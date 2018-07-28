@@ -24,15 +24,15 @@ GitHub repo - enable GitHub Pages e.g. https://fionnachan.github.io/Timer/static
 Docsify (documentation)
 
 ## Pages: 
-###Calendar Page (home)
+###### Calendar Page (home)
     Daily calendar
         Schedules (markers)
-###Travel time between schedules (edges)
-###Transport means (color of edges)
-###Overview (map)
+###### Travel time between schedules (edges)
+###### Transport means (color of edges)
+###### Overview (map)
     Markers / lines / line color on the map
     Durations by marker / edge
-###Profile
+###### Profile
     User preferences
         Activate/Deactivate each travel means globally
         Time/Distance constraints for travel means
@@ -41,14 +41,14 @@ Docsify (documentation)
     Settings
         Notifications
         Overlay
-###Create Routine (Additional)
+###### Create Routine (Additional)
     User inputs:
         Frequency
         Time
         Duration  
         Recurrence (Temporary/Permanent)
         Type/Description
-###Create meeting
+###### Create meeting
     User inputs:
         Location
         Time
