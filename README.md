@@ -11,17 +11,17 @@ Software Engineering course project in LM Automation &amp; Control engineering, 
 - Variability time between appointments
 
 ## Development tools:
--jQuery (library for cross-browser compatibility, not good for building scalable web apps)
--Materialize https://materializecss.com/
--Package manager: npm
--Install node.js
--Install gulp (to run project on localhost)
--Open a firebase project to use authentication + realtime database
--Use Atom / Visual Studio Code
--Version control - git with command lines / GUI software
--Unit testing - Karma / Jasmine (to test function by function)
--GitHub repo - enable GitHub Pages e.g. https://fionnachan.github.io/Timer/static/
--Docsify (documentation)
+- jQuery (library for cross-browser compatibility, not good for building scalable web apps)
+- Materialize https://materializecss.com/
+- Package manager: npm
+- Install node.js
+- Install gulp (to run project on localhost)
+- Open a firebase project to use authentication + realtime database
+- Use Atom / Visual Studio Code
+- Version control - git with command lines / GUI software
+- Unit testing - Karma / Jasmine (to test function by function)
+- GitHub repo - enable GitHub Pages e.g. https://fionnachan.github.io/Timer/static/
+- Docsify (documentation)
 
 ## Pages: 
 - Calendar Page (home)
