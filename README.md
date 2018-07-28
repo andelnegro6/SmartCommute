@@ -1,7 +1,7 @@
 # SmartCommute
 Software Engineering course project in LM Automation &amp; Control engineering, Politecnico di Milano. Based on project proposal: TRAVLENDAR
 
-# Requirements:
+## Requirements:
 1- Authentication System
 2- Calendar interface
 3- Automatically compute the travel time between appointments
@@ -10,7 +10,7 @@ Software Engineering course project in LM Automation &amp; Control engineering, 
 5- User customizable
 6- Variability time between appointments
 
-# Development tools:
+## Development tools:
 jQuery (library for cross-browser compatibility, not good for building scalable web apps)
 Materialize https://materializecss.com/
 Package manager: npm
@@ -23,16 +23,16 @@ Unit testing - Karma / Jasmine (to test function by function)
 GitHub repo - enable GitHub Pages e.g. https://fionnachan.github.io/Timer/static/
 Docsify (documentation)
 
-# Pages: 
-Calendar Page (home)
+## Pages: 
+###Calendar Page (home)
     Daily calendar
         Schedules (markers)
-Travel time between schedules (edges)
-Transport means (color of edges)
-Overview (map)
+###Travel time between schedules (edges)
+###Transport means (color of edges)
+###Overview (map)
     Markers / lines / line color on the map
     Durations by marker / edge
-Profile
+###Profile
     User preferences
         Activate/Deactivate each travel means globally
         Time/Distance constraints for travel means
@@ -41,14 +41,14 @@ Profile
     Settings
         Notifications
         Overlay
-Create Routine (Additional)
+###Create Routine (Additional)
     User inputs:
         Frequency
         Time
         Duration  
         Recurrence (Temporary/Permanent)
         Type/Description
-Create meeting
+###Create meeting
     User inputs:
         Location
         Time
