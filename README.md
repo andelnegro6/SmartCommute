@@ -12,18 +12,17 @@ Software Engineering course project in LM Automation &amp; Control engineering, 
 
 ## Development tools:
 - jQuery (library for cross-browser compatibility, not good for building scalable web apps)
-- Materialize https://materializecss.com/
+- Bootstrap
 - Package manager: npm
 - Install node.js
 - Install gulp (to run project on localhost)
 - Open a firebase project to use authentication + realtime database
 - Use Atom / Visual Studio Code
 - Version control - git with command lines / GUI software
-- Unit testing - Karma / Jasmine (to test function by function)
-- GitHub repo - enable GitHub Pages e.g. https://fionnachan.github.io/Timer/static/
+- Unit testing - jest (jestjs.io)
 - Docsify (documentation)
 
-## Pages: 
+## Pages:
 - Calendar Page (home)
   - Daily calendar
     - Schedules (markers)
@@ -58,4 +57,3 @@ Software Engineering course project in LM Automation &amp; Control engineering, 
     - Transportation cost
     - Weather forecast
     - Fill in form → Validate → Click Submit → Check travel time feasibility → Save / Warn
-
