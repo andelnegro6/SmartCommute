@@ -1,4 +1,10 @@
-"use strict";
+'use strict';
 
-//type something here
-var HELLO = 0;
+$(function () {
+
+  // page is now ready, initialize the calendar...
+
+  $('#calendar').fullCalendar({
+    // put your options and callbacks here
+  });
+});
