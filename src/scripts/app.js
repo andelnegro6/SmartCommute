@@ -1,6 +1,5 @@
 $( document ).ready(function() {
 
-  // page is now ready, initialize the calendar...
 
   $('#calendar').fullCalendar({
 
@@ -9,5 +8,4 @@ $( document ).ready(function() {
       alert('a day has been clicked!');
     }
   })
-
 });

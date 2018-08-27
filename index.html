@@ -54,14 +54,10 @@
 
   <!--- call the app.js that contains the javascript code -->
   <script type="text/javascript" src="dist/scripts/app.js"></script>
-
+  
   <!--- TITLE -->
   <title>SmartCommute</title>
-
-
-
 </head>
-
 
   <!-- Start the BODY -->
 <body>
@@ -74,11 +70,11 @@
   <form class="px-4 py-3">
     <div class="form-group">
       <label for="exampleDropdownFormEmail1">Email address</label>
-      <input type="email" class="form-control" id="exampleDropdownFormEmail1" placeholder="email@example.com">
+      <input type="email" class="form-control" id="Email_field" placeholder="email@example.com">
     </div>
     <div class="form-group">
       <label for="exampleDropdownFormPassword1">Password</label>
-      <input type="password" class="form-control" id="exampleDropdownFormPassword1" placeholder="Password">
+      <input type="password" class="form-control" id="Password_field" placeholder="Password">
     </div>
     <div class="form-check">
       <input type="checkbox" class="form-check-input" id="dropdownCheck">
@@ -86,11 +82,11 @@
         Remember me
       </label>
     </div>
-    <button type="submit" class="btn btn-primary">Sign in</button>
+    <button type="submit" class="btn btn-primary" onclick="login()">Sign in</button>
   </form>
   <div class="dropdown-divider"></div>
-  <a class="dropdown-item" href="#">New around here? Sign up</a>
-  <a class="dropdown-item" href="google.com">Forgot password?</a>
+  <a class="dropdown-item" href="#">New to Travlendar? Sign up</a>
+  <a class="dropdown-item" href="#">Forgot password?</a>
 </div>
 
 <div class="btn-group">
@@ -119,14 +115,32 @@
   </div>
 </div>
 
-  <!-- Insert the calendar -->
-  <div id='calendar'></div>
+  <!-- Insert the calendar >
+  <div id='calendar'></div-->
 
+
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDs3D1g5QObX9iyVtKbi4E_2ZSQ2EyEocw",
+      authDomain: "travlendar-977c5.firebaseapp.com",
+      databaseURL: "https://travlendar-977c5.firebaseio.com",
+      projectId: "travlendar-977c5",
+      storageBucket: "travlendar-977c5.appspot.com",
+      messagingSenderId: "1015307388650"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <script type="text/javascript" src="dist/scripts/loginform.js"></script>
   <!-- Compiled and minified JavaScript -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+  <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+
+
 </body>
 
 </html>
