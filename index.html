@@ -54,7 +54,7 @@
 
   <!--- call the app.js that contains the javascript code -->
   <script type="text/javascript" src="dist/scripts/app.js"></script>
-  
+
   <!--- TITLE -->
   <title>SmartCommute</title>
 </head>
@@ -66,7 +66,7 @@
 
   <!--- Login box -->
 
-<div class="dropdown-menu2"class="mx-auto" style="width: 200px;">
+<div class="dropdown-menu2"class="mx-auto" style="width: 200px;" id="login_div">
   <form class="px-4 py-3">
     <div class="form-group">
       <label for="exampleDropdownFormEmail1">Email address</label>
@@ -85,9 +85,18 @@
     <button type="submit" class="btn btn-primary" onclick="login()">Sign in</button>
   </form>
   <div class="dropdown-divider"></div>
-  <a class="dropdown-item" href="#">New to Travlendar? Sign up</a>
+  <a class="dropdown-item" href="/src/html/signupform.html">New to Travlendar? Sign up</a>
   <a class="dropdown-item" href="#">Forgot password?</a>
 </div>
+
+<div class="dropdown-menu2"class="mx-auto" style="width: 200px;" id="user_div">
+  <form class="px-4 py-3">
+    <div class="form-group">
+      <label for="logoutmsg">Welcome user, you're logged in.</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Sign Out</button>
+</div>
+
 
 <div class="btn-group">
   <button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -131,6 +140,7 @@
     };
     firebase.initializeApp(config);
   </script>
+
   <script type="text/javascript" src="dist/scripts/loginform.js"></script>
   <!-- Compiled and minified JavaScript -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
