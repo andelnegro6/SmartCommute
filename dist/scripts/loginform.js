@@ -32,3 +32,12 @@ function logout() {
     // An error happened.
   });
 }
+
+function signup() {
+  firebase.auth().createUserWithEmailAndPassword(emailsu, passwordsu).catch(function (error) {
+    // Handle Errors here.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // ...
+  });
+}
