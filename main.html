@@ -37,9 +37,49 @@
 </head>
 
 <body>
-  <h1> Smart Commute: Home </h1>
-  
-  <button onclick="mainApp.logOut()">logOut</button>
+  <div class="jumbotron jumbotron-fluid">
+  <div class="container">
+    <h1 class="display-4">SmartCommute: Home</h1>
+    <p class="lead">Welcome USER, how's your day?</p>
+    <p class="lead">Please, choose something to do:</p>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">For Today</h5>
+        <p class="card-text">A list of today's appointments, where and when.</p>
+        <a href="src/html/today.html" class="btn btn-primary">Go!</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Routines</h5>
+        <p class="card-text">Check and/or manage your preset routines.</p>
+        <a href="src/html/routines.html" class="btn btn-primary">Go!</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your Calendar</h5>
+        <p class="card-text">Check all your events within a weekly, monthly or yearly format.</p>
+        <a href="src/html/calendar.html" class="btn btn-primary">Go!</a>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Your Roadmap</h5>
+        <p class="card-text">Check your events, their times and locations alltogether.</p>
+        <a href="src/html/roadmap.html" class="btn btn-primary">Go!</a>
+      </div>
+    </div>
+  </div>
+</div>
+  <button type="button" class="btn btn-danger" onclick="mainApp.logOut()">Log Out</button>
 
   <!-- my js sources -->
     <script type="text/javascript" src="dist/scripts/firebase.js"></script>
