@@ -1,10 +1,10 @@
 'use strict';
 
-$(document).ready(function () {
+$(function () {
 
   // page is now ready, initialize the calendar...
 
-  $('calendar').fullCalendar({
+  $('#calendar').fullCalendar({
     // put your options and callbacks here
   });
 });

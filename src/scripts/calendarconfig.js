@@ -1,9 +1,9 @@
-$( document ).ready(function() {
+$(function() {
 
-    // page is now ready, initialize the calendar...
+  // page is now ready, initialize the calendar...
   
-    $('calendar').fullCalendar({
-      // put your options and callbacks here
-    })
+  $('#calendar').fullCalendar({
+    // put your options and callbacks here
+  })
   
   });
