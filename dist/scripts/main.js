@@ -19,15 +19,3 @@ var mainApp = {};
   }
   mainApp.logOut = logOut;
 })();
-
-// $( document ).ready(function() {
-//
-//
-//   $('#calendar').fullCalendar({
-//
-//     // put your options and callbacks here
-//     dayClick: function() {
-//       alert('a day has been clicked!');
-//     }
-//   })
-// });
