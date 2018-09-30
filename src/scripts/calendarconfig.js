@@ -7,7 +7,7 @@ $(function() {
     events: {
       googleCalendarId: 'u5j2jgvvosnlpej89pr54lb7q8@group.calendar.google.com',
       className: 'gcal-event'
-    },
+    },  //the events parameter receives data from the gcal ID stated within the events object, and puts it in the fullcalendar layout.
     header: {
       left: 'prev,next today myCustomButton',
       center: 'title',
