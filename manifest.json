@@ -1,0 +1,14 @@
+{
+    "manifest_version": 2,
+    "version": "0.1",
+    "default_locale": "en",
+    "author": "Antonio Del Negro and Pavel Pascacio",
+    "short_name": "TRAVLENDAR",
+    "name": "SMARTCOMMUTE",
+    "description": "Your all in one scheduler app that tells you where to go and when! no more dead time gaps, ever.",
+    "developer": {
+        "name": "Antonio Del Negro",
+        "url": "https://github.com/andelnegro6/"
+    }
+
+}
