@@ -1,20 +1,3 @@
-<!-- for today, we need a list like an agenda page:
-
-8:00:
-9:00:
-10:00:
-11:00:
-12:00:
-.
-.
-.
-23:00:
-
-and a button on each item @ each time to edit the event
-also a button for "new event"
-
-all events must update in all the other functionalities such as the roadmap if it has a location and in the calendar by default. -->
-
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:og="http://ogp.me/ns#" xmlns:fb="https://www.facebook.com/2008/fbml">
@@ -33,7 +16,7 @@ all events must update in all the other functionalities such as the roadmap if i
 
 <!-- Style stuff -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-  <link rel="stylesheet" href="dist/css/main.min.css" />
+  <link rel="stylesheet" href="../../dist/css/main.min.css" />
 
 <!--Firebase stuff-->
   <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
@@ -41,8 +24,8 @@ all events must update in all the other functionalities such as the roadmap if i
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.1.1/firebaseui.css" /> -->
 
 <!-- standard javascript sources -->
-  <script type='text/javascript' src='lib/jquery.min.js'></script>
-  <script type='text/javascript' src='lib/moment.min.js'></script>
+  <script type='text/javascript' src='../../lib/jquery.min.js'></script>
+  <script type='text/javascript' src='../../lib/moment.min.js'></script>
  
   <title> For Today </title>
 </head>
@@ -66,35 +49,20 @@ all events must update in all the other functionalities such as the roadmap if i
     <h1 id="todayTitle">Today's tasks</h1>
     <h3 id="todaySubtitle">your tasks are:</h3>
     <button id= "btnCreateEvent" type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">Create event for today</button> 
-       
+
     <div class="list-group" id="todayTasks">
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"> 
           <div class="w-50 justify-content-between">
             <h5 class="mb-1">Go pick up the documentation</h5>
-            <small>9:30 am</small>
+            <h5 class="mb-1">9:30 AM</h5>            
           </div>
           <p class="mb-1">123 main st.</p>
           <small>Notes: Documentation for the job offer</small>
-          <button type="button">Check on map</button>
-          <button type="button">Delete</button>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Meeting with Clara</h5>
-            <small class="text-muted">1:30 pm</small>
+          <div id="eventoptionbuttons">
+            <button type="button">Check on map</button>
+            <button type="button">Edit</button>
             <button type="button">Delete</button>
           </div>
-          <p class="mb-1">456 restaurant st. Check on map</p>
-          <small class="text-muted">Notes: she doesn't like fish</small>
-        </a>
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-          <div class="d-flex w-100 justify-content-between">
-            <h5 class="mb-1">Go get groceries</h5>
-            <small class="text-muted">5:30 pm</small>
-            <button type="button">Delete</button>
-          </div>
-          <p class="mb-1">789 supermarket st. Check on map</p>
-          <small class="text-muted">Notes: remember to buy SKIM milk, not whole milk</small>
         </a>
       </div>
 
@@ -148,13 +116,14 @@ all events must update in all the other functionalities such as the roadmap if i
 })
 </script>
 
-      <!-- my js sources -->
-      <script type="text/javascript" src="dist/scripts/firebase.js"></script>
+    <!-- my js sources -->
+      <script type="text/javascript" src="../../dist/scripts/firebase.js"></script>
       <!--script type="text/javascript" src="dist/scripts/login.js"></script-->
-      <script type="text/javascript" src="dist/scripts/main.js"></script>
+      <script type="text/javascript" src="../../dist/scripts/main.js"></script>
   
     <!-- external sources -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
       <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>  
 </body>
+</html>
