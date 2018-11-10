@@ -24,11 +24,11 @@ Software Engineering course project in LM Automation &amp; Control engineering, 
 
 ## Pages:
 - Calendar Page (home)
-  - Daily calendar
+  - Daily view
     - Schedules (markers)
-- Travel time between schedules (edges)
-- Transport means (color of edges)
-- Overview (map)
+- Roadmap
+  - Travel time between schedules (edges)
+  - Transport means (color of edges)
   - Markers / lines / line color on the map
   - Durations by marker / edge
 - Profile
@@ -40,20 +40,16 @@ Software Engineering course project in LM Automation &amp; Control engineering, 
   - Settings
     - Notifications
     - Overlay
-- Create Routine (Additional)
+- Create event (appointment)
   - User inputs:
-    - Frequency
-    - Time
-    - Duration  
-    - Recurrence (Temporary/Permanent)
-    - Type/Description
-- Create meeting
-  - User inputs:
-    - Location
-    - Time
-    - Duration
+    - Title
+    - Address
+    - Start Time
+    - End Time
+    - Description
   - User journey:
     - Journey parameters
-    - Transportation cost
-    - Weather forecast
-    - Fill in form → Validate → Click Submit → Check travel time feasibility → Save / Warn
+    - Transportation cost (optional)
+    - Weather forecast (optional)
+    - Fill in form → Validate → Click Submit → Check travel time feasibility → Save / Warn / Throw error
+  
