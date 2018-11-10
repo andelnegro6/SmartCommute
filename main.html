@@ -66,19 +66,89 @@
 
 <div class="btn-group" role="group" aria-label="Basic example">
 
-  <a href="src/html/calendar.html" type="button" class="btn btn-secondary">Appointment</a>
-  <a href="src/html/roadmap.html" type="button" class="btn btn-secondary">Roadmaps</a>
-  <a href="src/html/today.html" type="button" class="btn btn-secondary">Settings</a>
-
+  <button id= "buttonAddEvent" type="button" class="btn btn-primary" data-toggle="modal" 
+    data-target="#todayEventCreation" data-whatever="@mdo">New Event</button> 
+  <a href="src/html/roadmap.html" type="button" class="btn btn-secondary">Roadmap</a>
+  <a href="src/html/settings.html" type="button" class="btn btn-secondary">Settings</a>
 </div>
 
+<!-- Insert the calendar -->
+<div id='calendar'></div>
 
 <!-- Botton go to Logout -->
   <button type="button" class="btn btn-danger" onclick="mainApp.logOut()">Log Out</button>
 
-  <!-- Insert the calendar -->
-    <div id='calendar'></div>
-  <!-- my js sources -->
+<!-- NOTA: PARA AGREGAR UN EVENTO CON POP UP, EL BOTON SEPARADO DEL CALENDARIO!-->
+  <!-- <div class="modal fade" id="todayEventCreation" tabindex="-1" role="dialog" 
+aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div id= "newEventDialog" class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Event</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="eventName" class="col-form-label">Event Name</label>
+            <input type="text" class="form-control" id="event-name" placeholder="What?">
+          </div>
+          <div class="form-group">
+            <label for="eventLocation" class="col-form-label">Location</label>
+            <input type="text" class="form-control" id="event-location" placeholder="where?">
+          </div>
+          <div class="form-group">
+            <label for="eventStartTime">Start Time: </label>
+            <input type="time" name="appt-Stime" value="" id="event-Stime">
+          </div>
+          <div class="form-group">
+          <div class="form-group">
+            <label for="eventEndTime">End Time: </label>
+            <input type="time" name="appt-Etime" value="" id="event-Etime">
+            </div>
+            <div class="form-group">
+            <label for="eventNotes" class="col-form-label">Notes: </label>
+            <textarea class="form-control" id="event-notes" placeholder="Notes..."></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeModal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveEvent">Save event</button>
+      </div>
+    </div>
+  </div>
+</div>  
+
+<script>
+    $('#todayEventCreation').on('show.bs.modal', function (event) {
+      var addEventbutton = $(event.relatedTarget) // Button that triggered the modal
+      var recipient = addEventbutton.data('whatever') // Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
+      var modal = $(this)
+      modal.find('.modal-title').text('New message to ' + recipient)
+      modal.find('.modal-footer').val(recipient)
+    })
+    
+    $("#closeModal").button().click(function(){ //not working, check.
+      $("#event-name").val("");
+      $("#event-location").val("");
+      $("#event-time").val("");
+      $("#event-notes").val("");  
+    })
+    
+    $('#saveEvent').button().click(function(){
+      var eventName = $("#event-name").val();
+      var eventLocation = $("#event-location").val();
+      var eventTime = $("#event-time").val();
+      var eventNotes= $("#event-notes").val();
+    })
+</script> -->
+
+    <!-- my js sources -->
     <script type="text/javascript" src="dist/scripts/firebase.js"></script>
     <!--script type="text/javascript" src="dist/scripts/login.js"></script-->
     <script type="text/javascript" src="dist/scripts/main.js"></script>
