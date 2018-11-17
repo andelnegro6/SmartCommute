@@ -1,0 +1,56 @@
+body {
+  font-size: 14px;
+}
+
+.row {
+  margin: 3px;
+}
+
+h2 {
+  font-size: 1.5em !important;
+}
+
+#calendar1 {
+  padding-bottom: 15px;
+  z-index: 950;
+}
+
+#calendar2 {
+  z-index: 900;
+}
+
+.navbar {
+  height: 50px;
+  border-radius: 0;
+}
+
+.fc-body td {
+  cursor: pointer;
+}
+
+
+.left {
+  float: left;
+}
+
+.fc-event .fc-bg {
+  background-color: #337ab7;
+}
+
+.navbar-btn {
+  margin-right: 15px;
+}
+
+.fc-today .fc-day-number {
+  background: #d9534f;
+  color: white;
+  font-weight: bold;
+  width: 20px;
+  border-radius: 50%;
+  text-align: center;
+  margin: 2px;
+}
+
+.fc-today {
+  background-color: #F2F2F2;
+}

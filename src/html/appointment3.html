@@ -1,0 +1,173 @@
+
+    <!--This part use the calendar2.js and is called by the botton Appointment in main.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href='../../scropt/css/vendor/bootstrap.min.css' rel='stylesheet' />
+    <link href='../../scropt/css/vendor/fullcalendar.css' rel='stylesheet' />
+    <link href='../../scropt/css/style.css' rel='stylesheet' />
+
+    <script src='../../scropt/js/vendor/jquery.min.js'></script>
+    <script src='../../scropt/js/vendor/moment.min.js'></script>
+    <script src='../../scropt/js/vendor/bootstrap.min.js'></script>
+    <script src='../../scropt/js/vendor/fullcalendar.js'></script>
+
+    <script src='../../scropt/js/events.js'></script>
+    <script src='../../scropt/js/calendar3.js'></script>
+
+    <!--Sources for datepicker -->
+  
+
+<!--Sources for Google map and search box-->
+
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKQX3cyZ7pVKmBwE8wiowivW9qH62AVk8&libraries=places&callback=initAutocomplete" async defer></script>
+<body>
+
+  <!--Include the actual date in the top of the page using bootstrap contairner-fluid -->
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <p class="navbar-brand" id="todaysDate"></p>
+        </div>
+    </nav>
+
+    <!--Include both calendars -->
+    <div class="container-fluid row">
+        <div id='calendar1' class='calendar col-md-8'></div>
+        <div id='calendar2' class='calendar col-md-4'></div>
+    </div>
+
+  <!--Include dialog using modal fade to create new event -->
+    <div class="modal fade" id="newEvent" role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+
+            <div class="modal-content">
+              <!--Title of modal windows -->
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                    <h4 class="modal-title" id="newEvent">New Apppointment</h4>
+                </div>
+                <!--Dialog that contain the fields to create new event -->
+                <div class="modal-body">
+                  <form>
+                    <!--Title event field -->
+                        <div class="form-group">
+                            <label for="title" class="form-control-label">Title</label>
+                            <input type="text" class="form-control" id="title">
+                        </div>
+
+                    <div class="container">
+                    <!--Searching Box location1-->
+                        <div class='col-sm-3'>
+                          <label for="locationField" class="form-control-label">Start location</label>
+                          <div id="locationField">
+                            <input id="autocomplete" placeholder="Enter your initial address" type="text" />
+                          </div>
+                          </span>
+                        </div>
+                    <!--Searching Box location2-->
+                      <div class='col-sm-3'>
+                        <label for="locationField2" class="form-control-label">End location</label>
+                        <div id="locationField2">
+                          <input id="autocomplete2" placeholder="Enter your final address" type="text" />
+                        </div>
+                        </span>
+                      </div>
+                    </div>
+                        <!--Start and End time -->
+                        <div class="container">
+                        <!--Start time -->
+                          <div class='col-sm-3'>
+                            <div class="form-group">
+                              <label for="datetimepicker3" class="form-control-label">Start time</label>
+                              <div id="datetimepicker3" class="input-append">
+                                <input data-format="hh:mm:ss" type="text"></input>
+                                <span class="add-on">
+                                  <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                  </i>
+                                </span>
+                                </div>
+                            </div>
+                          </div>
+                        <!--End time -->
+                          <div class='col-sm-3'>
+                            <div class="form-group">
+                              <label for="datetimepicker4" class="form-control-label">End time</label>
+                              <div id="datetimepicker4" class="input-append">
+                                <input data-format="hh:mm:ss" type="text"></input>
+                                <span class="add-on">
+                                  <i data-time-icon="icon-time" data-date-icon="icon-calendar">
+                                  </i>
+                                </span>
+                                </div>
+                            </div>
+                          </div>
+                        </div>
+                        <!--Description field -->
+                        <div class="form-group">
+                              <label for="exampleFormControlTextarea1">Description</label>
+                              <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                    </form>
+                  </div>
+                <!--Dialog that contain the botton to create or cancel -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-success" id="submit">Create Event</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="myModalLabel">Modal header</h3>
+      </div>
+      <div class="modal-body">
+        <div id="datetimepicker1" class="input-append date">
+          <input data-format="dd/MM/yyyy hh:mm:ss" type="text"></input>
+          <span class="add-on"><i data-time-icon="icon-time" data-date-icon="icon-calendar"></i></span>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+      </div>
+    </div>
+
+
+    <!--Include dialog using modal fade to edit event -->
+    <div class="modal fade" id="editEvent" role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true" data-persist="false">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+                    <h4 class="modal-title" id="editEvent">Update Apppointment</h4>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="title" class="form-control-label">Title</label>
+                            <input type="text" class="form-control" id="editTitle">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger left" id="delete">Delete Event</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-success" id="update">Update Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
