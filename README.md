@@ -1,5 +1,5 @@
 # SmartCommute
-~Software Engineering course project in LM Automation &amp; Control engineering, Politecnico di Milano. Based on project proposal: TRAVLENDAR~
+/Software Engineering course project in LM Automation &amp; Control engineering, Politecnico di Milano. Based on project proposal: TRAVLENDAR/
 
   SmartCommute is a web based app developed by Antonio Del Negro and Pavel Pascacio.
   It's an application that helps your daily schedule to be as neat as possible by adding a spice to the default calendar and maps applications and melting them into one thing, so you can organize your appointments and commuting intelligently between them. By integrating Google Maps, you will be able to pinpoint your events, and we'll tell you long it'll take you to go from one to another, when you should leave, and with which transport.
