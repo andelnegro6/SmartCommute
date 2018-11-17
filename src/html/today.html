@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:og="http://ogp.me/ns#" 
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:og="http://ogp.me/ns#"
 xmlns:fb="https://www.facebook.com/2008/fbml">
 <head>
   <link rel="manifest" href="/manifest.json">
@@ -16,7 +16,7 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
   <link rel="icon" href="">
 
 <!-- Style stuff -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
   integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
   <!-- <link rel="stylesheet" href="../../dist/css/main.min.css" /> -->
 
@@ -28,7 +28,7 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
 <!-- standard javascript sources -->
   <script type='text/javascript' src='../../lib/jquery.min.js'></script>
   <script type='text/javascript' src='../../lib/moment.min.js'></script>
- 
+
   <title> For Today </title>
 </head>
 <body>
@@ -50,14 +50,16 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
 
     <h1 id="todayTitle">Today's tasks</h1>
     <h3 id="todaySubtitle">your tasks are:</h3>
-    <button id= "buttonAddEvent" type="button" class="btn btn-primary" data-toggle="modal" 
-    data-target="#todayEventCreation" data-whatever="@mdo">Create event for today</button> 
 
+    <!--Calling button Modal form -->
+    <button id= "buttonAddEvent" type="button" class="btn btn-primary" data-toggle="modal"
+    data-target="#todayEventCreation" data-whatever="@mdo">Create event for today</button>
+    <!--Dummies Botton -->
     <div class="list-group" id="savedEvent">
-        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start"> 
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
           <div class="w-50 justify-content-between">
             <h5 class="mb-1">Go pick up the documentation</h5>
-            <h5 class="mb-1">9:30 AM</h5>            
+            <h5 class="mb-1">9:30 AM</h5>
           </div>
           <p class="mb-1">123 main st.</p>
           <small>Notes: Documentation for the job offer</small>
@@ -70,36 +72,46 @@ xmlns:fb="https://www.facebook.com/2008/fbml">
     </div>
 
 
-<div class="modal fade" id="todayEventCreation" tabindex="-1" role="dialog" 
+<div class="modal fade" id="todayEventCreation" tabindex="-1" role="dialog"
 aria-labelledby="exampleModalLabel" aria-hidden="true">
+
   <div id= "newEventDialog" class="modal-dialog" role="document">
+
     <div class="modal-content">
+
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">New Event</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
+
       <div class="modal-body">
         <form>
           <div class="form-group">
             <label for="eventName" class="col-form-label">Event Name</label>
             <input type="text" class="form-control" id="event-name" placeholder="What?">
           </div>
+
           <div class="form-group">
             <label for="eventLocation" class="col-form-label">Location</label>
             <input type="text" class="form-control" id="event-location" placeholder="where?">
           </div>
+
           <div class="form-group">
             <label for="eventTime">Event Time: </label>
             <input type="time" name="appt-time" value="" id="event-time">
           </div>
+
           <div class="form-group">
             <label for="eventNotes" class="col-form-label">Notes: </label>
             <textarea class="form-control" id="event-notes" placeholder="Notes..."></textarea>
           </div>
+
         </form>
+
       </div>
+
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal" id="closeModal">Close</button>
         <button type="button" class="btn btn-primary" id="saveEvent">Save event</button>
@@ -123,7 +135,7 @@ $("#closeModal").button().click(function(){ //not working, check.
   $("#event-name").val("");
   $("#event-location").val("");
   $("#event-time").val("");
-  $("#event-notes").val("");  
+  $("#event-notes").val("");
 })
 
 $('#saveEvent').button().click(function(){
@@ -138,14 +150,14 @@ $('#saveEvent').button().click(function(){
       <script type="text/javascript" src="../../dist/scripts/firebase.js"></script>
       <!--script type="text/javascript" src="dist/scripts/login.js"></script-->
       <script type="text/javascript" src="../../dist/scripts/main.js"></script>
-  
+
     <!-- external sources -->
       <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" 
-      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" 
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+      integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
       crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
-      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" 
-      crossorigin="anonymous"></script>  
+      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+      integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+      crossorigin="anonymous"></script>
 </body>
 </html>
