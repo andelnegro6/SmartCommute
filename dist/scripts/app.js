@@ -1,17 +1,11 @@
 'use strict';
 
-$(function () {
-  // loadEvents();
-  // saveEvent();
-
-});
-/* --------------------------calendar-------------------------- */
 $(document).ready(function () {
   var inicio = '';
   var fin = '';
-  /* --------------------------Config Calendar-------------------------- */
-  $('#calendar').fullCalendar({
 
+  //fullCalendar configuration:
+  $('#calendar').fullCalendar({
     header: {
       left: 'today prev,next',
       center: 'title',
@@ -29,10 +23,8 @@ $(document).ready(function () {
     timezone: 'America/Chicago',
 
     select: function select(startDate, endDate) {
-
       inicio = startDate.format();
       fin = endDate.format();
-
       newEvent(startDate);
     },
 
@@ -40,9 +32,7 @@ $(document).ready(function () {
       editEvent(calEvent);
     },
 
-    /* -----Modify the event adding a new element and 
-    generate a pop over of title and description--- */
-
+    //Modify the event adding a new element and generate a pop over of title and description
     eventRender: function eventRender(eventObj, $el) {
       $el.addClass(eventObj.description);
       $el.popover({
@@ -54,17 +44,17 @@ $(document).ready(function () {
       });
     },
 
-    /* --------------------------Config defaut events as a function-------------------------- */
-
-    events: events() //HERE WE GOTTA LOAD THE EVENTS FROM THE USER!
+    //Config defaut events as a function
+    events: events()
   });
-  /* --------------------------Load events from the file events.js-------------------------- */
+  //------------------------------------------------------------------------------
 
+  //Load events from the file events.js
   var loadEvents = function loadEvents() {
     $.getScript("scripts/events.js", function () {});
   };
 
-  /* --------------------------Create a newEvent-------------------------- */
+  //Create a newEvent
   var newEvent = function newEvent(startDate) {
     $('input#title').val("");
     $('textarea#info_description').val("");
@@ -77,6 +67,22 @@ $(document).ready(function () {
       var etiempo = $('input#etime').val();
       var comentario = $('textarea#info_description').val();
 
+      /*-------------------------get user data--------------------------------*/
+      //to get the current user and link its info to the events:
+      var user = firebase.auth().currentUser; //retrieve current user's info
+      var name, email, uid, emailVerified; //declare the relevant data
+
+      if (user != null) {
+        name = user.displayName;
+        email = user.email;
+        emailVerified = user.emailVerified;
+        uid = user.uid;
+        // The user's ID, unique to the Firebase project. Do NOT use
+        // this value to authenticate with your backend server, if
+        // you have one. Use User.getToken() instead.
+      }
+      /*----------------------------------------------------------------------- */
+      //parse date format into a string for the json:
       var Fecha = new Date(fin);
 
       //Fecha.setDate(Fecha.getDate());
@@ -91,6 +97,7 @@ $(document).ready(function () {
       } else {
         mes2 = mes.toString();
       }
+
       if (dia.toString().length < 2) {
         dia2 = '0' + dia.toString();
       } else {
@@ -101,7 +108,6 @@ $(document).ready(function () {
       var fin2 = ano.toString() + '-' + mes2 + '-' + dia2;
       //var fin2 = Fechachan.toString("YYYY-MM-DD");
 
-
       if (title) {
         var eventData = {
           title: title,
@@ -109,25 +115,27 @@ $(document).ready(function () {
           end: fin2 + "T" + etiempo + ":00.000Z",
           description: comentario
         };
+
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         $('#newEvent').modal('hide');
+
         //sends data to travlendar database:
-        $.ajax({
-          type: "POST",
-          url: "https://travlendar-977c5.firebaseio.com/.json", //AQUI VA EL URL DE FIREBASE
-          data: eventData,
-          dataType: "json",
-          success: function success(response) {
-            alert('lo lograste wey');
-          }
+        firebase.database().ref('users/' + uid).set({
+          //id: id,
+          title: eventData.title,
+          description: eventData.description,
+          start: eventData.start,
+          end: eventData.end
         });
+
+        console.log(eventData);
       } else {
         alert("Title can't be blank. Please try again.");
       }
     });
   };
-  /* --------------------------Edit an Event-------------------------- */
 
+  //Edit an event:
   var editEvent = function editEvent(calEvent) {
     $('input#editTitle').val(calEvent.title);
     $('textarea#editinfo_description').val(calEvent.description);
@@ -153,15 +161,17 @@ $(document).ready(function () {
         alert("Title can't be blank. Please try again.");
       }
     });
-    $('#delete').on('click', function () {
-      $('#delete').unbind();
 
+    $('#delete').on('click', function () {
+
+      $('#delete').unbind();
       if (calEvent._id.includes("_fc")) {
         $('#calendar').fullCalendar('removeEvents', [getCal1Id(calEvent._id)]);
         $('#calendar').fullCalendar('removeEvents', [calEvent._id]);
       } else {
         $('#calendar').fullCalendar('removeEvents', [calEvent._id]);
       }
+
       $('#editEvent').modal('hide');
     });
   };
@@ -182,3 +192,21 @@ var disableEnter = function disableEnter() {
     }
   });
 };
+
+//function that writes data to the realtime database:
+//we insert the current user's id to call the .ref method of the DB and set the event data!
+function writeUserData(userId, name, email) {
+  firebase.database().ref('users/' + userId).set({
+    //id: id,
+    title: eventData.title,
+    description: eventData.description,
+    start: eventData.start,
+    end: eventData.end
+  });
+}
+
+//$(function() {
+//   // loadEvents();
+//   // saveEvent();
+
+//   });

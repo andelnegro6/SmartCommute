@@ -17,3 +17,4 @@ var uid = null;
   }
   mainApp.logOut = logOut;
 })()
+
