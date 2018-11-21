@@ -23,9 +23,13 @@
       <script type="text/javascript" src="http://www.datejs.com/build/date.js"></script>
       <script type='text/javascript' src='../../fullcalendar/gcal.js'></script>
       <script type='text/javascript' src='../../fullcalendar/fullcalendar.js'></script>
-      <script src='scheduler.js'></script>
       <!--Firebase stuff-->
-      <script src="https://www.gstatic.com/firebasejs/5.5.0/firebase.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-app.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-auth.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-database.js"></script>
+      <!--- call the firebase.js that contain the javascript code -->
+      <script type="text/javascript" src="dist/scripts/firebase.js"></script>
+
       <!--Sources for timepicker -->
       <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
       <link href='../../scrtimer/css/timedropper.css' rel="stylesheet" type="text/css" />
@@ -36,8 +40,8 @@
       <script type='text/javascript' src='lib/moment.min.js'></script>
 
     <style>
-    p {
-      color: blue;
+      p {
+      color: black;
       margin: 8px;
       }
       body {
@@ -50,13 +54,17 @@
         max-width: 900px;
         margin: 0 auto;
       }
+
+      #eventHeader {
+        margin-right: 140px;
+      }
+
     </style>
 
    <!--- TITLE -->
-   <title> SmartCommute home </title>
+   <title> Home </title>
 
   </head>
-  <!-- ...........................................................................Start the BODY -->
   <body>
     <!-- Welcome to User -->
     <div class="jumbotron jumbotron-fluid">
@@ -67,22 +75,22 @@
       </div>
     </div>
 
-    <!-- Bottons to access to other html GUI-->
+    <!-- Bottons to access other GUI's-->
     <div class="btn-group" role="group" aria-label="Basic example">
-      <a href="src/html/appointment3.html" type="button" class="btn btn-secondary">Appointment</a>
-      <a href="src/html/roadmap2.html" type="button" class="btn btn-secondary">Roadmaps</a>
+      <a href="src/html/appointment3.html" type="button" class="btn btn-secondary">Appointments</a>
+      <a href="src/html/roadmap2.html" type="button" class="btn btn-secondary">Roadmap</a>
       <a href="src/html/test.html" type="button" class="btn btn-secondary">Settings</a>
     </div>
 
 
-    <!-- Botton go to Logout -->
+    <!-- to Logout -->
     <button type="button" class="btn btn-danger" onclick="mainApp.logOut()">Log Out</button>
 
     <!-- Insert the calendar -->
     <div id='calendar'></div>
 
     <!--..............Include dialog using modal fade to newEvent event ........................-->
-      <div class="modal fade" id="newEvent"  role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true">
+      <div class="modal fade" id="newEvent" role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true">
           <div class="modal-dialog" role="document">
               <div class="modal-content">
                   <!--Title of modal windows -->
@@ -90,18 +98,17 @@
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
-                      <h4 class="modal-title" id="newEvent">New Apppointment</h4>
+                      <h4 class="modal-title" id="eventHeader">New Apppointment</h4>
                   </div>
-                  <!--..........................................................Dialog that contain the fields to create new event -->
+                  <!--.......Dialog that contain the fields to create new event -->
                   <div class="modal-body">
                     <form>
-                      <!--..................................................-Searching Box -->
                           <!--Title event field -->
                           <div class="form-group">
                               <label for="title" class="form-control-label">Title</label>
                               <input type="text" class="form-control" id="title">
                           </div>
-                          <!--..................................................-Searching Box -->
+                          <!--.......searchbox -->
                           <div class="row">
                               <!-- Searching Box location1-->
                               <div class="col">
@@ -118,7 +125,7 @@
                                   </div>
                               </div>
                            </div>
-                           <!--.................................................Start and End time.-->
+                           <!--...Start and End time.-->
                            <div class="row">
                           <!-- Box Start time-->
                               <div class="col">
@@ -138,7 +145,7 @@
                           </div>
                       </form>
                     </div>
-                    <!--........................................................Dialog that contain the botton to create or cancel -->
+                    <!--...footer that contain the botton to create or cancel -->
                   <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                       <button type="button" class="btn btn-success" id="submit">Create Event</button>
@@ -155,9 +162,9 @@
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>
-                      <h4 class="modal-title" id="editEvent">Update Apppointment</h4>
+                      <h4 class="modal-title" id="eventHeader">Update Apppointment</h4>
                   </div>
-                  <!--..........................................................Dialog that contain the fields to edit an event -->
+                  <!--...Dialog that contain the fields to edit an event -->
                   <div class="modal-body">
                     <form>
                       <!--Title event field -->
@@ -220,26 +227,24 @@
       $( "#stime" ).timeDropper({
          format: 'HH:mm',
          setCurrentTime: true,
-        meridians: false});
-        $( "#etime" ).timeDropper({
+         meridians: false});
+      $( "#etime" ).timeDropper({
          format: 'HH:mm',
          setCurrentTime: true,
-        meridians: false});
-
-        $( "#editstime" ).timeDropper({
-           format: 'HH:mm',
-           setCurrentTime: true,
-          meridians: false});
-        $( "#editetime" ).timeDropper({
-           format: 'HH:mm',
-           setCurrentTime: true,
-          meridians: false});
-        </script>
+         meridians: false});
+      $( "#editstime" ).timeDropper({
+         format: 'HH:mm',
+         setCurrentTime: true,
+         meridians: false});
+      $( "#editetime" ).timeDropper({
+         format: 'HH:mm',
+         setCurrentTime: true,
+         meridians: false});
+      </script>
 
       <!--call the searchbox.js tha contain the  javascript code for search location box 1 and 2-->
       <script type="text/javascript" src="dist/scripts/searchbox.js"></script>
-      <!--- call the firebase.js that contain the javascript code -->
-      <script type="text/javascript" src="dist/scripts/firebase.js"></script>
+
       <!--script type="text/javascript" src="dist/scripts/login.js"></script-->
       <script type="text/javascript" src="dist/scripts/main.js"></script>
       <!--- call the app.js that contain the javascript code -->

@@ -1,8 +1,9 @@
 'use strict';
 
 $(function () {
-  loadEvents();
-  saveEvent();
+  // loadEvents();
+  // saveEvent();
+
 });
 /* --------------------------calendar-------------------------- */
 $(document).ready(function () {
@@ -39,7 +40,8 @@ $(document).ready(function () {
       editEvent(calEvent);
     },
 
-    /* -----Modify the event adding a new element and generate a pop over of title and description--- */
+    /* -----Modify the event adding a new element and 
+    generate a pop over of title and description--- */
 
     eventRender: function eventRender(eventObj, $el) {
       $el.addClass(eventObj.description);
@@ -54,7 +56,7 @@ $(document).ready(function () {
 
     /* --------------------------Config defaut events as a function-------------------------- */
 
-    events: events()
+    events: events() //HERE WE GOTTA LOAD THE EVENTS FROM THE USER!
   });
   /* --------------------------Load events from the file events.js-------------------------- */
 
@@ -109,6 +111,16 @@ $(document).ready(function () {
         };
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         $('#newEvent').modal('hide');
+        //sends data to travlendar database:
+        $.ajax({
+          type: "POST",
+          url: "https://travlendar-977c5.firebaseio.com/.json", //AQUI VA EL URL DE FIREBASE
+          data: eventData,
+          dataType: "json",
+          success: function success(response) {
+            alert('lo lograste wey');
+          }
+        });
       } else {
         alert("Title can't be blank. Please try again.");
       }
@@ -126,12 +138,16 @@ $(document).ready(function () {
     $('#update').on('click', function () {
       var title = $('input#editTitle').val();
       var comentario = $('textarea#editinfo_description').val();
+      var stiempo = $('input#stime').val();
+      var etiempo = $('input#etime').val();
+
       $('#editEvent').modal('hide');
       var eventData;
 
       if (title) {
         calEvent.description = comentario;
         calEvent.title = title;
+
         $('#calendar').fullCalendar('updateEvent', calEvent);
       } else {
         alert("Title can't be blank. Please try again.");
@@ -150,6 +166,7 @@ $(document).ready(function () {
     });
   };
 });
+
 /* --------------------------Others-------------------------- */
 var getCal1Id = function getCal1Id(cal2Id) {
   var num = cal2Id.replace('_fc', '') - 1;

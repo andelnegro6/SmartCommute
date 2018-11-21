@@ -9,5 +9,7 @@ var app_fireBase = {};
     messagingSenderId: "1015307388650"
   };
   firebase.initializeApp(config);
+  var database = firebase.database;
   app_fireBase = firebase;
 })()
+
