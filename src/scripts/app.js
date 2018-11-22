@@ -1,6 +1,6 @@
 $(document).ready(function(){
-  var inicio=('');
-  var fin=('');
+  var inicio='';
+  var fin='';
 
   //fullCalendar configuration:
   $('#calendar').fullCalendar({
@@ -24,6 +24,7 @@ $(document).ready(function(){
       inicio = startDate.format();
       fin = endDate.format();
       newEvent(startDate);
+      // console.log(inicio, typeof inicio, fin, typeof fin); //fin throws wrong day
     },
     
     eventClick: function(calEvent, jsEvent, view) {
@@ -70,7 +71,6 @@ $(document).ready(function(){
       //to get the current user and link its info to the events:
       var user = firebase.auth().currentUser; //retrieve current user's info
       var name, email, uid, emailVerified; //declare the relevant data
-
       if (user != null) {
         name = user.displayName;
         email = user.email;
@@ -87,7 +87,7 @@ $(document).ready(function(){
       //Fecha.setDate(Fecha.getDate());
       var ano = Fecha.getUTCFullYear();
       var mes = Fecha.getUTCMonth() + 1;
-      var dia = Fecha.getUTCDate() - 1;
+      var dia = Fecha.getUTCDate();
       var dia2 ='';
       var mes2 ='';
 
@@ -127,7 +127,7 @@ $(document).ready(function(){
           end: eventData.end
         });
 
-        console.log(eventData);
+        // console.log(eventData);
       }else{
         alert("Title can't be blank. Please try again.");
       }
@@ -138,32 +138,101 @@ $(document).ready(function(){
   var editEvent = function(calEvent) {
     $('input#editTitle').val(calEvent.title);
     $('textarea#editinfo_description').val(calEvent.description);
-     
+
+    //extracts hours and minutes from calEvent (saved event):
+    var updstHours = (calEvent.start._d.getHours() - 1).toString();
+    var updstMins = calEvent.start._d.getMinutes().toString();
+    var updeHours = (calEvent.end._d.getHours() - 1).toString();
+    var updeMins = calEvent.end._d.getMinutes().toString();
+
+    $('input#editstime').val(updstHours + ":" + updstMins);
+    $('input#editetime').val(updeHours + ":" + updeMins);
     $('#editEvent').modal('show');
     $('#update').unbind();
+    
+    console.log('hola asfefesss');
+    //DATE FORMATS (SUN 4 NOV 2018 yadayadayada)
 
     $('#update').on('click', function() {
       var title = $('input#editTitle').val();
+      var stiempo = $('input#editstime').val(); //string 'hh:mm'
+      var etiempo = $('input#editetime').val(); //string
       var comentario = $('textarea#editinfo_description').val();
-      var stiempo = $('input#stime').val();
-      var etiempo = $('input#etime').val();
+      
+      var user = firebase.auth().currentUser;
+      var name, email, uid, emailVerified;
+      if (user != null) {
+        name = user.displayName;
+        email = user.email;
+        emailVerified = user.emailVerified;
+        uid = user.uid;
+      }
 
-      $('#editEvent').modal('hide');
-      var eventData;
+      var ano_s = (calEvent.start._d.getUTCFullYear()).toString();
+      var mes_s = (calEvent.start._d.getUTCMonth() + 1).toString();
+      var dia_s = (calEvent.start._d.getUTCDate()).toString();
+      var ano_e = (calEvent.end._d.getUTCFullYear()).toString();
+      var mes_e = (calEvent.end._d.getUTCMonth() + 1).toString();
+      var dia_e = (calEvent.end._d.getUTCDate()-1).toString();
+      
+      if(dia_s.length < 2){
+        dia_s = '0' + dia_s;
+      }else{
+        dia_s = dia_s;
+      }
+
+      if(mes_s.length < 2){
+        mes_s = '0' + mes_s;
+      }else{
+        mes_s = mes_s;
+      }
+
+      if(dia_e.length < 2){
+        dia_e = '0' + dia_e;
+      }else{
+        dia_e = dia_e;
+      }
+
+      if(mes_e.length < 2){
+        mes_e= '0' + mes_e;
+      }else{
+        mes_e = mes_e;
+      }
+
+      var f_inicio = ano_s + '-' + mes_s + '-' + dia_s;
+      var f_fin = ano_e + '-' + mes_e + '-' + dia_e;
+      console.log(f_inicio, f_fin);
 
       if (title){
         calEvent.description = comentario;
         calEvent.title = title;
+        calEvent.start ='' ;
+        calEvent.end ='' ;
         
-        $('#calendar').fullCalendar('updateEvent', calEvent);
+        var eventData={
+          title: title,
+          start: f_inicio + "T" + stiempo + ":00.000Z",
+          end: f_fin + "T" + etiempo + ":00.000Z",
+          description: comentario
+        };
 
+        $('#calendar').fullCalendar('updateEvent', calEvent);
+        $('#editEvent').modal('hide');
+
+        firebase.database().ref('users/' + uid).set({
+          //id: id,
+          title: eventData.title,
+          description : eventData.description,
+          start: eventData.start,
+          end: eventData.end
+        });
       }else{
         alert("Title can't be blank. Please try again.")
       }
     });
     
     $('#delete').on('click', function() {
-      
+
       $('#delete').unbind();
       if (calEvent._id.includes("_fc")){
         $('#calendar').fullCalendar('removeEvents', [getCal1Id(calEvent._id)]);
@@ -171,7 +240,7 @@ $(document).ready(function(){
       }else{
         $('#calendar').fullCalendar('removeEvents', [calEvent._id]);
       }
-      
+
       $('#editEvent').modal('hide');
     });
   }

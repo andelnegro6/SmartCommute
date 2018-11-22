@@ -82,188 +82,190 @@
       <a href="src/html/test.html" type="button" class="btn btn-secondary">Settings</a>
     </div>
 
-
     <!-- to Logout -->
-    <button type="button" class="btn btn-danger" onclick="mainApp.logOut()">Log Out</button>
+    <button type="button" class="btn btn-danger" onclick="mainApp.logOut()">Logout</button>
 
     <!-- Insert the calendar -->
     <div id='calendar'></div>
 
-    <!--..............Include dialog using modal fade to newEvent event ........................-->
-      <div class="modal fade" id="newEvent" role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true">
-          <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                  <!--Title of modal windows -->
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                      <h4 class="modal-title" id="eventHeader">New Apppointment</h4>
-                  </div>
-                  <!--.......Dialog that contain the fields to create new event -->
-                  <div class="modal-body">
-                    <form>
-                          <!--Title event field -->
-                          <div class="form-group">
-                              <label for="title" class="form-control-label">Title</label>
-                              <input type="text" class="form-control" id="title">
-                          </div>
-                          <!--.......searchbox -->
-                          <div class="row">
-                              <!-- Searching Box location1-->
-                              <div class="col">
-                                <label for="locationField" class="form-control-label">Start location</label>
-                                  <div id="locationField">
-                                    <input id="autocomplete" placeholder="Enter your initial address" type="text" />
-                                  </div>
-                              </div>
-                              <!--Searching Box location2-->
-                              <div class="col">
-                                <label for="locationField2" class="form-control-label">End location</label>
-                                  <div id="locationField2">
-                                    <input id="autocomplete2" placeholder="Enter your final address" type="text" />
-                                  </div>
-                              </div>
-                           </div>
-                           <!--...Start and End time.-->
-                           <div class="row">
-                          <!-- Box Start time-->
-                              <div class="col">
-                                <label for="stime">Start time</label>
-                                <input type="text" id="stime" >
-                              </div>
-                          <!-- Box End time-->
-                              <div class="col">
-                                <label for="etime">End time</label>
-                                <input type="text" id="etime" >
-                              </div>
-                            </div>
-                          <!--..................................................Description field-->
-                          <div class="form-group">
-                            <label for="info_description">Description</label>
-                            <textarea class="form-control" id="info_description" rows="3"></textarea>
-                          </div>
-                      </form>
+    <!--Include dialog using modal fade to newEvent event-->
+    <div class="modal fade" id="newEvent" role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <!--Title of modal windows -->
+            <div class="modal-header">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              <h4 class="modal-title" id="eventHeader">New Apppointment</h4>
+            </div>
+
+            <!--NEW EVENT MODAL -->
+            <div class="modal-body">
+              <form>
+                <!--Title event field -->
+                <div class="form-group">
+                  <label for="title" class="form-control-label">Title</label>
+                  <input type="text" class="form-control" id="title">
+                </div>
+                <!-- searchbox -->
+                <div class="row">
+                  <!-- Searching Box location1-->
+                  <div class="col">
+                    <label for="locationField" class="form-control-label">Start location</label>
+                    <div id="locationField">
+                      <input id="autocomplete" placeholder="Enter your initial address" type="text" />
                     </div>
-                    <!--...footer that contain the botton to create or cancel -->
-                  <div class="modal-footer">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                      <button type="button" class="btn btn-success" id="submit">Create Event</button>
                   </div>
-              </div>
-          </div>
-      </div>
-      <!--............Include dialog using modal fade to editEvent event .................................-->
-      <div class="modal fade" id="editEvent" role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true" data-persist="false">
-          <div class="modal-dialog" role="document">
-              <!--Title of modal windows -->
-              <div class="modal-content">
-                  <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
-                      <h4 class="modal-title" id="eventHeader">Update Apppointment</h4>
+                  <!--Searching Box location2-->
+                  <div class="col">
+                    <label for="locationField2" class="form-control-label">End location</label>
+                    <div id="locationField2">
+                      <input id="autocomplete2" placeholder="Enter your final address" type="text" />
+                    </div>
                   </div>
-                  <!--...Dialog that contain the fields to edit an event -->
-                  <div class="modal-body">
-                    <form>
-                      <!--Title event field -->
-                      <div class="form-group">
-                        <label for="title" class="form-control-label">Title</label>
-                        <input type="text" class="form-control" id="editTitle">
-                      </div>
-                      <!--..................................................-Searching Box -->
-                      <div class="row">
-                          <!-- Searching Box location1-->
-                          <div class="col">
-                            <label for="editlocationField" class="form-control-label">Start location</label>
-                              <div id="editocationField">
-                                <input id="editautocomplete" placeholder="Enter your initial address" type="text" />
-                              </div>
-                          </div>
-                          <!--Searching Box location2-->
-                          <div class="col">
-                            <label for="editlocationField2" class="form-control-label">End location</label>
-                              <div id="editlocationField2">
-                                <input id="editautocomplete2" placeholder="Enter your final address" type="text" />
-                              </div>
-                          </div>
-                       </div>
-                       <!--.................................................Start and End time.-->
-                       <div class="row">
-                      <!-- Box Start time-->
-                          <div class="col">
-                            <label for="editstime">Start time</label>
-                            <input type="text" id="editstime" >
-                          </div>
-                      <!-- Box End time-->
-                          <div class="col">
-                            <label for="editetime">End time</label>
-                            <input type="text" id="editetime" >
-                          </div>
-                        </div>
-                      <!--..................................................Description field-->
-                      <div class="form-group">
-                        <label for="editinfo_description">Description</label>
-                        <textarea class="form-control" id="editinfo_description" rows="3"></textarea>
-                      </div>
-                      </form>
-                      </div>
-
-                      <div class="modal-footer">
-                          <button type="button" class="btn btn-danger left" id="delete">Delete Event</button>
-                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                          <button type="button" class="btn btn-success" id="update">Update Event</button>
-                      </div>
-              </div>
+                </div>
+                <!--Start and End time.-->
+                <div class="row">
+                  <!-- Box Start time-->
+                  <div class="col">
+                    <label for="stime">Start time</label>
+                    <input type="text" id="stime" >
+                  </div>
+                  <!-- Box End time-->
+                  <div class="col">
+                    <label for="etime">End time</label>
+                    <input type="text" id="etime" >
+                  </div>
+                </div>
+                <!--Description field-->
+                <div class="form-group">
+                  <label for="info_description">Description</label>
+                  <textarea class="form-control" id="info_description" rows="3"></textarea>
+                </div>
+              </form>
+            </div>
+            <!-- Footer that contains the botton to create or cancel -->
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-success" id="submit">Create Event</button>
+            </div>
           </div>
+        </div>
+    </div>
+
+    <!--EDIT EVENT MODAL-->
+    <div class="modal fade" id="editEvent" role="dialog" aria-labelledby="eventFormLabel" aria-hidden="true" data-persist="false">
+      <div class="modal-dialog" role="document">
+        <!--Title of modal windows -->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title" id="eventHeader">Update Apppointment</h4>
+          </div>
+          <!--Dialog that contain the fields to edit an event -->
+          <div class="modal-body">
+            <form>
+            <!--Title event field -->
+              <div class="form-group">
+                <label for="title" class="form-control-label">Title</label>
+                <input type="text" class="form-control" id="editTitle">
+              </div>
+              <!--Searching Box -->
+              <div class="row">
+                <!-- Searching Box location1-->
+                <div class="col">
+                  <label for="editlocationField" class="form-control-label">Start location</label>
+                  <div id="editocationField">
+                    <input id="editautocomplete" placeholder="Enter your initial address" type="text" />
+                  </div>
+                </div>
+                <!--Searching Box location2-->
+                <div class="col">
+                  <label for="editlocationField2" class="form-control-label">End location</label>
+                  <div id="editlocationField2">
+                    <input id="editautocomplete2" placeholder="Enter your final address" type="text" />
+                  </div>
+                </div>
+              </div>
+              <!--Start and End time.-->
+              <div class="row">
+                <!-- Box Start time-->
+                <div class="col">
+                  <label for="editstime">Start time</label>
+                  <input type="text" id="editstime" >
+                </div>
+                <!-- Box End time-->
+                <div class="col">
+                  <label for="editetime">End time</label>
+                  <input type="text" id="editetime" >
+                </div>
+              </div>
+              <!--.Description field-->
+              <div class="form-group">
+                <label for="editinfo_description">Description</label>
+                <textarea class="form-control" id="editinfo_description" rows="3"></textarea>
+              </div>
+            </form>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-danger left" id="delete">Delete Event</button>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-success" id="update">Update Event</button>
+          </div>
+        </div>
       </div>
+    </div>
 
-      <!-- .........................................................................my js sources -->
-      <!--Js of  timepicker -->
-      <script src='../../scrtimer/js/timedropper.js'></script>
+    <!-- .my js sources -->
+    <!--Js of  timepicker -->
+    <script src='../../scrtimer/js/timedropper.js'></script>
 
-      <script>
+    <script>
       $( "#stime" ).timeDropper({
-         format: 'HH:mm',
-         setCurrentTime: true,
-         meridians: false});
+        format: 'HH:mm',
+        setCurrentTime: true,
+        meridians: false});
       $( "#etime" ).timeDropper({
-         format: 'HH:mm',
-         setCurrentTime: true,
-         meridians: false});
+        format: 'HH:mm',
+        setCurrentTime: true,
+        meridians: false});
       $( "#editstime" ).timeDropper({
-         format: 'HH:mm',
-         setCurrentTime: true,
-         meridians: false});
+        format: 'HH:mm',
+        setCurrentTime: true,
+        meridians: false});
       $( "#editetime" ).timeDropper({
-         format: 'HH:mm',
-         setCurrentTime: true,
-         meridians: false});
-      </script>
+        format: 'HH:mm',
+        setCurrentTime: true,
+      meridians: false});
+    </script>
 
-      <!--call the searchbox.js tha contain the  javascript code for search location box 1 and 2-->
-      <script type="text/javascript" src="dist/scripts/searchbox.js"></script>
+    <!--call the searchbox.js tha contains the javascript code for search location box 1 and 2-->
+    <script type="text/javascript" src="dist/scripts/searchbox.js"></script>
+    
+    <!--- js files with code -->
+    <script type="text/javascript" src="dist/scripts/main.js"></script>
+    <script type="text/javascript" src="dist/scripts/app.js"></script>
 
-      <!--script type="text/javascript" src="dist/scripts/login.js"></script-->
-      <script type="text/javascript" src="dist/scripts/main.js"></script>
-      <!--- call the app.js that contain the javascript code -->
-      <script type="text/javascript" src="dist/scripts/app.js"></script>
-
-      <!--- call the event.js that contain the events saved -->
-      <script type="text/javascript" src="dist/scripts/events.js"></script>
+    <!--- call the event.js that contains the events saved -->
+    <script type="text/javascript" src="dist/scripts/events.js"></script>
 
 
-      <!--............................................................................external sources.-->
-      <!--.......js for proper funtionalities of timerpicker.......-->
-      <script src="http://code.jquery.com/jquery-1.12.1.min.js"></script>
-      <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-      <!--.......js for googlemap.......-->
-      <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKQX3cyZ7pVKmBwE8wiowivW9qH62AVk8&libraries=places&callback=initAutocomplete" async defer></script>
-      <!--.......js others.......-->
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
-    </body>
+    <!--EXTERNAL SOURCES-->
+    <!--older jquery version for proper funtionalities of timerpicker-->
+    <script src="http://code.jquery.com/jquery-1.12.1.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+
+    <!--Google Maps API source-->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKQX3cyZ7pVKmBwE8wiowivW9qH62AVk8&libraries=places&callback=initAutocomplete" async defer></script>
+        
+    <!--.......Jquery, ajax, bootstrap and fullcalendar CDN's.......-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+  </body>
 </html>

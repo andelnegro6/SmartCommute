@@ -2,7 +2,7 @@ var mainApp = {};
 
 (function(){
   var firebase = app_fireBase;
-var uid = null;
+  var uid = null;
   firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
         // User is signed in.
