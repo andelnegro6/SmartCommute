@@ -118,7 +118,8 @@ $(document).ready(function(){
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         $('#newEvent').modal('hide');
         
-        //sends data to travlendar database:
+        //we must APPEND to firebase DB, and .set just substitutes
+        //one event for another.
         firebase.database().ref('users/' + uid).set({
           //id: id,
           title: eventData.title,
@@ -150,7 +151,7 @@ $(document).ready(function(){
     $('#editEvent').modal('show');
     $('#update').unbind();
     
-    console.log('hola asfefesss');
+    console.log('hola gueyes');
     //DATE FORMATS (SUN 4 NOV 2018 yadayadayada)
 
     $('#update').on('click', function() {
@@ -166,7 +167,7 @@ $(document).ready(function(){
         email = user.email;
         emailVerified = user.emailVerified;
         uid = user.uid;
-      }
+      } //what we actually care for here is uid
 
       var ano_s = (calEvent.start._d.getUTCFullYear()).toString();
       var mes_s = (calEvent.start._d.getUTCMonth() + 1).toString();
@@ -206,8 +207,8 @@ $(document).ready(function(){
       if (title){
         calEvent.description = comentario;
         calEvent.title = title;
-        calEvent.start ='' ;
-        calEvent.end ='' ;
+        calEvent.start = f_inicio + "T"+ stiempo + ":00.000Z";
+        calEvent.end = f_fin + "T" + etiempo + ":00.000Z";
         
         var eventData={
           title: title,
@@ -219,6 +220,7 @@ $(document).ready(function(){
         $('#calendar').fullCalendar('updateEvent', calEvent);
         $('#editEvent').modal('hide');
 
+        //we need to set given event. It must be event with its ID
         firebase.database().ref('users/' + uid).set({
           //id: id,
           title: eventData.title,
