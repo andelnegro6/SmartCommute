@@ -1,6 +1,7 @@
 $(document).ready(function(){
   var inicio='';
   var fin='';
+  var newEventKey;
 
   //fullCalendar configuration:
   $('#calendar').fullCalendar({
@@ -52,7 +53,23 @@ $(document).ready(function(){
   var loadEvents = function() {
     $.getScript("scripts/events.js", function(){
     });
-  }
+  };
+
+  //Update new event function
+  var writeNewEvent = function(uid, title, description, start, end){
+    var eventData = {
+      title: title,
+      start: start,
+      end: end,
+      description: description
+    };
+
+    newEventKey = firebase.database().ref().child('events').push().key;
+    var updates = {};
+
+    updates['/users/' + uid + '/events/' + newEventKey] = eventData;
+    return firebase.database().ref().update(updates), newEventKey;
+  };
 
   //Create a newEvent
   var newEvent = function(startDate){
@@ -110,25 +127,19 @@ $(document).ready(function(){
       if (title) {
         var eventData = {
           title: title,
-          start: inicio + "T"+ stiempo + ":00.000Z",
-          end: fin2+ "T"+ etiempo + ":00.000Z",
+          start: inicio + "T" + stiempo + ":00.000Z",
+          end: fin2 + "T" + etiempo + ":00.000Z",
           description: comentario
         };
         
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         $('#newEvent').modal('hide');
         
-        //we must APPEND to firebase DB, and .set just substitutes
-        //one event for another.
-        firebase.database().ref('users/' + uid).set({
-          //id: id,
-          title: eventData.title,
-          description : eventData.description,
-          start: eventData.start,
-          end: eventData.end
-        });
+        // we must APPEND to firebase DB, and .set just substitutes
+        // one event for another.
 
-        // console.log(eventData);
+        writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
+        console.log(newEventKey);
       }else{
         alert("Title can't be blank. Please try again.");
       }
@@ -152,7 +163,6 @@ $(document).ready(function(){
     $('#update').unbind();
     
     console.log('hola gueyes');
-    //DATE FORMATS (SUN 4 NOV 2018 yadayadayada)
 
     $('#update').on('click', function() {
       var title = $('input#editTitle').val();
@@ -221,8 +231,7 @@ $(document).ready(function(){
         $('#editEvent').modal('hide');
 
         //we need to set given event. It must be event with its ID
-        firebase.database().ref('users/' + uid).set({
-          //id: id,
+        firebase.database().ref('users/' + uid + /events/ + eventKey).set({
           title: eventData.title,
           description : eventData.description,
           start: eventData.start,
