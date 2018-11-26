@@ -3,6 +3,7 @@
         "user1": {
             "events": {
                 "event1": {
+                    "id": "",
                     "title": "",
                     "description": "",
                     "start_time": "",

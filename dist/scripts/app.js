@@ -27,11 +27,11 @@ $(document).ready(function () {
       inicio = startDate.format();
       fin = endDate.format();
       newEvent(startDate);
-      // console.log(inicio, typeof inicio, fin, typeof fin); //fin throws wrong day
     },
 
     eventClick: function eventClick(calEvent, jsEvent, view) {
       editEvent(calEvent);
+      console.log(calEvent.id); //each event's ID is shown! good.
     },
 
     //Modify the event adding a new element and generate a pop over of title and description
@@ -133,14 +133,13 @@ $(document).ready(function () {
           description: comentario
         };
 
+        writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
+        eventData.id = newEventKey; //appends the id generated from DB to the event
+        console.log(eventData);
+
+        //renders event onto calendar with ID generated from firebase DB
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         $('#newEvent').modal('hide');
-
-        // we must APPEND to firebase DB, and .set just substitutes
-        // one event for another.
-
-        writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
-        console.log(newEventKey);
       } else {
         alert("Title can't be blank. Please try again.");
       }
@@ -162,8 +161,6 @@ $(document).ready(function () {
     $('input#editetime').val(updeHours + ":" + updeMins);
     $('#editEvent').modal('show');
     $('#update').unbind();
-
-    console.log('hola gueyes');
 
     $('#update').on('click', function () {
       var title = $('input#editTitle').val();
@@ -232,7 +229,7 @@ $(document).ready(function () {
         $('#editEvent').modal('hide');
 
         //we need to set given event. It must be event with its ID
-        firebase.database().ref('users/' + uid + /events/ + eventKey).set({
+        firebase.database().ref('users/' + uid + '/events/' + calEvent.id).set({
           title: eventData.title,
           description: eventData.description,
           start: eventData.start,
@@ -252,7 +249,6 @@ $(document).ready(function () {
       } else {
         $('#calendar').fullCalendar('removeEvents', [calEvent._id]);
       }
-
       $('#editEvent').modal('hide');
     });
   };
@@ -285,9 +281,3 @@ function writeUserData(userId, name, email) {
     end: eventData.end
   });
 }
-
-//$(function() {
-//   // loadEvents();
-//   // saveEvent();
-
-//   });
