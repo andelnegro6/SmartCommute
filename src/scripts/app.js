@@ -241,6 +241,12 @@ $(document).ready(function(){
     });
     
     $('#delete').on('click', function() {
+      var user = firebase.auth().currentUser;
+      var uid;
+      if (user != null) {
+        uid = user.uid;
+      } 
+      firebase.database().ref('users/' + uid + '/events/' + calEvent.id).set(null);
 
       $('#delete').unbind();
       if (calEvent._id.includes("_fc")){
@@ -267,17 +273,5 @@ var disableEnter = function() {
       e.preventDefault();
       return false;
     }
-  });
-}
-
-//function that writes data to the realtime database:
-//we insert the current user's id to call the .ref method of the DB and set the event data!
-function writeUserData(userId, name, email) {
-  firebase.database().ref('users/' + userId).set({
-    //id: id,
-    title: eventData.title,
-    description : eventData.description,
-    start: eventData.start,
-    end: eventData.end
   });
 }

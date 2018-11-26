@@ -1,4 +1,4 @@
-var events = function() {
+var events = function() { //must load from firebase DB all the events of the current user!
   return [{
   id: 1,
   title: "Well, you said you wanted to be around when I made a mistake.",
@@ -24,6 +24,6 @@ var events = function() {
   start: "2018-11-20T09:00:00.000Z",
   end: "2018-11-23T18:25:00.000Z",
   dow:[0,1,2,3,4,5,6]
-  }
-];
-}
+  }];
+};
+//returns an array of the form: [{eventData}, {eventData2}, ...];

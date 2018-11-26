@@ -1,6 +1,7 @@
 "use strict";
 
 var events = function events() {
+  //must load from firebase DB all the events of the current user!
   return [{
     id: 1,
     title: "Well, you said you wanted to be around when I made a mistake.",
@@ -24,3 +25,4 @@ var events = function events() {
     dow: [0, 1, 2, 3, 4, 5, 6]
   }];
 };
+//returns an array of the form: [{eventData}, {eventData2}, ...];
