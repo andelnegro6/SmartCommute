@@ -43,17 +43,12 @@ $(document).ready(function(){
         container: 'body'
       });
     },
-  
-  //Config defaut events as a function
-    events: events()
+    // events: events(),
+    eventSources: ['src/scripts/events.js']
   });
   //------------------------------------------------------------------------------
 
-  //Load events from the file events.js
-  var loadEvents = function() {
-    $.getScript("scripts/events.js", function(){
-    });
-  };
+
 
   //Update new event function
   var writeNewEvent = function(uid, title, description, start, end){
@@ -183,7 +178,7 @@ $(document).ready(function(){
       var ano_e = (calEvent.end._d.getUTCFullYear()).toString();
       var mes_e = (calEvent.end._d.getUTCMonth() + 1).toString();
       var dia_e = (calEvent.end._d.getUTCDate()-1).toString();
-      
+
       if(dia_s.length < 2){
         dia_s = '0' + dia_s;
       }else{

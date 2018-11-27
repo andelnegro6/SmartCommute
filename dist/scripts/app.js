@@ -45,16 +45,11 @@ $(document).ready(function () {
         container: 'body'
       });
     },
-
-    //Config defaut events as a function
-    events: events()
+    // events: events(),
+    eventSources: ['src/scripts/events.js']
   });
   //------------------------------------------------------------------------------
 
-  //Load events from the file events.js
-  var loadEvents = function loadEvents() {
-    $.getScript("scripts/events.js", function () {});
-  };
 
   //Update new event function
   var writeNewEvent = function writeNewEvent(uid, title, description, start, end) {
