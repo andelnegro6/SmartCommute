@@ -141,7 +141,7 @@ $(document).ready(function(){
         writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
         eventData.id = newEventKey; //appends the id generated from DB to the event
         console.log(eventData);
-        
+         
         //renders event onto calendar with ID generated from firebase DB
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         $('#newEvent').modal('hide');
