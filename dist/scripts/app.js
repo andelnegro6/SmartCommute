@@ -46,7 +46,8 @@ $(document).ready(function () {
       });
     },
     // events: events(),
-    eventSources: ['src/scripts/events.js']
+    eventSources: ['src/scripts/events.js', 'src/scripts/settings.js']
+    //events loads the previously saved events, settings load the user's settings
   });
   //------------------------------------------------------------------------------
 
@@ -61,6 +62,7 @@ $(document).ready(function () {
     };
 
     newEventKey = firebase.database().ref().child('events').push().key;
+    eventData.id = newEventKey;
     var updates = {};
 
     updates['/users/' + uid + '/events/' + newEventKey] = eventData;
@@ -217,7 +219,8 @@ $(document).ready(function () {
           title: title,
           start: f_inicio + "T" + stiempo + ":00.000Z",
           end: f_fin + "T" + etiempo + ":00.000Z",
-          description: comentario
+          description: comentario,
+          id: calEvent.id
         };
 
         $('#calendar').fullCalendar('updateEvent', calEvent);
@@ -228,7 +231,8 @@ $(document).ready(function () {
           title: eventData.title,
           description: eventData.description,
           start: eventData.start,
-          end: eventData.end
+          end: eventData.end,
+          id: eventData.id
         });
       } else {
         alert("Title can't be blank. Please try again.");

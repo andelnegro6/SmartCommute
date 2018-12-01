@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" xmlns:og="http://ogp.me/ns#" 
+xmlns:fb="https://www.facebook.com/2008/fbml">
+    <head>
+        <link rel="manifest" href="/manifest.json">
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <meta name="description" content="" />
+        <meta name="Keywords" content="" />
+        <meta http-equiv="Content-Language" content="en" />
+        <meta http-equiv="EXPIRES" content="" />
+        <meta name="expires" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="robots" content="index, follow" />
+        <!-- Firefox, Chrome, Safari, IE 11+ and Opera. 196x196 pixels in size. -->
+        <link rel="icon" href="">
+        <!-- Style stuff -->
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+        <link rel="stylesheet" href="../../dist/css/main.min.css" />
+         <!-- Fullcallendar -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.css" media='print' />
+        <link rel='stylesheet' href='fullcalendar/fullcalendar.css' media='print' />
+        <script type="text/javascript" src="http://www.datejs.com/build/date.js"></script>
+        <script type='text/javascript' src='../../fullcalendar/gcal.js'></script>
+        <script type='text/javascript' src='../../fullcalendar/fullcalendar.js'></script>
+        <!--Firebase stuff-->
+        <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-app.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-database.js"></script>
+        <!--- call the firebase.js that contain the javascript code -->        
+        <script type="text/javascript" src="../../dist/scripts/firebase.js"></script>
+
+        <!-- standard javascript sources -->
+        <script type='text/javascript' src='../../lib/jquery.min.js'></script>
+        <script type='text/javascript' src='../../lib/moment.min.js'></script>
+
+        <title> Settings </title>
+    </head>
+    <body>
+        <style>
+            #avTransports{
+            margin-bottom: 20px;
+            margin-left: 10px;
+            margin-top: 20px;
+            }
+            #settingsTitle{
+            margin-top: 10px;
+            margin-left: 10px;
+            }
+            #prefTransport{
+            margin-top: 10px;
+            margin-left: 50px;
+            margin-right: 50px;
+            margin-bottom: 15px;
+            }
+            #saveNexit{
+            margin-top: 10px;
+            margin-left: 1000px;
+            margin-right: 50px;
+            margin-bottom: 15px;
+            }
+            #break_e_time{
+            margin-bottom: 50px;
+            }
+        </style>
+
+        <h1 id="settingsTitle">Settings</h1>
+        <h4 id="avTransports"> Select Preferred Transport:</h4>
+        <select class="form-control" id="prefTransport">
+            <option>Tram</option>
+            <option>Bus</option>
+            <option>Metro</option>
+            <option>Bike</option>
+            <option>Walk</option>
+            <option>Car</option>
+        </select>
+        <h4 id="avTransports"> Toggle available Transports: </h4>
+        <div class="form-check form-check-inline" id="prefTransport">
+            <input class="form-check-input" type="checkbox" id="a_tram" value="Tram">
+            <label class="form-check-label" for="inlineCheckbox1">Tram</label>
+        </div>
+        <div class="form-check form-check-inline" id="prefTransport">
+            <input class="form-check-input" type="checkbox" id="a_bus" value="Bus">
+            <label class="form-check-label" for="inlineCheckbox2">Bus</label>
+        </div>
+        <div class="form-check form-check-inline" id="prefTransport">
+            <input class="form-check-input" type="checkbox" id="a_metro" value="Metro">
+            <label class="form-check-label" for="inlineCheckbox3">Metro</label>
+        </div>
+        <div class="form-check form-check-inline" id="prefTransport">
+            <input class="form-check-input" type="checkbox" id="a_bike" value="Bike">
+            <label class="form-check-label" for="inlineCheckbox4">Bike</label>
+        </div>
+        <div class="form-check form-check-inline" id="prefTransport">
+            <input class="form-check-input" type="checkbox" id="a_walk" value="Walk">
+            <label class="form-check-label" for="inlineCheckbox5">Walk</label>
+        </div>
+        <div class="form-check form-check-inline" id="prefTransport">
+            <input class="form-check-input" type="checkbox" id="a_car">
+            <label class="form-check-label" for="inlineCheckbox6">Car</label>
+        </div>
+
+        <h4 id="avTransports"> Select Lunch period: </h4>
+        <h6 id="avTransports">Start time:</h6>
+        <input type="time" name="LStime" value="" id="lunch_s_time">
+        <h6 id="avTransports">End time:</h6>
+        <input type="time" name="LEtime" value="" id="lunch_e_time">
+        
+        <h4 id="avTransports"> Select Break period: </h4>
+        <h6 id="avTransports">Start time:</h6>
+        <input type="time" name="BStime" value="" id="break_s_time">
+        <h6 id="avTransports">End time:</h6>
+        <input type="time" name="BEtime" value="" id="break_e_time">
+    </br>
+        
+        <a id="cancelActions" type="button" class="btn btn-secondary" href="../../main.html">Cancel</a>
+        <a id="saveNexit" type="button" class="btn btn-success" href="../../main.html">Save & Exit</a>
+        
+
+        <!-- my js sources -->
+        <script type="text/javascript" src="../../dist/scripts/settings.js"></script>
+        <script type="text/javascript" src="../../dist/scripts/main.js"></script>
+    
+        <!-- external sources -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>  
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
+    </body>
+</html>

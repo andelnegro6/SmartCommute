@@ -17,7 +17,7 @@ var events = function events() {
   checkUser().then(function (uid) {
     console.log("i just passed " + uid + " successfully!");
     var eventReference = firebase.database().ref('users/' + uid + "/events/");
-    eventReference.on('value', gotData, errData);
+    eventReference.once('value', gotData, errData); //loads once all the events, but does not match them with their key!
   }).catch(function (error) {
     alert(error);
   });
@@ -32,6 +32,7 @@ function gotData(data) {
     var value = eventlist[key];
     console.log(value);
     myEventsArray.push(value); //appends to eventsarray each value of each event
+    $('#calendar').fullCalendar('renderEvent', myEventsArray, true);
   };
   console.log(myEventsArray.length); //checks how many events we have
   $('#calendar').fullCalendar('addEventSource', myEventsArray); //adds myEventsArray as a source to the calendar
@@ -41,33 +42,6 @@ function errData(err) {
   console.log("ERROR!" + err);
 }
 //returns an array of the form: [{eventData}, {eventData2}, ...];
-
-// [{
-//   id: 1,
-//   title: "Well, you said you wanted to be around when I made a mistake.",
-//   description: 'description for Birthday Part22w2w21w21w2w',
-//   start: "2018-11-04T14:30:00.000Z",
-//   end: "2018-11-06T18:30:00.000Z"
-//   },
-
-//   {
-//   id: 2,
-//   title: "Lunch Time",
-//   description: 'description for Birthday Party',
-//   start: '13:00',
-//   end: '14:00',
-//   backgroundColor:'#FFD700',
-//   dow:[0,1,2,3,4,5,6]
-//   },
-
-//   {
-//   id: 3,
-//   title: "4days-20-23",
-//   description: 'Rome Travel',
-//   start: "2018-11-20T09:00:00.000Z",
-//   end: "2018-11-23T18:25:00.000Z",
-//   dow:[0,1,2,3,4,5,6]
-//   }]
 
 events();
 
