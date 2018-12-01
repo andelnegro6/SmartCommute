@@ -3,6 +3,7 @@
 $(document).ready(function () {
   var inicio = '';
   var fin = '';
+  var fin2 = '';
   var newEventKey;
 
   //fullCalendar configuration:
@@ -26,7 +27,7 @@ $(document).ready(function () {
     select: function select(startDate, endDate) {
       inicio = startDate.format();
       fin = endDate.format();
-      newEvent(startDate);
+      newEvent();
     },
 
     eventClick: function eventClick(calEvent, jsEvent, view) {
@@ -70,7 +71,35 @@ $(document).ready(function () {
   };
 
   //Create a newEvent
-  var newEvent = function newEvent(startDate) {
+  var newEvent = function newEvent() {
+    //parse date format into a string for the json:
+    var Fecha = new Date(fin);
+    var fechaInicio = new Date(inicio);
+    console.log(Fecha, fin, fechaInicio);
+
+    //Fecha.setDate(Fecha.getDate());
+    var ano = Fecha.getUTCFullYear();
+    var mes = Fecha.getUTCMonth() + 1;
+    var dia = Fecha.getUTCDate() - 1;
+    var dia2 = '';
+    var mes2 = '';
+
+    if (mes.toString().length < 2) {
+      mes2 = '0' + mes.toString();
+    } else {
+      mes2 = mes.toString();
+    }
+
+    if (dia.toString().length < 2) {
+      dia2 = '0' + dia.toString();
+    } else {
+      dia2 = dia.toString();
+    }
+
+    //formato de salida para la fecha
+    fin2 = ano.toString() + '-' + mes2 + '-' + dia2;
+
+    $('#selected').text('selected days: ' + inicio + ' to ' + fin2); //shows on modal the selected date
     $('input#title').val("");
     $('textarea#info_description').val("");
     $('#newEvent').modal('show');
@@ -96,33 +125,13 @@ $(document).ready(function () {
         // you have one. Use User.getToken() instead.
       }
       /*----------------------------------------------------------------------- */
-      //parse date format into a string for the json:
-      var Fecha = new Date(fin);
+      var startToParse = inicio + " " + stiempo + " Z";
+      var endToParse = fin2 + " " + etiempo + " Z";
+      var startParsed = Date.parse(startToParse);
+      var endParsed = Date.parse(endToParse);
+      console.log(startParsed, endParsed);
 
-      //Fecha.setDate(Fecha.getDate());
-      var ano = Fecha.getUTCFullYear();
-      var mes = Fecha.getUTCMonth() + 1;
-      var dia = Fecha.getUTCDate();
-      var dia2 = '';
-      var mes2 = '';
-
-      if (mes.toString().length < 2) {
-        mes2 = '0' + mes.toString();
-      } else {
-        mes2 = mes.toString();
-      }
-
-      if (dia.toString().length < 2) {
-        dia2 = '0' + dia.toString();
-      } else {
-        dia2 = dia.toString();
-      }
-
-      //formato de salida para la fecha
-      var fin2 = ano.toString() + '-' + mes2 + '-' + dia2;
-      //var fin2 = Fechachan.toString("YYYY-MM-DD");
-
-      if (title) {
+      if (title && endParsed - startParsed >= 0) {
         var eventData = {
           title: title,
           start: inicio + "T" + stiempo + ":00.000Z",
@@ -138,13 +147,14 @@ $(document).ready(function () {
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         $('#newEvent').modal('hide');
       } else {
-        alert("Title can't be blank. Please try again.");
+        alert("Title is blank or date is incorrect. Try again.");
       }
     });
   };
 
   //Edit an event:
   var editEvent = function editEvent(calEvent) {
+    $('#editSelected').text('Selected days: ' + calEvent.start.format().split('T', 1) + ' to ' + calEvent.end.format().split('T', 1));
     $('input#editTitle').val(calEvent.title);
     $('textarea#editinfo_description').val(calEvent.description);
 
