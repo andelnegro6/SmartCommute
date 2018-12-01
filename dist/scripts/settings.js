@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 $(document).ready(function () {
     function checkUser() {
@@ -13,6 +13,29 @@ $(document).ready(function () {
             });
         });
     }
+
+    var settings = function settings() {
+        checkUser().then(function (uid) {
+            console.log("i just passed " + uid + " successfully!");
+            //if there isn't any settings data on DB, load the first time w push(?)
+            //if settings is present in DB, just load as you'd load the events
+            var settingsRef = firebase.database().ref('users/' + uid + '/settings/');
+            if (settingsRef = null) {
+                //PUSH for the first time the default settings
+            } else {
+                //snapshot of the settings
+                settingsRef.once('value', settingsData, sErrData);
+            }
+        }).catch(function (error) {
+            alert(error);
+        });
+    };
+
+    function settingsData(data) {};
+
+    function sErrData(err) {
+        console.log("ERROR!" + err);
+    };
 
     var prefTransport = $('select#prefTransport').val();
     // switch(prefTransport){
@@ -29,11 +52,14 @@ $(document).ready(function () {
 
     console.log(prefTransport, a_car);
 
-    var settings = function settings() {
-        checkUser().then(function (uid) {
-            console.log("i just passed " + uid + " successfully!");
-            //if there isn't any settings data on DB, load the first time w push(?)
-            //if settings is present in DB, just load as you'd load the events
-        });
-    };
+    // settings(); 
+
+    $("#saveNexit").on('click', function () {
+        var user = firebase.auth().currentUser;
+        if (user != null) {
+            uid = user.uid;
+        }
+
+        //updates the settings once we click the button save & exit
+    });
 });
