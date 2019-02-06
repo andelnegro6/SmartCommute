@@ -46,9 +46,9 @@ $(document).ready(function () {
         container: 'body'
       });
     },
-    // events: events(),
+    //  events: events(),
     eventSources: ['src/scripts/events.js', 'src/scripts/settings.js']
-    //events loads the previously saved events, settings load the user's settings
+    //events loads the previously saved events, settings loads the user's settings
   });
   //------------------------------------------------------------------------------
 
@@ -84,6 +84,7 @@ $(document).ready(function () {
     var dia2 = '';
     var mes2 = '';
 
+    //add 0 whenever month or day values are below 10
     if (mes.toString().length < 2) {
       mes2 = '0' + mes.toString();
     } else {
@@ -249,6 +250,7 @@ $(document).ready(function () {
       }
     });
 
+    //delete event
     $('#delete').on('click', function () {
       var user = firebase.auth().currentUser;
       var uid;
