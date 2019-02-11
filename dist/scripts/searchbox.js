@@ -70,7 +70,7 @@ function fillInAddress() {
 
   /* --- box 1-- */
   var editplace = editautocomplete.getPlace();
-  alert(place.place_id);
+  alert(editplace.place_id);
   //   codeAddress(document.getElementById('autocomplete').value);
   /* --- box 2-- */
   var editplace2 = editautocomplete2.getPlace();

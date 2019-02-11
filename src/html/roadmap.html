@@ -1,4 +1,108 @@
-<!-- Imports the map with google maps API, and matches each event's attributes of location and time of day. Roadmap is per day and there's a
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Style stuff -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+    integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="../../dist/css/main.min.css" />
+     <!-- Fullcallendar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.print.css" media='print' />
+    <link rel='stylesheet' href='fullcalendar/fullcalendar.css' media='print' />
+    <script type="text/javascript" src="http://www.datejs.com/build/date.js"></script>
+    <script type='text/javascript' src='../../fullcalendar/gcal.js'></script>
+    <script type='text/javascript' src='../../fullcalendar/fullcalendar.js'></script>
+    <!--Firebase stuff-->
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-database.js"></script>
+    <!--- call the firebase.js that contain the javascript code -->        
+    <script type="text/javascript" src="../../dist/scripts/firebase.js"></script>
+
+    <!-- standard javascript sources -->
+    <script type='text/javascript' src='../../lib/jquery.min.js'></script>
+    <script type='text/javascript' src='../../lib/moment.min.js'></script>
+
+    <title>Roadmap</title>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- LEAFLET MAPS and routing machine-->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+    integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+    crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.css" />
+    <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+    integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+    crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet-routing-machine@latest/dist/leaflet-routing-machine.js"></script>
+    <!-- leaflet control geocoder: -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
+    <script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+    <!-- HERE maps -->
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" 
+    type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" 
+    type="text/javascript" charset="utf-8"></script>
+
+  </head>
+  <body>
+
+    <!-- HERE MAPS (TESTING) -->
+    <div id="mapContainer" style="width: 1500px; height: 800px;"></div>
+    <script>
+      var platform = new H.service.Platform({
+        'app_id': 'SKrth5W6mIRCcxVYfDWi',
+        'app_code': 'bW5PezhhynKJWF85-sSZlA'
+      });
+      
+      var defaultLayers = platform.createDefaultLayers();
+      var map = new H.Map(
+                document.getElementById('mapContainer'),
+                defaultLayers.normal.map,
+                {
+                zoom: 10,
+                center: { lat: 52.5, lng: 13.4 }
+                });
+    </script>
+
+    <!-- LEAFLET MAPS (DO NOT REMOVE YET) -->
+    <!-- <div id="mapid" style="width: 1500px; height: 800px;"></div>
+    <script>
+      var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+
+      L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+        maxZoom: 18,
+        id: 'mapbox.streets',
+        accessToken: 'pk.eyJ1IjoiY2l1ZGFkYW5vdnpsYSIsImEiOiJjanJ5M3diNHgwcmp0NDVseGl2dTR0dTRzIn0.5RWTpLzp6PeINJb_SHISmg'
+      }).addTo(mymap);
+
+      //adds basic routing control to leaflet maps:
+      L.Routing.control({
+        waypoints: [
+          L.latLng(57.74, 11.94),
+          L.latLng(57.6792, 11.949)
+        ],
+        routeWhileDragging: true,
+        geocoder: L.Control.Geocoder.nominatim()
+      }).addTo(mymap);
+
+      //adds control geocoder:
+      // L.Control.geocoder().addTo(mymap);
+    </script> -->
+    <a id="cancelActions" type="button" class="btn btn-secondary" href="../../main.html">Back to main page</a>
+
+    <!-- External Sources: -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>    
+  </body>
+</html>
+
+<!-- Imports the map with leaflet, and matches each event's attributes of location and time of day. Roadmap is per day and there's a
 roadmap profile for each day as long as there's events in that day.
 
 Default inputs: initial location (most likely home address) and end location (most likely home address).
@@ -13,42 +117,4 @@ Roadmap tool takes {eventlocation[i], eventtimeofday[i]} and:
 this is the STATIC CONSTRAINT.
   -adds a time clearance after each event (marker/node), and adds this feature to the travel time shown for the trajectory that takes you to the next event.
 NOTE1: can't alert if current time - eventtimeofday[i+1] > traveltime[i] (DYNAMIC CONSTRAINT) as it needs live location from user and that's for smartphones.
-This functionality will be considered if app is really cool in the end.
-
-all these 4 functionalities thanks to googlemaps API + JS + jquery -->
-
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Roadmap</title>
-    <meta name="viewport" content="initial-scale=1.0">
-    <meta charset="utf-8">
-    <style>
-      /* Always set the map height explicitly to define the size of the div
-       * element that contains the map. */
-      #map {
-        height: 100%;
-      }
-      /* Optional: Makes the sample page fill the window. */
-      html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-      }
-    </style>
-  </head>
-  <body>
-    <div id="map"></div>
-    <script>
-      var map;
-      function initMap() {
-        map = new google.maps.Map(document.getElementById('map'), {
-          center: {lat: -34.397, lng: 150.644},
-          zoom: 8
-        });
-      }
-    </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKQX3cyZ7pVKmBwE8wiowivW9qH62AVk8&callback=initMap"
-    async defer></script>
-  </body>
-</html>
+This functionality will be considered if app is really cool in the end.-->

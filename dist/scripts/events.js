@@ -12,10 +12,10 @@ function checkUser() {
     });
   });
 }
-//must load from firebase DB all the events of the current user!
+
+//must load from firebase DB all the events of the current user:
 var events = function events() {
   checkUser().then(function (uid) {
-    console.log("i just passed " + uid + " successfully!");
     var eventReference = firebase.database().ref('users/' + uid + "/events/");
     eventReference.once('value', gotData, errData); //loads once all the events, but does not match them with their key!
   }).catch(function (error) {
@@ -26,22 +26,19 @@ var events = function events() {
 function gotData(data) {
   var myEventsArray = [];
   var eventlist = data.toJSON();
-  console.log(eventlist); //shows: {event{dataevent}, event2{}, event3{}}
+  //console.log(eventlist); //shows: {event{dataevent}, event2{}, event3{}}
   for (var key in eventlist) {
     //iterates through all events
     var value = eventlist[key];
-    console.log(value);
     myEventsArray.push(value); //appends to eventsarray each value of each event
     $('#calendar').fullCalendar('renderEvent', myEventsArray, true);
   };
-  console.log(myEventsArray.length); //checks how many events we have
   $('#calendar').fullCalendar('addEventSource', myEventsArray); //adds myEventsArray as a source to the calendar
 }
 
 function errData(err) {
   console.log("ERROR!" + err);
 }
-//returns an array of the form: [{eventData}, {eventData2}, ...];
 
 events();
 
