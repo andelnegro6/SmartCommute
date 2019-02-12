@@ -16,7 +16,7 @@
     <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase-database.js"></script>
-    <!--- call the firebase.js that contain the javascript code -->        
+    <!--- call the firebase.js that contains the javascript code -->        
     <script type="text/javascript" src="../../dist/scripts/firebase.js"></script>
 
     <!-- standard javascript sources -->
@@ -45,11 +45,13 @@
     type="text/javascript" charset="utf-8"></script>
     <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" 
     type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" 
+     type="text/javascript" charset="utf-8"></script>
 
   </head>
   <body>
 
-    <!-- HERE MAPS (TESTING) -->
+    <!-- 'HERE MAPS' (TESTING) -->
     <div id="mapContainer" style="width: 1500px; height: 800px;"></div>
     <script>
       var platform = new H.service.Platform({
@@ -65,9 +67,13 @@
                 zoom: 10,
                 center: { lat: 52.5, lng: 13.4 }
                 });
+      map.addEventListener('tap', function(evt){
+        console.log(evt.type, evt.currentPointer.type);
+      })
     </script>
 
-    <!-- LEAFLET MAPS (DO NOT REMOVE YET) -->
+
+    <!-- LEAFLET MAPS (DO NOT REMOVE YET - 7FEB 2019) -->
     <!-- <div id="mapid" style="width: 1500px; height: 800px;"></div>
     <script>
       var mymap = L.map('mapid').setView([51.505, -0.09], 13);
@@ -92,8 +98,14 @@
       //adds control geocoder:
       // L.Control.geocoder().addTo(mymap);
     </script> -->
+
+
     <a id="cancelActions" type="button" class="btn btn-secondary" href="../../main.html">Back to main page</a>
 
+    <!-- my js sources -->
+    <script type="text/javascript" src="../../dist/scripts/settings.js"></script>
+    <script type="text/javascript" src="../../dist/scripts/main.js"></script>
+    <script type="text/javascript" src="../../dist/scripts/app.js"></script>
     <!-- External Sources: -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>

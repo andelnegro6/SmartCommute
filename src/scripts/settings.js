@@ -1,4 +1,11 @@
 $(document).ready(function(){
+    //globally declare settings values
+    var defaultSettings = {
+        "availableTransports":[0, 1, 1, 1, 1, 1],
+        "preferredTransport": 'metro'
+    };
+    var userSettings = {};
+
     function checkUser(){
         return new Promise(function(resolve, reject){
           firebase.auth().onAuthStateChanged(function(user) {
@@ -12,35 +19,37 @@ $(document).ready(function(){
         });
     }
 
-    var settings = function(){
+    var getSettings = function getSettings(){
         checkUser().then(function(uid){
-            console.log("i just passed " + uid + " successfully!");
-            //if there isn't any settings data on DB, load the first time w push(?)
+            //if there isn't any settings data on DB, load the first time the defaultsets JSON
             //if settings is present in DB, just load as you'd load the events
             var settingsRef = firebase.database().ref('users/' + uid + '/settings/');
-            if (settingsRef = null){
-                //PUSH for the first time the default settings
-            } else{
-                //snapshot of the settings
-                settingsRef.once('value', settingsData, sErrData);
-            }
+            settingsRef.once('value', settingsData, sErrData);
         }).catch(function(error){
             alert(error);
         });
     };
 
     function settingsData (data) {
-
+        if (data != null || data != undefined){
+            userSettings = data.toJSON();
+            //shows: {availTransports, prefTransport} as a JSON
+        }else{
+            //if no settings set, must create default ones:
+            var updSettings = {};
+            updSettings['/users/' + uid + '/settings/'] = defaultSettings;
+            firebase.database().ref().update(updSettings);
+        }
     };
 
     function sErrData (err) {
         console.log("ERROR!" + err);
     };
 
+    getSettings(); 
+
+    //config inputs:
     var prefTransport = $('select#prefTransport').val();
-    // switch(prefTransport){
-    //     //cases of each transport, save it into a value and send it to firebase
-    // }
 
     var a_car = $('input#a_car').val();
     var a_walk = $('input#a_walk').val();
@@ -50,16 +59,21 @@ $(document).ready(function(){
     var a_tram = $('input#a_tram').val();
     var availTransports = [a_car, a_walk, a_bike, a_metro, a_bus, a_tram]; //array of booleans
     
-    console.log(prefTransport, a_car);
+    console.log(prefTransport, availTransports);
+    console.log(typeof prefTransport);
 
-    // settings(); 
 
     $("#saveNexit").on('click', function(){
         var user = firebase.auth().currentUser;
+        var uid;
         if (user != null){
             uid = user.uid;
         }
-
-        //updates the settings once we click the button save & exit
+        userSettings = {
+            "availableTransports": availTransports,
+            "preferredTransport:": prefTransport
+        }
+        var settingsRef = firebase.database().ref('users/' + uid + '/settings/');
+        settingsRef.set(userSettings);
     });
 });

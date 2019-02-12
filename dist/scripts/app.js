@@ -22,8 +22,9 @@ $(document).ready(function () {
     timezone: 'America/Chicago',
 
     select: function select(startDate, endDate) {
-      var inicio = startDate.format(); //"yyyy-MM-dd" and it is correct
-      var fin = endDate.format(); //GIVES ME yyyy-MM-(dd+1) as a string
+      //triggered once several days are selected
+      var inicio = startDate.format();
+      var fin = endDate.format();
       var finDate = new Date(endDate);
       var endDay = finDate.getUTCDate() - 1; //correct day as an integer
       var endDay2digits = '';
@@ -38,7 +39,7 @@ $(document).ready(function () {
     },
 
     dayClick: function dayClick(startDate) {
-      //this instead works for clicking day. can pass start & end as same dates
+      //triggered once a day is clicked
       var endDate = startDate;
       var fechaInicio = new Date(startDate);
       //var fstringInicio = $.fullCalendar.formatDate(fechaInicio, 'yyyy-MM-dd');
@@ -54,10 +55,12 @@ $(document).ready(function () {
     },
     //Modify the event adding a new element and generate a pop over of title and description
     eventRender: function eventRender(eventObj, $el) {
+      var inizio = eventObj.start.format().slice(12, 16);
+      var fine = eventObj.end.format().slice(12, 16);
       $el.addClass(eventObj.description);
       $el.popover({
         title: eventObj.title,
-        content: eventObj.description,
+        content: "start time: " + inizio + ", end time: " + fine,
         trigger: 'hover',
         placement: 'top',
         container: 'body'
