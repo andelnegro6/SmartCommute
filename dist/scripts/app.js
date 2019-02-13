@@ -135,9 +135,15 @@ $(document).ready(function () {
       var endParsed = Date.parse(endToParse);
       //console.log(endToParse, endParsed, startToParse, startParsed);
 
+      var eventData = {
+        title: title,
+        start: start + "T" + stiempo + ":00.000Z",
+        end: end + "T" + etiempo + ":00.000Z",
+        description: comentario
+      };
+
       var isValid = validateEvents(uid, startParsed, endParsed);
 
-      // @TODO FROM HERE
       if (title && isValid) {
         var eventData = {
           title: title,
@@ -281,18 +287,18 @@ var disableEnter = function disableEnter() {
   });
 };
 
-function validateEvents(uid, start, end) {
+function validateEvents(uid, start, end, eventData) {
   if (end - start < 0) {
     return false;
   }
-  var isValid = isNotColliding(uid, start, end);
+  var isValid = isNotColliding(uid, start, end, eventData);
   return isValid;
 }
 
-function isNotColliding(uid, start, end) {
+function isNotColliding(uid, start, end, eventData) {
   var waiting = true;
   var response = true;
-  var asd = firebase.database().ref('users/' + uid + "/events/").once('value', function gotData(data) {
+  firebase.database().ref('users/' + uid + "/events/").once('value', function gotData(data) {
     var datas = data.toJSON();
     for (var i in datas) {
       var value = datas[i];
@@ -301,9 +307,12 @@ function isNotColliding(uid, start, end) {
       //console.log(typeof eventsStart, typeof eventsEnd);
       if (eventsStart < end && eventsEnd > start) {
         response = false;
+        // break;
       }
     }
-    //console.log(yesArray);
+    // writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
+    // eventData.id = newEventKey; //appends the id generated from DB to the event
+    // console.log(eventData);
     waiting = false;
   }, errData);
   while (waiting) {}

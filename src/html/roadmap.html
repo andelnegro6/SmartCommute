@@ -58,7 +58,6 @@
         'app_id': 'SKrth5W6mIRCcxVYfDWi',
         'app_code': 'bW5PezhhynKJWF85-sSZlA'
       });
-      
       var defaultLayers = platform.createDefaultLayers();
       var map = new H.Map(
                 document.getElementById('mapContainer'),
@@ -67,11 +66,13 @@
                 zoom: 10,
                 center: { lat: 52.5, lng: 13.4 }
                 });
+      var mapEvents = new H.mapevents.MapEvents(map);
       map.addEventListener('tap', function(evt){
         console.log(evt.type, evt.currentPointer.type);
       })
+      var behavior = new H.mapevents.Behavior(mapEvents);
     </script>
-
+    <!-- ------------------------------------- -->
 
     <!-- LEAFLET MAPS (DO NOT REMOVE YET - 7FEB 2019) -->
     <!-- <div id="mapid" style="width: 1500px; height: 800px;"></div>
