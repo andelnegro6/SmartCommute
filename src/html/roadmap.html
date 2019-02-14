@@ -46,34 +46,22 @@
     <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" 
     type="text/javascript" charset="utf-8"></script>
     <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" 
-     type="text/javascript" charset="utf-8"></script>
+    type="text/javascript" charset="utf-8"></script>
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-places.js"
+    type="text/javascript" charset="UTF-8"
+    ></script>
+      <!-- user interface: -->
+    <script src="http://js.api.here.com/v3/3.0/mapsjs-ui.js" 
+    type="text/javascript" charset="utf-8"></script>
+    <link rel="stylesheet" type="text/css" 
+    href="http://js.api.here.com/v3/3.0/mapsjs-ui.css" />
 
   </head>
   <body>
 
     <!-- 'HERE MAPS' (TESTING) -->
     <div id="mapContainer" style="width: 1500px; height: 800px;"></div>
-    <script>
-      var platform = new H.service.Platform({
-        'app_id': 'SKrth5W6mIRCcxVYfDWi',
-        'app_code': 'bW5PezhhynKJWF85-sSZlA'
-      });
-      var defaultLayers = platform.createDefaultLayers();
-      var map = new H.Map(
-                document.getElementById('mapContainer'),
-                defaultLayers.normal.map,
-                {
-                zoom: 10,
-                center: { lat: 52.5, lng: 13.4 }
-                });
-      var mapEvents = new H.mapevents.MapEvents(map);
-      map.addEventListener('tap', function(evt){
-        console.log(evt.type, evt.currentPointer.type);
-      })
-      var behavior = new H.mapevents.Behavior(mapEvents);
-    </script>
-    <!-- ------------------------------------- -->
-
+    
     <!-- LEAFLET MAPS (DO NOT REMOVE YET - 7FEB 2019) -->
     <!-- <div id="mapid" style="width: 1500px; height: 800px;"></div>
     <script>
@@ -100,13 +88,13 @@
       // L.Control.geocoder().addTo(mymap);
     </script> -->
 
-
     <a id="cancelActions" type="button" class="btn btn-secondary" href="../../main.html">Back to main page</a>
 
     <!-- my js sources -->
     <script type="text/javascript" src="../../dist/scripts/settings.js"></script>
     <script type="text/javascript" src="../../dist/scripts/main.js"></script>
     <script type="text/javascript" src="../../dist/scripts/app.js"></script>
+    <script type="text/javascript" src="../../dist/scripts/maps.js"></script>
     <!-- External Sources: -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
