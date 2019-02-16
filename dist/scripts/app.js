@@ -1,8 +1,6 @@
 'use strict';
 
 $(document).ready(function () {
-  var newEventKey;
-
   //fullCalendar configuration:
   $('#calendar').fullCalendar({
     header: {
@@ -72,23 +70,6 @@ $(document).ready(function () {
   });
   //------------------------------------------------------------------------------
 
-  //Update new event function
-  var writeNewEvent = function writeNewEvent(uid, title, description, start, end) {
-    var eventData = {
-      title: title,
-      start: start,
-      end: end,
-      description: description
-    };
-
-    newEventKey = firebase.database().ref().child('events').push().key;
-    eventData.id = newEventKey;
-    var updates = {};
-
-    updates['/users/' + uid + '/events/' + newEventKey] = eventData;
-    return firebase.database().ref().update(updates), newEventKey;
-  };
-
   var fixTo2Digits = function fixTo2Digits(digits) {
     var fixedDigits;
     if (digits.length < 2) {
@@ -134,7 +115,6 @@ $(document).ready(function () {
       var startParsed = Date.parse(startToParse);
       var endParsed = Date.parse(endToParse);
       //console.log(endToParse, endParsed, startToParse, startParsed);
-
       var eventData = {
         title: title,
         start: start + "T" + stiempo + ":00.000Z",
@@ -142,29 +122,11 @@ $(document).ready(function () {
         description: comentario
       };
 
-      var isValid = validateEvents(uid, startParsed, endParsed);
-
-      if (title && isValid) {
-        var eventData = {
-          title: title,
-          start: start + "T" + stiempo + ":00.000Z",
-          end: end + "T" + etiempo + ":00.000Z",
-          description: comentario
-        };
-
-        writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
-        eventData.id = newEventKey; //appends the id generated from DB to the event
-        console.log(eventData);
-
-        //renders event onto calendar with ID generated from firebase DB
-        $('#calendar').fullCalendar('renderEvent', eventData, true);
-        eventRenderer();
-        $('#newEvent').modal('hide');
-      } else {
-        alert("Title is blank or date is incorrect. Try again.");
+      var isValid = validateEvents(uid, startParsed, endParsed, eventData);
+      if (!isValid) {
+        alert("invalid times or blank title");
       }
     });
-    // @TODO TO HERE IS NEW EVENT
   };
 
   //Edit an event:
@@ -266,6 +228,7 @@ $(document).ready(function () {
     });
   };
 });
+var newEventKey;
 
 var eventRenderer = function eventRenderer() {
   $('#calendar').fullCalendar('removeEvents');
@@ -288,7 +251,7 @@ var disableEnter = function disableEnter() {
 };
 
 function validateEvents(uid, start, end, eventData) {
-  if (end - start < 0) {
+  if (end - start < 0 && eventData.title) {
     return false;
   }
   var isValid = isNotColliding(uid, start, end, eventData);
@@ -296,9 +259,9 @@ function validateEvents(uid, start, end, eventData) {
 }
 
 function isNotColliding(uid, start, end, eventData) {
-  var waiting = true;
   var response = true;
-  firebase.database().ref('users/' + uid + "/events/").once('value', function gotData(data) {
+  var EDlocal = eventData;
+  firebase.database().ref('users/' + uid + "/events/").once('value').then(function (data) {
     var datas = data.toJSON();
     for (var i in datas) {
       var value = datas[i];
@@ -307,18 +270,53 @@ function isNotColliding(uid, start, end, eventData) {
       //console.log(typeof eventsStart, typeof eventsEnd);
       if (eventsStart < end && eventsEnd > start) {
         response = false;
-        // break;
       }
     }
-    // writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
-    // eventData.id = newEventKey; //appends the id generated from DB to the event
-    // console.log(eventData);
-    waiting = false;
-  }, errData);
-  while (waiting) {}
+
+    writeNewEvent(uid, EDlocal.title, EDlocal.description, EDlocal.start, EDlocal.end);
+    eventData.id = newEventKey; //appends the id generated from DB to the event
+    console.log(eventData);
+
+    if (response) {
+      var eventData = {
+        title: title,
+        start: start + "T" + stiempo + ":00.000Z",
+        end: end + "T" + etiempo + ":00.000Z",
+        description: comentario
+      };
+
+      // writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
+      // eventData.id = newEventKey; //appends the id generated from DB to the event
+      // console.log(eventData);
+
+      //renders event onto calendar with ID generated from firebase DB
+      $('#calendar').fullCalendar('renderEvent', eventData, true);
+      eventRenderer();
+      $('#newEvent').modal('hide');
+    } else {
+      alert("One or more events overlapping. Try again.");
+    }
+  });
+
   return response;
-}
+};
 
 function errData(err) {
   console.log("ERROR!" + err);
-}
+};
+
+//Update new event function
+var writeNewEvent = function writeNewEvent(uid, title, description, start, end) {
+  var eventData = {
+    title: title,
+    start: start,
+    end: end,
+    description: description
+  };
+
+  var newEventKey = firebase.database().ref().child('events').push().key;
+  eventData.id = newEventKey;
+  var updates = {};
+  updates['/users/' + uid + '/events/' + newEventKey] = eventData;
+  return firebase.database().ref().update(updates), newEventKey;
+};

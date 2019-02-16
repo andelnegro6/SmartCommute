@@ -1,7 +1,7 @@
 $(document).ready(function(){
     //globally declare settings values
     var defaultSettings = {
-        "availableTransports":['off', 'on', 'on', 'on', 'on', 'on'],
+        "availableTransports":[false, true, true, true, true, true],
         "preferredTransport": 'bus'
     };
     var userSettings = {};
@@ -53,26 +53,26 @@ $(document).ready(function(){
 
     function loadDatasOnFrontEnd(settings){
         console.log(settings.availableTransports, settings.preferredTransport);
-        $('input#a_car').val(settings.availableTransports[0]);
-        $('input#a_walk').val(settings.availableTransports[1]);
-        $('input#a_bike').val(settings.availableTransports[2]);
-        $('input#a_metro').val(settings.availableTransports[3]);
-        $('input#a_bus').val(settings.availableTransports[4]);
-        $('input#a_tram').val(settings.availableTransports[5]);
+        $('input#a_car').prop("checked", settings.availableTransports[0]);
+        $('input#a_walk').prop("checked", settings.availableTransports[1]);
+        $('input#a_bike').prop("checked", settings.availableTransports[2]);
+        $('input#a_metro').prop("checked", settings.availableTransports[3]);
+        $('input#a_bus').prop("checked", settings.availableTransports[4]);
+        $('input#a_tram').prop("checked", settings.availableTransports[5]);
         $('select#prefTransport').val(settings.preferredTransport);
     }
 
-    getSettings();    
+    getSettings();
 
     $("#saveNexit").on('click', function(){
         //config inputs:
         var prefTransport = $('select#prefTransport').val();
-        var a_car = $('input#a_car').val();
-        var a_walk = $('input#a_walk').val();
-        var a_bike = $('input#a_bike').val();
-        var a_metro = $('input#a_metro').val();
-        var a_bus = $('input#a_bus').val();
-        var a_tram = $('input#a_tram').val();
+        var a_car = $('input#a_car').prop("checked") || false;
+        var a_walk = $('input#a_walk').prop("checked") || false;
+        var a_bike = $('input#a_bike').prop("checked") || false;
+        var a_metro = $('input#a_metro').prop("checked") || false;
+        var a_bus = $('input#a_bus').prop("checked") || false;
+        var a_tram = $('input#a_tram').prop("checked") || false;
         var availTransports = [a_car, a_walk, a_bike, a_metro, a_bus, a_tram]; 
         
         console.log(prefTransport, availTransports);
