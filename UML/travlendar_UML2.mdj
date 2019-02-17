@@ -25093,19 +25093,19 @@
 										},
 										{
 											"_type": "UMLOperationView",
-											"_id": "AAAAAAFo91ycoD08edM=",
+											"_id": "AAAAAAFo+Awi/dy4n6c=",
 											"_parent": {
 												"$ref": "AAAAAAFo6MwlsZz/yLI="
 											},
 											"model": {
-												"$ref": "AAAAAAFo91ycVT052Qw="
+												"$ref": "AAAAAAFo+Awiudy1hJU="
 											},
 											"font": "Arial;13;0",
 											"left": 1245,
 											"top": 1520,
 											"width": 122.12255859375,
 											"height": 13,
-											"text": "-routes.Snapshot()",
+											"text": "-checkUser()",
 											"horizontalAlignment": 0
 										}
 									],
@@ -28480,11 +28480,11 @@
 						},
 						{
 							"_type": "UMLOperation",
-							"_id": "AAAAAAFo91ycVT052Qw=",
+							"_id": "AAAAAAFo+Awiudy1hJU=",
 							"_parent": {
 								"$ref": "AAAAAAFo6MwlsJz2bok="
 							},
-							"name": "routes.Snapshot",
+							"name": "checkUser",
 							"visibility": "private"
 						}
 					]
