@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  //fullCalendar configuration:
+
   $('#calendar').fullCalendar({
     header: {
     left: 'today prev,next',
@@ -49,8 +49,8 @@ $(document).ready(function(){
     },
   //Modify the event adding a new element and generate a pop over of title and description
     eventRender: function(eventObj, $el) {
-      var inizio=eventObj.start.format().slice(12,16);
-      var fine=eventObj.end.format().slice(12,16);
+      var inizio=eventObj.start.format().slice(11,16);
+      var fine=eventObj.end.format().slice(11,16);
       $el.addClass(eventObj.description);
       $el.popover({
         title: eventObj.title,
@@ -118,10 +118,7 @@ $(document).ready(function(){
         description: comentario
       };
       if(title){
-        var isValid = validateEvents(uid, startParsed, endParsed, eventData);
-        if (!isValid){
-          alert("invalid times");
-        }
+        validateEvents(uid, startParsed, endParsed, eventData);
       }else{
         alert("please insert a title");
       }
@@ -183,7 +180,7 @@ $(document).ready(function(){
       var startParsed = Date.parse(startToParse);
       var endParsed = Date.parse(endToParse);
 
-      if (title && (endParsed - startParsed) > 0){
+      if (title){
         calEvent.description = comentario;
         calEvent.title = title;
         calEvent.start = f_inicio + "T"+ stiempo + ":00.000Z";
@@ -197,20 +194,9 @@ $(document).ready(function(){
           id: calEvent.id
         };
 
-        $('#calendar').fullCalendar('updateEvent', calEvent);
-        eventRenderer();
-        $('#editEvent').modal('hide');
-
-        //we need to set given event. It must be event with its ID
-        firebase.database().ref('users/' + uid + '/events/' + calEvent.id).set({
-          title: eventData.title,
-          description : eventData.description,
-          start: eventData.start,
-          end: eventData.end,
-          id: eventData.id
-        });
+        validateEvents(uid, startParsed, endParsed, eventData, calEvent);
       }else{
-        alert("Title is blank or date is incorrect. Try again.")
+        alert("Title is blank. Try again.")
       }
     });
     
@@ -250,56 +236,59 @@ var disableEnter = function() {
   });
 }
 
-function validateEvents(uid, start, end, eventData) {
-  if ((end - start) < 0 && eventData.title){
-    return false;
-  }
-  var isValid = isNotColliding(uid, start, end, eventData);
-  return isValid;
+function allEventsOk(everyVal){
+  return everyVal > 0;
 }
 
-function isNotColliding(uid, start, end, eventData) {
-  var response = true;
-  var EDlocal = eventData;
+function validateEvents(uid, start, end, eventData, calEvent) {
+  if ((end - start) < 0 && eventData.title){ //step to verify no wrong time values (if start comes after the end)
+    alert("event times are invalid. Please correct");
+  } else{
+    isNotColliding(uid, start, end, eventData, calEvent);
+  }
+}
+
+function isNotColliding(uid, start, end, eventData, calEvent) {
   firebase.database().ref('users/' + uid + "/events/").once('value').then(function(data){
     var datas = data.toJSON();
+    var allVals = new Array;
     for(var i in datas){
       var value = datas[i];
       var eventsStart = Date.parse(value.start);
       var eventsEnd = Date.parse(value.end);
-      //console.log(typeof eventsStart, typeof eventsEnd);
       if (eventsStart < end && eventsEnd > start){
-        response = false;
+        allVals.push(0);
+      } else {
+        allVals.push(1);
       }
     }
-
-    writeNewEvent(uid, EDlocal.title, EDlocal.description, EDlocal.start, EDlocal.end);
-    eventData.id = newEventKey; //appends the id generated from DB to the event
-    console.log(eventData);
-
-    if (response) {
-      var eventData = {
-        title: title,
-        start: start + "T" + stiempo + ":00.000Z",
-        end: end + "T" + etiempo + ":00.000Z",
-        description: comentario
-      };
-
-      // writeNewEvent(uid, eventData.title, eventData.description, eventData.start, eventData.end);
-      // eventData.id = newEventKey; //appends the id generated from DB to the event
-      // console.log(eventData);
-        
-      //renders event onto calendar with ID generated from firebase DB
-      $('#calendar').fullCalendar('renderEvent', eventData, true);
-      eventRenderer();
-      $('#newEvent').modal('hide');
-
-    }else{
-      alert("One or more events overlapping. Try again.");
+    if (eventData.id != null || eventData.id != undefined){
+      allVals.pop();
+    }
+    if (allVals.every(allEventsOk)){
+      if (eventData.id == null || eventData.id == undefined){ //if event is new so there's no event id:
+        writeNewEvent(uid, eventData.title, eventData.start, eventData.end, eventData.description);
+        eventData.id = newEventKey;
+        $('#calendar').fullCalendar('renderEvent', eventData, true);
+        eventRenderer();
+        $('#newEvent').modal('hide');
+      } else { //if event exists therefore id is existent:
+        //we need to set given event. It must be event with its ID
+        firebase.database().ref('users/' + uid + '/events/' + calEvent.id).set({
+          title: eventData.title,
+          description : eventData.description,
+          start: eventData.start,
+          end: eventData.end,
+          id: eventData.id
+        });
+        $('#calendar').fullCalendar('updateEvent', calEvent);
+        eventRenderer();
+        $('#editEvent').modal('hide');
+      }
+    } else {
+      alert("One or more events overlapping. Try changing the time.");
     }
   });
-
-  return response;
 };
 
 function errData(err){
@@ -307,7 +296,7 @@ function errData(err){
 };
 
 //Update new event function
-var writeNewEvent = function(uid, title, description, start, end){
+var writeNewEvent = function(uid, title, start, end, description){
   var eventData = {
     title: title,
     start: start,
