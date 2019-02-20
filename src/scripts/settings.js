@@ -35,7 +35,7 @@ $(document).ready(function(){
             //shows: {availTransports, prefTransport} as a JSON
             userSettings = data.toJSON();
             loadDatasOnFrontEnd(userSettings);
-        }else{
+        }else if (data.toJSON() == null){
             //if no settings set, must create default ones:
             loadDatasOnFrontEnd(defaultSettings);
         }

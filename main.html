@@ -75,14 +75,15 @@
     <div class="jumbotron jumbotron-fluid">
       <div class="container">
         <h1 class="display-4">SmartCommute: Home</h1>
-        <p class="lead">Welcome USER, how's your day?</p>
-        <p class="lead">Please, choose something to do:</p>
+        <!-- <p class="lead">Please, choose something to do:</p> -->
       </div>
     </div>
+    <p class="lead">Welcome USER, how's your day? Choose something to do:</p>
+
 
     <!-- Bottons to access other GUI's-->
     <div class="btn-group" role="group" aria-label="Basic example">
-      <a href="src/html/appointment3.html" type="button" class="btn btn-secondary">Appointments</a>
+      <!-- <a href="src/html/appointment3.html" type="button" class="btn btn-secondary">Appointments</a> -->
       <a href="src/html/roadmap.html" type="button" class="btn btn-secondary">Roadmap</a>
       <a href="src/html/settings.html" type="button" class="btn btn-secondary">Settings</a>
     </div>
@@ -116,18 +117,11 @@
                 </div>
                 <!-- searchbox -->
                 <div class="row">
-                  <!-- Searching Box location1-->
+                  <!-- Search Box location-->
                   <div class="col">
-                    <label for="locationField" class="form-control-label">Start location</label>
+                    <label for="locationField" class="form-control-label">Location</label>
                     <div id="locationField">
                       <input id="autocomplete" placeholder="Enter your initial address" type="text" />
-                    </div>
-                  </div>
-                  <!--Searching Box location2-->
-                  <div class="col">
-                    <label for="locationField2" class="form-control-label">End location</label>
-                    <div id="locationField2">
-                      <input id="autocomplete2" placeholder="Enter your final address" type="text" />
                     </div>
                   </div>
                 </div>
@@ -182,18 +176,11 @@
               </div>
               <!--Searching Box -->
               <div class="row">
-                <!-- Searching Box location1-->
+                <!-- Search Box location-->
                 <div class="col">
-                  <label for="editlocationField" class="form-control-label">Start location</label>
+                  <label for="editlocationField" class="form-control-label">Location</label>
                   <div id="editocationField">
                     <input id="editautocomplete" placeholder="Enter your initial address" type="text" />
-                  </div>
-                </div>
-                <!--Searching Box location2-->
-                <div class="col">
-                  <label for="editlocationField2" class="form-control-label">End location</label>
-                  <div id="editlocationField2">
-                    <input id="editautocomplete2" placeholder="Enter your final address" type="text" />
                   </div>
                 </div>
               </div>
@@ -260,6 +247,8 @@
     <script type="text/javascript" src="dist/scripts/events.js"></script>
     <!-- settings.js initializes the user settings -->
     <script type="text/javascript" src="dist/scripts/settings.js"></script>
+    <!-- maps.js contains the searchbox listener for the heremaps complete function -->
+    <script type="text/javascript" src="dist/scripts/maps.js"></script>
 
     <!--EXTERNAL SOURCES-->
     <!--older jquery version for proper funtionalities of timerpicker-->

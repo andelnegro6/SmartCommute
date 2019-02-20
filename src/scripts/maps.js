@@ -1,4 +1,54 @@
 $(document).ready(function(){
+  //CALENDAR DATA
+  $('#calendarInRoadmap').fullCalendar({
+    eventOverlap: false,
+    allDay:true,
+    editable: true,
+    eventLimit: true, // allow "more" link when too many events
+    timezone: 'America/Chicago',
+    select: function(startDate, endDate) { },
+    dayClick: function(startDate) { },
+    eventClick: function(calEvent, jsEvent, view) { },
+    eventRender: function(eventObj, $el) {
+      var inizio=eventObj.start.format().slice(11,16);
+      var fine=eventObj.end.format().slice(11,16);
+      $el.addClass(eventObj.description);
+      $el.popover({
+        title: eventObj.title,
+        content: "start time: "+inizio+", end time: "+fine,
+        trigger: 'hover',
+        placement: 'top',
+        container: 'body'
+      });
+    },
+    eventSources: ['src/scripts/events.js', 'src/scripts/settings.js']
+  });
+
+  var initializeRightCalendar = function()  {
+    $('#calendarInRoadmap').fullCalendar('changeView', 'agendaDay');
+    $('#calendarInRoadmap').fullCalendar('option', {
+      slotEventOverlap: false,
+      allDaySlot: false,
+      header: {
+        right: 'prev,next today'
+      },
+      selectable: true,
+      selectHelper: true,
+    });
+  }
+
+  var showTodaysDate = function() {
+    var nuDate =  new Date();
+    var y = nuDate.getFullYear();
+    var m = nuDate.getMonth() + 1;
+    var d = nuDate.getDate();
+    $("#todaysDate").html("Today is " + m + "/" + d + "/" + y);
+  };
+
+  showTodaysDate();
+  initializeRightCalendar();
+
+  /*--------------------------------------------------------MAPS DATA--------------------------------------------------------------*/
   var platform = new H.service.Platform({
           'app_id': 'SKrth5W6mIRCcxVYfDWi',
           'app_code': 'bW5PezhhynKJWF85-sSZlA'
@@ -11,6 +61,8 @@ $(document).ready(function(){
       zoom: 10,
       center: { lat: 52.5, lng: 13.4 }
       });
+  
+
   var mapEvents = new H.mapevents.MapEvents(map);
   map.addEventListener('tap', function(evt){
       console.log(evt.type, evt.currentPointer.type);
