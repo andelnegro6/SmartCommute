@@ -32,8 +32,10 @@ function gotData(data) {
     var value = eventlist[key];
     myEventsArray.push(value); //appends to eventsarray each value of each event
     $('#calendar').fullCalendar('renderEvent', myEventsArray, true);
+    $('#calendarInRoadmap').fullCalendar('renderEvent', myEventsArray, true);
   };
   $('#calendar').fullCalendar('addEventSource', myEventsArray); //adds myEventsArray as a source to the calendar
+  $('#calendarInRoadmap').fullCalendar('addEventSource', myEventsArray); //adds myEventsArray as a source to the calendar in the roadmap
 }
 
 function errData(err) {
