@@ -93,6 +93,7 @@ $(document).ready(function () {
       var stiempo = $('input#stime').val();
       var etiempo = $('input#etime').val();
       var comentario = $('textarea#info_description').val();
+      var location = $('input#newEventLocation').val();
 
       /*-------------------------get user data--------------------------------*/
       //to get the current user and link its info to the events:
@@ -110,8 +111,8 @@ $(document).ready(function () {
       //now we must load all event's start and end times here in date format:
 
       /*----------------------------------------------------------------------- */
-      var startToParse = start + " " + stiempo + " Z";
-      var endToParse = end + " " + etiempo + " Z";
+      var startToParse = start + "T" + stiempo + ":00";
+      var endToParse = end + "T" + etiempo + ":00";
       var startParsed = Date.parse(startToParse);
       var endParsed = Date.parse(endToParse);
       //console.log(endToParse, endParsed, startToParse, startParsed);
@@ -119,7 +120,8 @@ $(document).ready(function () {
         title: title,
         start: start + "T" + stiempo + ":00.000Z",
         end: end + "T" + etiempo + ":00.000Z",
-        description: comentario
+        description: comentario,
+        location: location
       };
       if (title) {
         validateEvents(uid, startParsed, endParsed, eventData);
@@ -135,6 +137,7 @@ $(document).ready(function () {
     $('#editSelected').text('Selected days: ' + calEvent.start.format().split('T', 1) + ' to ' + calEvent.end.format().split('T', 1));
     $('input#editTitle').val(calEvent.title);
     $('textarea#editinfo_description').val(calEvent.description);
+    $('input#editEventLocation').val(calEvent.location);
 
     //extracts hours and minutes from calEvent (saved event) ONLY to show on modal:
     var updstHours = (calEvent.start._d.getHours() - 1).toString();
@@ -158,6 +161,7 @@ $(document).ready(function () {
       var stiempo = $('input#editstime').val(); //string 'hh:mm'
       var etiempo = $('input#editetime').val(); //string
       var comentario = $('textarea#editinfo_description').val();
+      var location = $('input#editEventLocation').val();
 
       var user = firebase.auth().currentUser;
       var name, email, uid, emailVerified;
@@ -188,12 +192,14 @@ $(document).ready(function () {
         calEvent.title = title;
         calEvent.start = f_inicio + "T" + stiempo + ":00.000Z";
         calEvent.end = f_fin + "T" + etiempo + ":00.000Z";
+        calEvent.location = location;
 
         var eventData = {
           title: title,
           start: f_inicio + "T" + stiempo + ":00.000Z",
           end: f_fin + "T" + etiempo + ":00.000Z",
           description: comentario,
+          location: location,
           id: calEvent.id
         };
 
@@ -272,7 +278,7 @@ function isNotColliding(uid, start, end, eventData, calEvent) {
     if (allVals.every(allEventsOk)) {
       if (eventData.id == null || eventData.id == undefined) {
         //if event is new so there's no event id:
-        writeNewEvent(uid, eventData.title, eventData.start, eventData.end, eventData.description);
+        writeNewEvent(uid, eventData.title, eventData.start, eventData.end, eventData.description, eventData.location);
         eventData.id = newEventKey;
         $('#calendar').fullCalendar('renderEvent', eventData, true);
         eventRenderer();
@@ -302,14 +308,14 @@ function errData(err) {
 };
 
 //Update new event function
-var writeNewEvent = function writeNewEvent(uid, title, start, end, description) {
+var writeNewEvent = function writeNewEvent(uid, title, start, end, description, location) {
   var eventData = {
     title: title,
     start: start,
     end: end,
-    description: description
+    description: description,
+    location: location
   };
-
   var newEventKey = firebase.database().ref().child('events').push().key;
   eventData.id = newEventKey;
   var updates = {};

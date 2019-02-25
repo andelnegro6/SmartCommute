@@ -8,11 +8,11 @@ $(document).ready(function () {
     editable: true,
     eventLimit: true, // allow "more" link when too many events
     timezone: 'America/Chicago',
-    select: function select(startDate, endDate) {},
-    dayClick: function dayClick(startDate) {},
-    eventClick: function eventClick(calEvent, jsEvent, view) {
-      //center on the map the event's popup selected.
-    },
+    // select: function(startDate, endDate) { },
+    // dayClick: function(startDate) { },
+    // eventClick: function(calEvent, jsEvent, view) {
+    //   //center on the map the event's popup selected.
+    // },
     eventRender: function eventRender(eventObj, $el) {
       var inizio = eventObj.start.format().slice(11, 16);
       var fine = eventObj.end.format().slice(11, 16);
@@ -53,29 +53,29 @@ $(document).ready(function () {
   initializeRightCalendar();
 
   /*------------------MY LOCATION--------------------*/
-  var getLocation = function getLocation() {
+  function getLocation() {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(showPosition);
-      console.log(myPosX, myPosY);
     } else {
       alert("geolocation is not supported by this browser.");
     }
-  };
+  }
 
-  function showPosition(position) {
-    var myPosX = position.coords.latitude;
-    var myPosY = position.coords.longitude;
+  function showPosition(pos) {
+    var pcoords = pos.coords;
+    var myPosX = pcoords.latitude;
+    var myPosY = pcoords.longitude;
     mapWmyLoc(myPosX, myPosY);
   }
 
   getLocation();
   /*--------------------------------------------------------MAPS DATA--------------------------------------------------------------*/
   function mapWmyLoc(myPosX, myPosY) {
-    var platform = new H.service.Platform({
+    var platform = new H.service.Platform({ //my heremaps platform
       'app_id': 'SKrth5W6mIRCcxVYfDWi',
       'app_code': 'bW5PezhhynKJWF85-sSZlA'
     });
-
+    console.log(myPosX, myPosY); // SHOWS LOCATION!
     var defaultLayers = platform.createDefaultLayers();
     var map = new H.Map(document.getElementById('mapContainer'), defaultLayers.normal.map, {
       zoom: 10,
@@ -84,12 +84,32 @@ $(document).ready(function () {
 
     var mapEvents = new H.mapevents.MapEvents(map);
 
+    //shows that a click has been made in console log:
     map.addEventListener('tap', function (evt) {
       console.log(evt.type, evt.currentPointer.type);
     });
 
     var behavior = new H.mapevents.Behavior(mapEvents);
     var ui = H.ui.UI.createDefault(map, defaultLayers);
+
+    var userEvents = $('#calendarInRoadmap').fullCalendar('clientEvents');
+    console.log(userEvents); //SHOWS EVENTS
+
+    //now, to get every event data:
+    var eventTimes = [];
+    var todaysDate = new Date();
+    for (var i in userEvents) {
+      if (userEvents[i].end - todaysDate > 0) {
+        //filter all the events after today's date
+        eventTimes.push(userEvents[i].start);
+        eventTimes.push(userEvents[i].end);
+      }
+    }
+    console.log(eventTimes);
+    eventTimes.sort(function (left, right) {
+      return left.time.diff(right.time);
+    });
+    console.log(eventTimes);
 
     /* map's engine pseudocode:
       get today's events title, location, starttimes, endtimes, id and description (note that events is already loaded so no need for snapshot maybe)

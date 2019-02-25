@@ -34,17 +34,35 @@
       <link href="http://www.jqueryscript.net/css/jquerysctipttop.css" rel="stylesheet" type="text/css">
       <link href='../../scrtimer/css/timedropper.css' rel="stylesheet" type="text/css" />
 
-      <!-- LEAFLET MAPS -->
+      <!-- LEAFLET MAPS
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
       integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
       crossorigin=""/>
       <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
       integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
-      crossorigin=""></script>
+      crossorigin=""></script> -->
+
+      <!-- HERE maps -->
+      <script src="http://js.api.here.com/v3/3.0/mapsjs-core.js" 
+      type="text/javascript" charset="utf-8"></script>
+      <script src="http://js.api.here.com/v3/3.0/mapsjs-service.js" 
+      type="text/javascript" charset="utf-8"></script>
+      <script src="http://js.api.here.com/v3/3.0/mapsjs-mapevents.js" 
+      type="text/javascript" charset="utf-8"></script>
+      <script src="http://js.api.here.com/v3/3.0/mapsjs-places.js"
+      type="text/javascript" charset="UTF-8"
+      ></script>
+
+        <!-- user interface: -->
+      <script src="http://js.api.here.com/v3/3.0/mapsjs-ui.js" 
+      type="text/javascript" charset="utf-8"></script>
+      <link rel="stylesheet" type="text/css" 
+      href="http://js.api.here.com/v3/3.0/mapsjs-ui.css" />
 
       <!-- standard javascript sources -->
       <script type='text/javascript' src='lib/jquery.min.js'></script>
       <script type='text/javascript' src='lib/moment.min.js'></script>
+      <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
     <style>
       p {
@@ -65,7 +83,6 @@
       #eventHeader {
         margin-right: 140px;
       }
-
     </style>
 
    <title> Home </title>
@@ -79,7 +96,6 @@
       </div>
     </div>
     <p class="lead">Welcome USER, how's your day? Choose something to do:</p>
-
 
     <!-- Bottons to access other GUI's-->
     <div class="btn-group" role="group" aria-label="Basic example">
@@ -120,8 +136,10 @@
                   <!-- Search Box location-->
                   <div class="col">
                     <label for="locationField" class="form-control-label">Location</label>
-                    <div id="locationField">
-                      <input id="newEventLocation" placeholder="Enter your initial address" type="text" />
+                    <div id="locationField" class="ui-widget">
+                      <label for="awesomplete1"></label>
+                      <input id="newEventLocation" placeholder="Enter your initial address" type="text" class="awesomplete"
+                      onkeyup="return autoCompleteListener(this, event);"/>
                     </div>
                   </div>
                 </div>
@@ -179,8 +197,10 @@
                 <!-- Search Box location-->
                 <div class="col">
                   <label for="editlocationField" class="form-control-label">Location</label>
-                  <div id="editocationField">
-                    <input id="editEventLocation" placeholder="Enter your initial address" type="text" />
+                  <div id="editocationField" class="ui-widget">
+                    <label for="awesomplete2">insert trial</label>
+                    <input id="editEventLocation" placeholder="Enter your initial address" type="text" class="awesomplete"
+                    onkeyup="return autoCompleteListener(this, event);" />
                   </div>
                 </div>
               </div>
@@ -236,8 +256,115 @@
       meridians: false});
     </script>
 
-    <!--call the searchbox.js tha contains the javascript code for search location box 1 and 2-->
-    <script type="text/javascript" src="dist/scripts/searchbox.js"></script>
+    <script>
+      //communication with the Heremaps platform
+      var platform = new H.service.Platform({ //my heremaps platform
+      'app_id': 'SKrth5W6mIRCcxVYfDWi',
+      'app_code': 'bW5PezhhynKJWF85-sSZlA'
+      });
+      var pixelRatio = window.devicePixelRatio || 1;
+      var defaultLayers = platform.createDefaultLayers({
+        tileSize: pixelRatio === 1 ? 256 : 512,
+        ppi: pixelRatio === 1 ? undefined : 320
+      });
+
+      //autocomplete engine:
+      var AUTOCOMPLETION_URL = 'https://autocomplete.geocoder.api.here.com/6.2/suggest.json'
+      var ajaxRequest = new XMLHttpRequest();
+      var query= '';
+
+      //function triggered on key up of the input fields
+      function autoCompleteListener(textBox, event) {
+        if (query != textBox.value){
+          if (textBox.value.length >= 1){
+            var params = '?' +
+              'query=' +  encodeURIComponent(textBox.value) +   // The search text which is the basis of the query
+              '&beginHighlight=' + encodeURIComponent('<mark>') + //  Mark the beginning of the match in a token. 
+              '&endHighlight=' + encodeURIComponent('</mark>') + //  Mark the end of the match in a token. 
+              '&maxresults=5' +  // The upper limit the for number of suggestions to be included 
+                                // in the response.  Default is set to 5.
+              '&app_id=SKrth5W6mIRCcxVYfDWi' +
+              '&app_code=bW5PezhhynKJWF85-sSZlA';
+            ajaxRequest.open('GET', AUTOCOMPLETION_URL + params );
+            ajaxRequest.send();
+            console.log('called service');
+          }
+        }
+        query = textBox.value;
+
+      }
+
+      function onAutoCompleteSuccess() {
+       addSuggestionsToPanel(this.response);  // In this context, 'this' means the XMLHttpRequest itself.
+      }
+      function onAutoCompleteFailed() {
+        console.log('called fail');
+        alert('autocomplete service not available');
+      }
+      // Attach the event listeners to the XMLHttpRequest object
+      ajaxRequest.addEventListener("load", onAutoCompleteSuccess);
+      ajaxRequest.addEventListener("error", onAutoCompleteFailed);
+      ajaxRequest.responseType = "json";
+
+      //declare vars for autocomplete:
+      var inputFields = document.getElementsByClassName("awesomplete");
+
+      function addSuggestionsToPanel(response){
+        var suggestionsList = [];
+        console.log('addSuggestionsToPanel / enter with:');
+        console.log(response);
+        for (var i in response.suggestions){
+          var sStreet = response.suggestions[i].address.street;
+          var sStreetF = removeHtmls(sStreet);
+          var sCity = response.suggestions[i].address.city;
+          var sCityF = removeHtmls(sCity);
+          var sState = response.suggestions[i].address.state;
+          var sStateF = removeHtmls(sState);
+          var sZip = response.suggestions[i].address.postalCode;
+          var sZipF = removeHtmls(sZip);
+          var sCountry = response.suggestions[i].address.country;
+          var sCountryF = removeHtmls(sCountry);
+          var sSuggestion = sStreetF+sCityF+sStateF+sZipF+sCountryF; //string containing the label of the address
+          
+          suggestionsList.push(sSuggestion);
+        }
+        console.log(suggestionsList);
+        $(".awesomplete").autocomplete({
+            source: suggestionsList
+        });
+      }
+      var removeHtmls = function(sString){
+        if (sString != undefined){
+          var sString1 = sString.replace('<mark>', '');
+          var sString2 = sString1.replace('</mark>', '');
+          return sString2 + ' ';
+        }else{
+          return '';
+        }
+      }
+
+      // ///////////////////////////////////////////////////////////////////////////
+      // function geocode(platform) {
+      //   var geocoder = platform.getGeocodingService(),
+      //   geocodingParameters = {
+      //     searchText: $('.addressFields').val(),
+      //     jsonattributes : 1
+      //   };
+      //   geocoder.geocode(geocodingParameters, onSuccess, onError);
+      // }
+
+      // function onSuccess(result) {
+      //   var locations = result.response.view[0].result;
+      
+      //   addLocationsToMap(locations);
+      //   addLocationsToPanel(locations);
+        
+      // }
+      // function onError(error) {
+      //   alert('Ooops! could not establish connection with the geocoding service');
+      // }
+
+    </script>
     
     <!--- main.js initializes the user auth-->
     <script type="text/javascript" src="dist/scripts/main.js"></script>
@@ -252,14 +379,9 @@
 
     <!--EXTERNAL SOURCES-->
     <!--older jquery version for proper funtionalities of timerpicker-->
-    <script src="http://code.jquery.com/jquery-1.12.1.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-
-    <!--Google Maps API source-->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCKQX3cyZ7pVKmBwE8wiowivW9qH62AVk8&libraries=places&callback=initAutocomplete" async defer></script>
-        
-    <!--.......Jquery, ajax, bootstrap and fullcalendar CDN's.......-->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- <script src="http://code.jquery.com/jquery-1.12.1.min.js"></script> -->
+    
+    <!--.......ajax, bootstrap and fullcalendar CDN's.......-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
