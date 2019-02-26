@@ -268,10 +268,11 @@ function isNotColliding(uid, start, end, eventData, calEvent) {
         allVals.push(1);
       }
     }
-    if (eventData.id != null || eventData.id != undefined){
-      allVals.pop();
+    if (eventData.id != null || eventData.id != undefined){ 
+      allVals.pop(); //pops out the element correspondent to the current event data (to prevent self-comparison)
     }
-    if (allVals.every(allEventsOk)){
+    if (allVals.every(allEventsOk)){ //if no other event overlaps 
+
       if (eventData.id == null || eventData.id == undefined){ //if event is new so there's no event id:
         writeNewEvent(uid, eventData.title, eventData.start, eventData.end, eventData.description, eventData.location);
         eventData.id = newEventKey;
@@ -279,6 +280,7 @@ function isNotColliding(uid, start, end, eventData, calEvent) {
         eventRenderer();
         $('#newEvent').modal('hide');
       } else { //if event exists therefore id is existent:
+        
         //we need to set given event. It must be event with its ID
         firebase.database().ref('users/' + uid + '/events/' + calEvent.id).set({
           title: eventData.title,
