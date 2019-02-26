@@ -316,3 +316,24 @@ var writeNewEvent = function(uid, title, start, end, description, location){
   updates['/users/' + uid + '/events/' + newEventKey] = eventData;
   return firebase.database().ref().update(updates), newEventKey;
 };
+
+// here maps geocoding service
+function geocode(platform) {
+  var geocoder = platform.getGeocodingService(),
+  geocodingParameters = {
+    searchText: $('.addressFields').val(),
+    jsonattributes : 1
+  };
+  geocoder.geocode(geocodingParameters, onSuccess, onError);
+}
+
+function onSuccess(result) {
+  var locations = result.response.view[0].result;
+
+  addLocationsToMap(locations);
+  addLocationsToPanel(locations);
+  
+}
+function onError(error) {
+  alert('Ooops! could not establish connection with the geocoding service');
+}
