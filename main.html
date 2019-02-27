@@ -84,9 +84,8 @@
       #eventHeader {
         margin-right: 140px;
       }
-      .awesomplete {
-        z-index: 1 !important;
-        cursor: default;
+      .ui-autocomplete {
+        z-index: 99999 !important;
         position: absolute;
       }
     </style>
@@ -204,7 +203,7 @@
                 <div class="col">
                   <label for="editlocationField" class="form-control-label">Location</label>
                   <div id="editocationField" class="ui-widget">
-                    <label for="awesomplete2">insert trial</label>
+                    <label for="awesomplete2"></label>
                     <input id="editEventLocation" placeholder="Enter your initial address" type="text" class="awesomplete"
                     onkeyup="return autoCompleteListener(this, event);" />
                   </div>
