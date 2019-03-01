@@ -53,12 +53,17 @@ $(document).ready(function () {
     },
     //Modify the event adding a new element and generate a pop over of title and description
     eventRender: function eventRender(eventObj, $el) {
-      var inizio = eventObj.start.format().slice(11, 16);
-      var fine = eventObj.end.format().slice(11, 16);
+      if (eventObj.start != null || eventObj.end != null) {
+        var inizio = eventObj.start.format().slice(11, 16);
+        var fine = eventObj.end.format().slice(11, 16);
+        var content = "start time: " + inizio + ", end time: " + fine;
+      } else {
+        var content = "n/a";
+      }
       $el.addClass(eventObj.description);
       $el.popover({
         title: eventObj.title,
-        content: "start time: " + inizio + ", end time: " + fine,
+        content: content,
         trigger: 'hover',
         placement: 'top',
         container: 'body'
@@ -111,8 +116,8 @@ $(document).ready(function () {
       //now we must load all event's start and end times here in date format:
 
       /*----------------------------------------------------------------------- */
-      var startToParse = start + "T" + stiempo + ":00";
-      var endToParse = end + "T" + etiempo + ":00";
+      var startToParse = start + "T" + stiempo + ":00.000Z";
+      var endToParse = end + "T" + etiempo + ":00.000Z";
       var startParsed = Date.parse(startToParse);
       var endParsed = Date.parse(endToParse);
       //console.log(endToParse, endParsed, startToParse, startParsed);
@@ -259,52 +264,98 @@ function validateEvents(uid, start, end, eventData, calEvent) {
 }
 
 function isNotColliding(uid, start, end, eventData, calEvent) {
+  //start and end are date objects
   firebase.database().ref('users/' + uid + "/events/").once('value').then(function (data) {
     var datas = data.toJSON();
     var allVals = new Array();
+    var allEvNodes = new Array();
+    var startM = moment(start);
+    var startE = moment(end);
+    allEvNodes.push({ 'startTime': startM, 'endTime': startE, 'location': eventData.location });
     for (var i in datas) {
       var value = datas[i];
-      var eventsStart = Date.parse(value.start);
-      var eventsEnd = Date.parse(value.end);
+      var eventsStart = moment(value.start);
+      var eventsEnd = moment(value.end);
       if (eventsStart < end && eventsEnd > start) {
         allVals.push(0);
       } else {
         allVals.push(1);
+        //puts all non-colliding event start and locs in array:
+        allEvNodes.push({ 'startTime': eventsStart, 'endTime': eventsEnd, 'location': value.location });
       }
     }
     if (eventData.id != null || eventData.id != undefined) {
       allVals.pop(); //pops out the element correspondent to the current event data (to prevent self-comparison)
     }
     if (allVals.every(allEventsOk)) {
-      //if no other event overlaps 
-
-      if (eventData.id == null || eventData.id == undefined) {
-        //if event is new so there's no event id:
-        writeNewEvent(uid, eventData.title, eventData.start, eventData.end, eventData.description, eventData.location);
-        eventData.id = newEventKey;
-        $('#calendar').fullCalendar('renderEvent', eventData, true);
-        eventRenderer();
-        $('#newEvent').modal('hide');
+      //if no other event overlaps
+      var currentTime = moment();
+      if (currentTime - start >= 0) {
+        //if event has passed 
+        if (eventData.id == null || eventData.id == undefined) {
+          //if event is new so there's no event id:
+          newEventAdditionProcess(uid, eventData);
+        } else {
+          //if event exists therefore id is existent:        
+          eventModificationProcess(uid, calEvent, eventData);
+        }
       } else {
-        //if event exists therefore id is existent:
+        //if event is yet to happen, first must check if it's the next event or not
+        //to do that, we sort all the times from allEvTimes array. And since no event overlaps,
+        //start times are odd elements and end times are even elements.
+        var evlocs = [];
+        var evstimes = [];
+        var evetimes = [];
+        allEvNodes.push({ 'startTime': currentTime, 'endTime': 'n/a', 'location': 'NOW' });
+        allEvNodes.sort(function (a, b) {
+          return a.startTime - b.startTime;
+        }); //sort start times in ascending order allEvTimes[0] is most recent start time
+        console.log(allEvNodes); //events organized
+        for (var k = 0; k < allEvNodes.length; k++) {
+          //events separated
+          evlocs.push(allEvNodes[k].location);
+          evstimes.push(allEvNodes[k].startTime);
+          evetimes.push(allEvNodes[k].endTime);
+        }
+        //removes all past events with coupled locations:
+        evlocs.splice(0, evlocs.indexOf('NOW') + 1);
+        evstimes.splice(0, evstimes.indexOf(currentTime) + 1);
+        evetimes.splice(0, evetimes.indexOf('n/a') + 1);
+        console.log(evlocs, evstimes, evetimes); //these are the event nodes.
+        //events locations and times now ordered and only upcoming ones are present
 
-        //we need to set given event. It must be event with its ID
-        firebase.database().ref('users/' + uid + '/events/' + calEvent.id).set({
-          title: eventData.title,
-          description: eventData.description,
-          start: eventData.start,
-          end: eventData.end,
-          id: eventData.id
-        });
-        $('#calendar').fullCalendar('updateEvent', calEvent);
-        eventRenderer();
-        $('#editEvent').modal('hide');
+        var waypoint0 = evlocs[evlocs.indexOf(eventData.location)];
+        var waypoint1 = evlocs[evlocs.indexOf(eventData.location) + 1];
+        geocode(platform, eventData, waypoint0, waypoint1);
       }
     } else {
       alert("One or more events overlapping. Try changing the time.");
     }
   });
 };
+
+function eventModificationProcess(uid, calEvent, eventData) {
+  //we need to set given event. It must be event with its ID
+  firebase.database().ref('users/' + uid + '/events/' + calEvent.id).set({
+    title: eventData.title,
+    description: eventData.description,
+    start: eventData.start,
+    end: eventData.end,
+    id: eventData.id,
+    location: eventData.location
+  });
+  $('#calendar').fullCalendar('updateEvent', calEvent);
+  eventRenderer();
+  $('#editEvent').modal('hide');
+}
+
+function newEventAdditionProcess(uid, eventData) {
+  writeNewEvent(uid, eventData.title, eventData.start, eventData.end, eventData.description, eventData.location);
+  eventData.id = newEventKey;
+  $('#calendar').fullCalendar('renderEvent', eventData, true);
+  eventRenderer();
+  $('#newEvent').modal('hide');
+}
 
 function errData(err) {
   console.log("ERROR!" + err);
@@ -326,22 +377,20 @@ var writeNewEvent = function writeNewEvent(uid, title, start, end, description, 
   return firebase.database().ref().update(updates), newEventKey;
 };
 
-// here maps geocoding service
-function geocode(platform) {
+// here maps geocoding service functions //
+function geocode(platform, eventData, waypoint0, waypoint1) {
   var geocoder = platform.getGeocodingService(),
       geocodingParameters = {
-    searchText: $('.addressFields').val(),
+    searchText: eventData.location,
     jsonattributes: 1
   };
   geocoder.geocode(geocodingParameters, onSuccess, onError);
-}
+};
 
 function onSuccess(result) {
   var locations = result.response.view[0].result;
-
-  addLocationsToMap(locations);
-  addLocationsToPanel(locations);
-}
+};
 function onError(error) {
-  alert('Ooops! could not establish connection with the geocoding service');
-}
+  alert('Ooops!');
+};
+// //////////////////////////////////////////

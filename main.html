@@ -263,12 +263,12 @@
 
     <script>
       //communication with the Heremaps platform
-      var platform = new H.service.Platform({ //my heremaps platform
+      var myPlatform = new H.service.Platform({ //my heremaps platform
       'app_id': 'SKrth5W6mIRCcxVYfDWi',
       'app_code': 'bW5PezhhynKJWF85-sSZlA'
       });
       var pixelRatio = window.devicePixelRatio || 1;
-      var defaultLayers = platform.createDefaultLayers({
+      var defaultLayers = myPlatform.createDefaultLayers({
         tileSize: pixelRatio === 1 ? 256 : 512,
         ppi: pixelRatio === 1 ? undefined : 320
       });
@@ -292,18 +292,15 @@
               '&app_code=bW5PezhhynKJWF85-sSZlA';
             ajaxRequest.open('GET', AUTOCOMPLETION_URL + params );
             ajaxRequest.send();
-            console.log('called service');
           }
         }
         query = textBox.value;
-
       }
 
       function onAutoCompleteSuccess() {
        addSuggestionsToPanel(this.response);  // In this context, 'this' means the XMLHttpRequest itself.
       }
       function onAutoCompleteFailed() {
-        console.log('called fail');
         alert('autocomplete service not available');
       }
       // Attach the event listeners to the XMLHttpRequest object
@@ -316,8 +313,6 @@
 
       function addSuggestionsToPanel(response){
         var suggestionsList = [];
-        console.log('addSuggestionsToPanel / enter with:');
-        console.log(response);
         for (var i in response.suggestions){
           var sStreet = response.suggestions[i].address.street;
           var sStreetF = removeHtmls(sStreet);
@@ -333,7 +328,7 @@
           
           suggestionsList.push(sSuggestion);
         }
-        console.log(suggestionsList);
+        // console.log(suggestionsList);
         $(".awesomplete").autocomplete({
             source: suggestionsList
         });

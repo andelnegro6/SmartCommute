@@ -58,7 +58,7 @@ $(document).ready(function(){
       alert("geolocation is not supported by this browser.");
     }
   }
-
+ 
   function showPosition(pos){
     var pcoords = pos.coords;
     var myPosX = pcoords.latitude;

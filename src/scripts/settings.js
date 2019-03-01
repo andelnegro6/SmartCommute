@@ -52,7 +52,7 @@ $(document).ready(function(){
     };
 
     function loadDatasOnFrontEnd(settings){
-        console.log(settings.availableTransports, settings.preferredTransport);
+        // console.log(settings.availableTransports, settings.preferredTransport);
         $('input#a_car').prop("checked", settings.availableTransports[0]);
         $('input#a_walk').prop("checked", settings.availableTransports[1]);
         $('input#a_bike').prop("checked", settings.availableTransports[2]);
