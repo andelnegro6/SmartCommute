@@ -22,6 +22,7 @@ $(document).ready(function () {
 
     select: function select(startDate, endDate) {
       //triggered once several days are selected
+      console.log(startDate, endDate);
       var inicio = startDate.format();
       var fin = endDate.format();
       var finDate = new Date(endDate);
@@ -39,18 +40,15 @@ $(document).ready(function () {
 
     dayClick: function dayClick(startDate) {
       //triggered once a day is clicked
-      var endDate = startDate;
-      var fechaInicio = new Date(startDate);
-      //var fstringInicio = $.fullCalendar.formatDate(fechaInicio, 'yyyy-MM-dd');
+      // var endDate = startDate;
       var inicio = startDate.format();
-      //var fstringFin = fstringInicio;
       var fin = inicio;
       newEvent(inicio, fin); //pass in 'YYYY-MM-dd' formats
     },
 
     eventClick: function eventClick(calEvent, jsEvent, view) {
       editEvent(calEvent);
-      //console.log(calEvent); //each event's ID is shown! good.
+      //console.log(calEvent); 
     },
     //Modify the event adding a new element and generate a pop over of title and description
     eventRender: function eventRender(eventObj, $el) {
@@ -70,9 +68,8 @@ $(document).ready(function () {
         container: 'body'
       });
     },
-
-    eventSources: ['src/scripts/events.js', 'src/scripts/settings.js']
     //events loads the previously saved events, settings loads the user's settings
+    eventSources: ['src/scripts/events.js', 'src/scripts/settings.js']
   });
   //------------------------------------------------------------------------------
 
@@ -114,23 +111,16 @@ $(document).ready(function () {
         // this value to authenticate with your backend server, if
         // you have one. Use User.getToken() instead.
       }
-      //now we must load all event's start and end times here in date format:
-
       /*----------------------------------------------------------------------- */
-      var startToParse = start + "T" + stiempo + ":00.000Z";
-      var endToParse = end + "T" + etiempo + ":00.000Z";
-      var startParsed = Date.parse(startToParse);
-      var endParsed = Date.parse(endToParse);
-      //console.log(endToParse, endParsed, startToParse, startParsed);
       var eventData = {
         title: title,
-        start: start + "T" + stiempo + ":00.000Z",
-        end: end + "T" + etiempo + ":00.000Z",
+        start: start + "T" + stiempo + ":00+01:00",
+        end: end + "T" + etiempo + ":00+01:00",
         description: comentario,
         location: location
       };
       if (title) {
-        validateEvents(uid, startParsed, endParsed, eventData);
+        validateEvents(uid, eventData);
       } else {
         alert("please insert a title");
       }
@@ -185,28 +175,23 @@ $(document).ready(function () {
       var f_fin = eDateUpdated[0];
       //console.log(f_inicio, f_fin);
 
-      var startToParse = f_inicio + " " + stiempo + " Z";
-      var endToParse = f_fin + " " + etiempo + " Z";
-      var startParsed = Date.parse(startToParse);
-      var endParsed = Date.parse(endToParse);
-
       if (title) {
         calEvent.description = comentario;
         calEvent.title = title;
-        calEvent.start = f_inicio + "T" + stiempo + ":00.000Z";
-        calEvent.end = f_fin + "T" + etiempo + ":00.000Z";
+        calEvent.start = f_inicio + "T" + stiempo + ":00+01:00";
+        calEvent.end = f_fin + "T" + etiempo + ":00+01:00";
         calEvent.location = location;
 
         var eventData = {
           title: title,
-          start: f_inicio + "T" + stiempo + ":00.000Z",
-          end: f_fin + "T" + etiempo + ":00.000Z",
+          start: f_inicio + "T" + stiempo + ":00+01:00",
+          end: f_fin + "T" + etiempo + ":00+01:00",
           description: comentario,
           location: location,
           id: calEvent.id
         };
 
-        validateEvents(uid, startParsed, endParsed, eventData, calEvent);
+        validateEvents(uid, eventData, calEvent);
       } else {
         alert("Title is blank. Try again.");
       }
@@ -252,30 +237,31 @@ function allEventsOk(everyVal) {
   return everyVal > 0;
 }
 
-function validateEvents(uid, start, end, eventData, calEvent) {
+function validateEvents(uid, eventData, calEvent) {
+  var start = Date.parse(eventData.start);
+  var end = Date.parse(eventData.end);
   if (end - start < 0 && eventData.title) {
     //step to verify no wrong time values (if start comes after the end)
     alert("event times are invalid. Please correct");
   } else {
-    isNotColliding(uid, start, end, eventData, calEvent);
+    isNotColliding(uid, eventData, calEvent);
   }
 }
 
-function isNotColliding(uid, start, end, eventData, calEvent) {
-  //start and end are date objects
+function isNotColliding(uid, eventData, calEvent) {
   firebase.database().ref('users/' + uid + "/events/").once('value').then(function (data) {
     var datas = data.toJSON();
     var allVals = new Array();
     var allEvNodes = new Array();
-    var startM = moment(start);
-    var startE = moment(end);
+    var startM = moment(eventData.start).local(); //IS GIVING ME ONE HOUR EXTRA FFFFFU
+    var endM = moment(eventData.end).local();
     //node information of event to be created:
-    allEvNodes.push({ 'startTime': startM, 'endTime': startE, 'location': eventData.location });
+    allEvNodes.push({ 'startTime': startM, 'endTime': endM, 'location': eventData.location });
     for (var i in datas) {
       var value = datas[i];
       var eventsStart = moment(value.start);
       var eventsEnd = moment(value.end);
-      if (eventsStart < end && eventsEnd > start) {
+      if (eventsStart < endM && eventsEnd > startM) {
         allVals.push(0);
       } else {
         allVals.push(1);
@@ -289,7 +275,7 @@ function isNotColliding(uid, start, end, eventData, calEvent) {
     if (allVals.every(allEventsOk)) {
       //if no other event overlaps
       var currentTime = moment();
-      if (currentTime - start >= 0) {
+      if (currentTime - startM >= 0) {
         //if event has passed 
         if (eventData.id == null || eventData.id == undefined) {
           //if event is new so there's no event id:
@@ -306,21 +292,21 @@ function isNotColliding(uid, start, end, eventData, calEvent) {
             evetimes = _generateNodes.evetimes;
 
         var eventNodes = { evlocs: evlocs, evstimes: evstimes, evetimes: evetimes };
-        console.log(evlocs, evstimes, evetimes); //these are the event nodes.
+        console.log(eventNodes); //these are the event nodes.
         //events locations and times now ordered and only upcoming ones are present
         var myPlatform = new H.service.Platform({
           'app_id': 'SKrth5W6mIRCcxVYfDWi',
           'app_code': 'bW5PezhhynKJWF85-sSZlA'
         });
-        if (evlocs[0] == eventData.location) {
+        if (eventNodes.evlocs[0] == eventData.location && eventNodes.evstimes[0] == startM) {
           //if the event to be created is next event:
           navigator.geolocation.getCurrentPosition(function (pos) {
             var myPosCoords = pos.coords;
-            geocodeNext(myPlatform, eventData, calEvent, myPosCoords, currentTime, uid, startM);
+            geocodeNext(myPlatform, eventData, calEvent, uid, startM, endM, eventNodes, myPosCoords, currentTime);
           });
         } else {
           //if the event happens after one or more upcoming existing events:
-          geocodeDef(myPlatform, eventNodes, eventData, calEvent, uid, startM);
+          geocodeDef(myPlatform, eventData, calEvent, uid, startM, endM, eventNodes);
         }
       }
     } else {
@@ -394,82 +380,140 @@ var writeNewEvent = function writeNewEvent(uid, title, start, end, description, 
   return firebase.database().ref().update(updates), newEventKey;
 };
 
-// here maps geocoding service functions //
-function geocodeNext(platform, eventData, calEvent, myPosition, currentTime, uid, startM) {
-  var geocoder = platform.getGeocodingService();
-  var geocodingParameters = {
-    searchText: eventData.location,
-    jsonattributes: 1
+// here maps geocoding service functions
+function geocodeNext(platform, eventData, calEvent, uid, startM, endM, eventNodes, myPosition, currentTime) {
+  var evKplu1_sTime = eventNodes.evstimes[eventNodes.evstimes.indexOf(startM) + 1];
+  var timeGapPre = startM.diff(currentTime, 'seconds');
+  if (evKplu1_sTime != undefined) {
+    var timeGapPost = evKplu1_sTime.diff(endM, 'seconds');
+  } else {
+    var timeGapPost = 0;
   };
-  geocoder.geocode(geocodingParameters, function (result) {
-    var nextEventCoords = result.response.view[0].result;
-    var waypoint0 = 'geo!' + myPosition.latitude.toString() + ',' + myPosition.longitude.toString();
-    var waypoint1 = 'geo!' + nextEventCoords[0].location.displayPosition.latitude.toString() + ',' + nextEventCoords[0].location.displayPosition.longitude.toString();
-    console.log(waypoint0, waypoint1); //shows lat and long of waypoints as proper strings
-    var routingParams = {
-      'mode': 'fastest;car',
-      'waypoint0': waypoint0,
-      'waypoint1': waypoint1,
-      'representation': 'display',
-      'legAttributes': 'travelTime' //duration element
-    };
-    var myRouter = platform.getRoutingService();
-    var timeGap = startM.diff(currentTime, 'seconds');
-    validateWithRoutingTime(myRouter, routingParams, startM, currentTime, eventData, uid, calEvent, timeGap);
-  }, onError);
-};
+  var timegaps = { timeGapPre: timeGapPre, timeGapPost: timeGapPost };
 
-function geocodeDef(platform, eventNodes, eventData, calEvent, uid, startM) {
-  //now we need to compare {event[k] start time and location} with {event[k-1] end time and location}
-  var fromEventeTime = moment(eventNodes.evetimes[evetimes.indexOf(eventData.end) - 1]);
-  var toEventsTime = moment(eventNodes.evetimes[evetimes.indexOf(eventData.start)]);
-  var timeGap = toEventsTime.diff(fromEventeTime, 'seconds');
-
-  //for geocoding of both events:
-  var fromEventLoc = eventNodes.evlocs[evlocs.indexOf(eventData.location) - 1];
-  var toEventLoc = eventNodes.evlocs[evlocs.indexOf(eventData.location)];
-  var fromEvParams = { searchText: fromEventLoc, jsonattributes: 1 };
-  var toEvParams = { searchText: toEventLoc, jsonattributes: 1 };
+  var nxtEventLoc = eventNodes.evlocs[eventNodes.evstimes.indexOf(startM) + 1];
   var geocoder = platform.getGeocodingService();
-  geocoder.geocode(fromEvParams, function (result) {
-    var prevEventcoords = result.response.view[0].result;
-    var waypoint0 = 'geo!' + prevEventcoords[0].location.displayPosition.latitude.toString() + ',' + prevEventcoords[0].location.displayPosition.longitude.toString();
-    geocoder.geocode(toEvParams, function (res) {
-      var thisEventcoords = res.response.view[0].result;
-      var waypoint1 = 'geo!' + thisEventcoords[0].location.displayPosition.latitude.toString() + ',' + thisEventcoords[0].location.displayPosition.longitude.toString();
-      var routingParams = {
+  var curEventGeoParams = { searchText: eventData.location, jsonattributes: 1 };
+  var nxtEventGeoParams = { searchText: nxtEventLoc, jsonattributes: 1 };
+  geocoder.geocode(curEventGeoParams, function (curResult) {
+    var curEventCoords = curResult.response.view[0].result;
+    geocoder.geocode(nxtEventGeoParams, function (nxtResult) {
+      var nxtEventCoords = nxtResult.response.view[0].result;
+      var waypoint0 = 'geo!' + myPosition.latitude.toString() + ',' + myPosition.longitude.toString();
+      var waypoint1 = 'geo!' + curEventCoords[0].location.displayPosition.latitude.toString() + ',' + curEventCoords[0].location.displayPosition.longitude.toString();
+      var waypoint2 = 'geo!' + nxtEventCoords[0].location.displayPosition.latitude.toString() + ',' + nxtEventCoords[0].location.displayPosition.longitude.toString();
+      console.log(waypoint0, waypoint1, waypoint2); //shows lat and long of waypoints as proper strings
+      var routeToEventParams = {
         'mode': 'fastest;car',
         'waypoint0': waypoint0,
         'waypoint1': waypoint1,
         'representation': 'display',
         'legAttributes': 'travelTime' //duration element
       };
-      var myRouter = platform.getRoutingService();
-      validateWithRoutingTime(myRouter, routingParams, startM, 0, eventData, uid, calEvent, timeGap);
+      var routeToNxtEventParams = {
+        'mode': 'fastest;car',
+        'waypoint0': waypoint1,
+        'waypoint1': waypoint2,
+        'representation': 'display',
+        'legAttributes': 'travelTime' //duration element
+      };
+      var routeCalcs = { routeToEventParams: routeToEventParams, routeToNxtEventParams: routeToNxtEventParams };
+      validateWithRoutingTime(platform, routeCalcs, eventData, uid, calEvent, timegaps);
+    }, onError);
+  }, onError);
+};
+
+function geocodeDef(platform, eventData, calEvent, uid, startM, endM, eventNodes) {
+  //now we need to compare event[k] start time and location} with {event[k-1] end time and location
+  var evKmin1_eTime = eventNodes.evetimes[eventNodes.evetimes.indexOf(endM) - 1];
+  var evK_sTime = eventNodes.evstimes[eventNodes.evstimes.indexOf(startM)];
+  var evK_eTime = eventNodes.evetimes[eventNodes.evetimes.indexOf(endM)];
+  var evKplu1_sTime = eventNodes.evstimes[eventNodes.evstimes.indexOf(startM) + 1];
+
+  console.log(eventNodes.evetimes, eventNodes.evstimes);
+  console.log(evK_sTime, evKmin1_eTime);
+  console.log(eventData.start, eventData.end);
+
+  if (evKplu1_sTime != undefined) {
+    //if event isn't the farthest in time
+    //gap of time between the next event start and the end of event to be created: 
+    var timeGapPost = evKplu1_sTime.diff(evK_eTime, 'seconds');
+  } else {
+    var timeGapPost = 0;
+  };
+  //gap of time between the previous event end and the start of event to be created:
+  var timeGapPre = evK_sTime.diff(evKmin1_eTime, 'seconds');
+  var timegaps = { timeGapPre: timeGapPre, timeGapPost: timeGapPost };
+
+  //for geocoding of both events:
+  var fromEventLoc = eventNodes.evlocs[eventNodes.evstimes.indexOf(startM) - 1];
+  var toEventLoc = eventNodes.evlocs[eventNodes.evstimes.indexOf(startM)];
+  var nxtEventLoc = eventNodes.evlocs[eventNodes.evstimes.indexOf(startM) + 1];
+
+  //locations of event k-1, k and k+1 to calculate prev and next routes:
+  var fromEvParams = { searchText: fromEventLoc, jsonattributes: 1 };
+  var toEvParams = { searchText: toEventLoc, jsonattributes: 1 };
+  var nxtEventParams = { searchText: nxtEventLoc, jsonattributes: 1 };
+
+  var geocoder = platform.getGeocodingService();
+  geocoder.geocode(fromEvParams, function (frmResult) {
+    var prevEventcoords = frmResult.response.view[0].result;
+    geocoder.geocode(toEvParams, function (toResult) {
+      var thisEventcoords = toResult.response.view[0].result;
+      geocoder.geocode(nxtEventParams, function (nxtResult) {
+        //obtains the coordinates of all the places needed for event validation
+        var nextEventcoords = nxtResult.response.view[0].result;
+        var waypoint0 = 'geo!' + prevEventcoords[0].location.displayPosition.latitude.toString() + ',' + prevEventcoords[0].location.displayPosition.longitude.toString();
+        var waypoint1 = 'geo!' + thisEventcoords[0].location.displayPosition.latitude.toString() + ',' + thisEventcoords[0].location.displayPosition.longitude.toString();
+        var waypoint2 = 'geo!' + nextEventcoords[0].location.displayPosition.latitude.toString() + ',' + nextEventcoords[0].location.displayPosition.longitude.toString();
+        var routeToEventParams = { //route request from prev event to current event
+          'mode': 'fastest;car',
+          'waypoint0': waypoint0,
+          'waypoint1': waypoint1,
+          'representation': 'display',
+          'legAttributes': 'travelTime' //duration element
+        };
+        var routeToNxtEventParams = { //route request from current event to following event (if any)
+          'mode': 'fastest;car',
+          'waypoint0': waypoint1,
+          'waypoint1': waypoint2,
+          'representation': 'display',
+          'legAttributes': 'travelTime' //duration element
+        };
+        var routeCalcs = { routeToEventParams: routeToEventParams, routeToNxtEventParams: routeToNxtEventParams };
+        validateWithRoutingTime(platform, routeCalcs, eventData, uid, calEvent, timegaps);
+      }, onError);
     }, onError);
   }, onError);
 }
 
-function validateWithRoutingTime(myRouter, routingParams, startM, currentTime, eventData, uid, calEvent, timeGap) {
-  myRouter.calculateRoute(routingParams, function (result) {
-    var traveltime = result.response.route[0].leg[0].travelTime; //in seconds apparently
-    console.log(traveltime, startM, currentTime, timeGap);
-    //now we compare the time gap available with the travel time to get to the appointment:
-    if (timeGap + 300 - 3600 > traveltime) {
-      //if the time gap with a clearance of 5 minutes is more than the travel time then:
-      //register event like before
-      if (eventData.id == null || eventData.id == undefined) {
-        newEventAdditionProcess(uid, eventData);
+function validateWithRoutingTime(platform, routingParams, eventData, uid, calEvent, timegaps) {
+  var myRouter = platform.getRoutingService();
+  myRouter.calculateRoute(routingParams.routeToEventParams, function (toResult) {
+    var trTimeToEvent = toResult.response.route[0].leg[0].travelTime; //in seconds 
+    myRouter.calculateRoute(routingParams.routeToNxtEventParams, function (nxtResult) {
+      var trTimeToNxtEvent = nxtResult.response.route[0].leg[0].travelTime;
+      console.log(trTimeToEvent, trTimeToNxtEvent, timegaps);
+      //now we compare the time gaps available with the travel time to get to the appointment:
+      if (timegaps.timeGapPre + 300 > trTimeToEvent && timegaps.timeGapPost + 300 > trTimeToNxtEvent) {
+        //if the time gap with a clearance of 5 minutes is more than the travel time
+        //BOTH FOR the travel to get there and what it would take to get to the next event, then:
+        //register event like before
+        if (eventData.id == null || eventData.id == undefined) {
+          newEventAdditionProcess(uid, eventData);
+        } else {
+          eventModificationProcess(uid, calEvent, eventData);
+        }
       } else {
-        eventModificationProcess(uid, calEvent, eventData);
+        alert("ERROR: you're either short on time to get there or you'd be unable to get to the following appointment!");
       }
-    } else {
-      alert("ERROR: you don't have enough time to get there!");
-    }
+    }, function (err) {
+      alert(err.message);
+    });
   }, function (err) {
     alert(err.message);
   });
-}
+};
 
 function onError(error) {
   alert(error + ": geocoding service error");
