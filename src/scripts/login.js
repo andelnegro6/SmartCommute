@@ -27,9 +27,9 @@
       // firebase.auth.PhoneAuthProvider.PROVIDER_ID
     ],
     // Terms of service url.
-    tosUrl: 'main.html',
+    tosUrl: '',
     // Privacy policy url.
-    privacyPolicyUrl: 'main.html'
+    privacyPolicyUrl: ''
   };
   ui.start('#firebaseui-auth-container', uiConfig);
 })()
