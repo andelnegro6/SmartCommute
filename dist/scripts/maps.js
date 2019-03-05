@@ -119,20 +119,25 @@ $(document).ready(function () {
         gotAllUpcEvtRoutes(myRouter, myPosX, myPosY, userEvents, function (userEvents, routes) {
           //from here on, we render the events and the routes generated
           console.log(userEvents, routes);
-          var waypointsToRender = [];
+          var routeShapes = [];
           var waypointMarkers = [];
-          var routeShape = route.shape;
-          // Create a linestring to use as a point source for the route line
-          var linestring = new H.geo.LineString();
-          routeShape.forEach(function (point) {
-            var parts = point.split(',');
-            linestring.pushLatLngAlt(parts[0], parts[1]);
-          });
-          // Create a polyline to display the route:
-          var routeLine = new H.map.Polyline(linestring, {
-            style: { strokeColor: 'blue', lineWidth: 10 }
-          });
+          var linestrings = [];
+          var routeLines = [];
+
           for (var k = 0; k <= userEvents.length; k++) {
+            var routeShape = route[k].shape;
+            var linestring = new H.geo.LineString();
+            routeShape.forEach(function (point) {
+              var parts = point.split(',');
+              linestring.pushLatLngAlt(parts[0], parts[1]);
+            });
+            routeShapes.push(routeShape);
+            linestrings.push(linestring);
+            // Create a polyline to display the route:
+            var routeLine = new H.map.Polyline(linestring, {
+              style: { strokeColor: 'blue', lineWidth: 10 }
+            });
+            routeLines.push(routeLine);
             // Create a marker for the start point:
             var curMarker = new H.map.Marker({
               lat: userEvents[i].lat,

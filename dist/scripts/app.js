@@ -398,10 +398,8 @@ function geocodeNext(platform, eventData, calEvent, uid, startM, endM, eventNode
   geocoder.geocode(curEventGeoParams, function (curResult) {
     var curEventCoords = curResult.response.view[0].result;
     geocoder.geocode(nxtEventGeoParams, function (nxtResult) {
-      var nxtEventCoords = nxtResult.response.view[0].result;
       var waypoint0 = 'geo!' + myPosition.latitude.toString() + ',' + myPosition.longitude.toString();
       var waypoint1 = 'geo!' + curEventCoords[0].location.displayPosition.latitude.toString() + ',' + curEventCoords[0].location.displayPosition.longitude.toString();
-      var waypoint2 = 'geo!' + nxtEventCoords[0].location.displayPosition.latitude.toString() + ',' + nxtEventCoords[0].location.displayPosition.longitude.toString();
       console.log(waypoint0, waypoint1, waypoint2); //shows lat and long of waypoints as proper strings
       var routeToEventParams = {
         'mode': 'fastest;car',
@@ -410,14 +408,22 @@ function geocodeNext(platform, eventData, calEvent, uid, startM, endM, eventNode
         'representation': 'display',
         'legAttributes': 'travelTime' //duration element
       };
-      var routeToNxtEventParams = {
-        'mode': 'fastest;car',
-        'waypoint0': waypoint1,
-        'waypoint1': waypoint2,
-        'representation': 'display',
-        'legAttributes': 'travelTime' //duration element
-      };
-      var routeCalcs = { routeToEventParams: routeToEventParams, routeToNxtEventParams: routeToNxtEventParams };
+      if (nxtResult.response != undefined) {
+        // if there's an event after the one to be created:
+        var nxtEventCoords = nxtResult.response.view[0].result;
+        var waypoint2 = 'geo!' + nxtEventCoords[0].location.displayPosition.latitude.toString() + ',' + nxtEventCoords[0].location.displayPosition.longitude.toString();
+        var routeToNxtEventParams = {
+          'mode': 'fastest;car',
+          'waypoint0': waypoint1,
+          'waypoint1': waypoint2,
+          'representation': 'display',
+          'legAttributes': 'travelTime' //duration element
+        };
+        var routeCalcs = { routeToEventParams: routeToEventParams, routeToNxtEventParams: routeToNxtEventParams };
+      } else {
+        //if there's no event after the one to be created:
+        var routeCalcs = { routeToEventParams: routeToEventParams, 'routeToNxtEventParams': null };
+      }
       validateWithRoutingTime(platform, routeCalcs, eventData, uid, calEvent, timegaps);
     }, onError);
   }, onError);
@@ -462,10 +468,8 @@ function geocodeDef(platform, eventData, calEvent, uid, startM, endM, eventNodes
       var thisEventcoords = toResult.response.view[0].result;
       geocoder.geocode(nxtEventParams, function (nxtResult) {
         //obtains the coordinates of all the places needed for event validation
-        var nextEventcoords = nxtResult.response.view[0].result;
         var waypoint0 = 'geo!' + prevEventcoords[0].location.displayPosition.latitude.toString() + ',' + prevEventcoords[0].location.displayPosition.longitude.toString();
         var waypoint1 = 'geo!' + thisEventcoords[0].location.displayPosition.latitude.toString() + ',' + thisEventcoords[0].location.displayPosition.longitude.toString();
-        var waypoint2 = 'geo!' + nextEventcoords[0].location.displayPosition.latitude.toString() + ',' + nextEventcoords[0].location.displayPosition.longitude.toString();
         var routeToEventParams = { //route request from prev event to current event
           'mode': 'fastest;car',
           'waypoint0': waypoint0,
@@ -473,14 +477,20 @@ function geocodeDef(platform, eventData, calEvent, uid, startM, endM, eventNodes
           'representation': 'display',
           'legAttributes': 'travelTime' //duration element
         };
-        var routeToNxtEventParams = { //route request from current event to following event (if any)
-          'mode': 'fastest;car',
-          'waypoint0': waypoint1,
-          'waypoint1': waypoint2,
-          'representation': 'display',
-          'legAttributes': 'travelTime' //duration element
-        };
-        var routeCalcs = { routeToEventParams: routeToEventParams, routeToNxtEventParams: routeToNxtEventParams };
+        if (nxtResult.response != undefined) {
+          var nextEventcoords = nxtResult.response.view[0].result;
+          var waypoint2 = 'geo!' + nextEventcoords[0].location.displayPosition.latitude.toString() + ',' + nextEventcoords[0].location.displayPosition.longitude.toString();
+          var routeToNxtEventParams = { //route request from current event to following event (if any)
+            'mode': 'fastest;car',
+            'waypoint0': waypoint1,
+            'waypoint1': waypoint2,
+            'representation': 'display',
+            'legAttributes': 'travelTime' //duration element
+          };
+          var routeCalcs = { routeToEventParams: routeToEventParams, routeToNxtEventParams: routeToNxtEventParams };
+        } else {
+          var routeCalcs = { routeToEventParams: routeToEventParams, 'routeToNxtEventParams': null };
+        }
         validateWithRoutingTime(platform, routeCalcs, eventData, uid, calEvent, timegaps);
       }, onError);
     }, onError);
@@ -490,26 +500,36 @@ function geocodeDef(platform, eventData, calEvent, uid, startM, endM, eventNodes
 function validateWithRoutingTime(platform, routingParams, eventData, uid, calEvent, timegaps) {
   var myRouter = platform.getRoutingService();
   myRouter.calculateRoute(routingParams.routeToEventParams, function (toResult) {
-    var trTimeToEvent = toResult.response.route[0].leg[0].travelTime; //in seconds 
-    myRouter.calculateRoute(routingParams.routeToNxtEventParams, function (nxtResult) {
-      var trTimeToNxtEvent = nxtResult.response.route[0].leg[0].travelTime;
-      console.log(trTimeToEvent, trTimeToNxtEvent, timegaps);
-      //now we compare the time gaps available with the travel time to get to the appointment:
-      if (timegaps.timeGapPre + 300 > trTimeToEvent && timegaps.timeGapPost + 300 > trTimeToNxtEvent) {
-        //if the time gap with a clearance of 5 minutes is more than the travel time
-        //BOTH FOR the travel to get there and what it would take to get to the next event, then:
-        //register event like before
+    var trTimeToEvent = toResult.response.route[0].leg[0].travelTime; //in seconds
+    if (routingParams['routeToNxtEventParams'] != null) {
+      myRouter.calculateRoute(routingParams.routeToNxtEventParams, function (nxtResult) {
+        var trTimeToNxtEvent = nxtResult.response.route[0].leg[0].travelTime;
+        console.log(trTimeToEvent, trTimeToNxtEvent, timegaps);
+        //now we compare the time gaps available with the travel time to get to the appointment:
+        if (timegaps.timeGapPre + 300 > trTimeToEvent && timegaps.timeGapPost + 300 > trTimeToNxtEvent) {
+          //if the time gap with a clearance of 5 minutes is more than the travel time
+          //BOTH FOR the travel to get there and what it would take to get to the next event, then:
+          //register event like before
+          if (eventData.id == null || eventData.id == undefined) {
+            newEventAdditionProcess(uid, eventData);
+          } else {
+            eventModificationProcess(uid, calEvent, eventData);
+          }
+        } else {
+          alert("ERROR: you're either short on time to get there or you'd be unable to get to the following appointment!");
+        }
+      }, function (err) {
+        alert(err.message);
+      });
+    } else {
+      if (timegaps.timeGapPre + 300 > trTimeToEvent) {
         if (eventData.id == null || eventData.id == undefined) {
           newEventAdditionProcess(uid, eventData);
         } else {
           eventModificationProcess(uid, calEvent, eventData);
         }
-      } else {
-        alert("ERROR: you're either short on time to get there or you'd be unable to get to the following appointment!");
       }
-    }, function (err) {
-      alert(err.message);
-    });
+    }
   }, function (err) {
     alert(err.message);
   });
