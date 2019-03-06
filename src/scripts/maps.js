@@ -79,8 +79,6 @@ $(document).ready(function(){
     map.addEventListener('tap', function(evt){
       console.log(evt.type, evt.currentPointer.type);
     });
-    var behavior = new H.mapevents.Behavior(mapEvents);
-    var ui = H.ui.UI.createDefault(map, defaultLayers);
 
     /*--------------user ID retrieval------------------*/
     var auth = firebase.auth();
@@ -109,44 +107,74 @@ $(document).ready(function(){
         return left.start.diff(right.start);
       });
       console.log(userEvents);
-      /*-----------------------geocoding of addresses---------------------*/
-      var geocoder = platform.getGeocodingService();
+      /*-----------------------geocoding of addresses, routing and rendering--------------------------*/
+      var geocoder = platform.getGeocodingService(); 
+      // var myRouter = platform.getRoutingService();
+      var waypoints = [];
+      var waypoint0 = 'geo!'+myPosX.toString()+','+myPosY.toString();
+      waypoints.push(waypoint0); //first element: my location
 
-      gotAllUpcEvtCoords(geocoder, myPosX, myPosY, userEvents, 
-      function(userEvents, myPosX, myPosY){
+      // for (var i in userEvents){
+      //   console.log(userEvents[i].location);
+      //   var curEvtGeoParams = {searchText: userEvents[i].location, jsonattributes: 1};
+      //   getEaEvtCoords(platform, waypoints, userEvents[i], curEvtGeoParams, function(platform, waypoints, curEvt){
+      //     var waypoint0 = waypoints[i];
+      //     var waypoint1 = waypoints[parseInt(i)+1];
+      //     getEaEvtRoutes(platform, waypoint0, waypoint1, curEvt, function(curEvt, route){
+      //       console.log(curEvt);
+      //       console.log(route);
+      //     });
+      //   });
+      // }
+
+      //OMIT FROM HERE 
+      gotAllUpcEvtCoords(geocoder, myPosX, myPosY, userEvents, function(userEvents, myPosX, myPosY){
         console.log(userEvents, myPosX, myPosY);
         var myRouter = platform.getRoutingService();
         gotAllUpcEvtRoutes(myRouter, myPosX, myPosY, userEvents, function(userEvents, routes){
           //from here on, we render the events and the routes generated
           console.log(userEvents, routes);
-          var routeShapes = [];
-          var waypointMarkers = [];
-          var linestrings = [];
-          var routeLines = [];
-          
-          for (var k = 0; k <= userEvents.length; k++){
-            var routeShape = route[k].shape;
+          var behavior = new H.mapevents.Behavior(mapEvents);
+          var ui = H.ui.UI.createDefault(map, defaultLayers);
+        
+          for (var k = 0; k < userEvents.length; k++){
+            var routeShape = routes[k].shape;
+            
             var linestring = new H.geo.LineString();
             routeShape.forEach(function(point) {
               var parts = point.split(',');
               linestring.pushLatLngAlt(parts[0], parts[1]);
             });
-            routeShapes.push(routeShape);
-            linestrings.push(linestring);
             // Create a polyline to display the route:
             var routeLine = new H.map.Polyline(linestring, {
             style: { strokeColor: 'blue', lineWidth: 10 }
             });
-            routeLines.push(routeLine);
-            // Create a marker for the start point:
-            var curMarker = new H.map.Marker({
-              lat: userEvents[i].lat,
-              lng: userEvents[i].long
+
+            var startPoint = routes[k].waypoint[0].mappedPosition; 
+            var endPoint = routes[k].waypoint[1].mappedPosition;
+            
+            // Create a marker for start and end points k
+            var startMarker = new H.map.Marker({
+              lat: startPoint.latitude,
+              lng: startPoint.longitude
             });
-            waypointMarkers.push(curMarker);
-          }
+            var endMarker = new H.map.Marker({
+              lat: endPoint.latitude,
+              lng: endPoint.longitude
+            });
+            // waypointMarkers.push(startMarker);
+            // waypointMarkers.push(endMarker);
+            
+            map.addObjects([routeLine, startMarker, endMarker]);
+            ui.addBubble(new H.ui.InfoBubble({
+              lat: endPoint.latitude,
+              lng: endPoint.longitude
+            }, {content: userEvents[k].title + '. ' + userEvents[k].location + '. Time: ' + userEvents[k].start.format('HH:mm')}));
+            map.setViewBounds(routeLine.getBounds());
+          };
         });
       });
+      //UNTIL HERE
     }); 
   }
 
@@ -174,26 +202,42 @@ $(document).ready(function(){
     })();
   }
 
-  //function that retrieves from here maps all the event coordinates
+  //option1
+  // var getEaEvtCoords = function(platform, waypoints, curEvt, curEvtGeoParams, callback){
+  //   var geocoder = platform.getGeocodingService();
+  //   geocoder.geocode(curEvtGeoParams, function(result){
+  //     var curEvtCoords = result.response.view[0].result;
+  //     var coord_ = 'geo!'+curEvtCoords[0].location.displayPosition.latitude.toString()+','+curEvtCoords[0].location.displayPosition.longitude.toString();
+  //     curEvt['coordsStr'] = coord_;
+  //     curEvt['lat'] = curEvtCoords[0].location.displayPosition.latitude;
+  //     curEvt['long'] = curEvtCoords[0].location.displayPosition.longitude;
+  //     waypoints.push(coord_); //adds current event to last waypoint index
+  //     callback(platform, waypoints, curEvt);
+  //   }, onError);
+  // }
+
+  // var getEaEvtRoutes = function(platform, waypoint0, waypoint1, curEvt, callback){
+  //   var myRouter = platform.getRoutingService();
+  //   var routetonext = {
+  //     'mode': 'fastest;car',
+  //     'waypoint0': waypoint0,
+  //     'waypoint1': waypoint1,
+  //     'representation': 'display'
+  //   };
+  //   myRouter.calculateRoute(routetonext, function(result){
+  //     var route = result.response.route[0];
+  //     callback(curEvt, route);
+  //   }, function (err) { alert(err.message); });
+  // }
+
+  // option 2
+  // function that retrieves from here maps all the event coordinates
   var gotAllUpcEvtCoords = function(geocoder, myPosX, myPosY, userEvents, callback){
-    for (var i in userEvents){
+    for (var i=0; i < userEvents.length; i++){
       console.log(userEvents[i].location);
       var curEvtGeoParams = {searchText: userEvents[i].location, jsonattributes: 1};
-      geocoder.geocode(curEvtGeoParams, function(result){
-        var curEvtCoords = result.response.view[0].result;
-        console.log(curEvtCoords);
-        var coord_ = 'geo!'+curEvtCoords[0].location.displayPosition.latitude.toString()+','+curEvtCoords[0].location.displayPosition.longitude.toString();
-        userEvents[i]['coordsStr'] = coord_; //appends the coordinates to the user events
-        userEvents[i]['lat'] = location.displayPosition.latitude;
-        userEvents[i]['long'] = location.displayPosition.longitude;
-        console.log(userEvents[i], coord_); 
-        console.log(curEvtCoords, userEvents[i].coords); 
-        if (i+1 == userEvents.length){ 
-          //triggers callback fcn with new key of coordinates in each eventdata item
-          callback(userEvents, myPosX, myPosY);
-        }
-      },onError); 
-    }
+      geocodingEach(geocoder, curEvtGeoParams, userEvents, i, callback, myPosX, myPosY); 
+    } 
   }
 
   var gotAllUpcEvtRoutes = function(myRouter, myPosX, myPosY, userEvents, callback){
@@ -203,108 +247,48 @@ $(document).ready(function(){
     waypoints.push(waypoint0); //first waypoint will always be mylocation
     for (var k = 0; k <= userEvents.length; k++){
       if (userEvents[k] != undefined){ //if event is last
-        waypoints.push(userEvents[k].coords); //waypoints[1]=userEvents[0].coords
+        waypoints.push(userEvents[k].coordsStr); //waypoints[1]=userEvents[0].coords
         console.log(waypoints); 
-        //take element 0, take element 1 and create route
-        //until element k+1 is undefined
-        var routetonext = {
-          'mode': 'fastest;car',
-          'waypoint0': waypoints[k],
-          'waypoint1': waypoints[k+1],
-          'representation': 'display'
-        };
-        myRouter.calculateRoute(routetonext, function(result){
-          console.log(result.response.route[0]); //gives result
-          eventRoutes.push(result.response.route[0]);
-        },function (err) { alert(err.message); });
-      } else { 
-        callback(userEvents, eventRoutes); //userEvents.length = k, eventRoutes.length = k-1
+      } else {
+        waypoints.push(userEvents[k-1].coordsStr); //pushes repeated coords to allow the route request
       }
+      //take element 0, take element 1 and create route
+      //until element k+1 is undefined
+      var routetonext = {
+        'mode': 'fastest;car',
+        'waypoint0': waypoints[k],
+        'waypoint1': waypoints[k+1],
+        'representation': 'display'
+      };
+      routingEach(myRouter, routetonext, eventRoutes, waypoints, k, callback, userEvents);
     }
   }
 });
+ 
+function routingEach(myRouter, routetonext, eventRoutes, waypoints, k, callback, userEvents) {
+  myRouter.calculateRoute(routetonext, function (result) {
+    console.log(result.response.route[0]); //gives result
+    eventRoutes.push(result.response.route[0]);
+    if (waypoints[k] == waypoints[k + 1]) {
+      eventRoutes.pop(); //pops out the last route in case 
+      callback(userEvents, eventRoutes); //userEvents.length = k, eventRoutes.length = k-1
+    }
+  }, function (err) { alert(err.message); });
+}
 
-    
-    /* map's engine pseudocode:
-      get today's events title, location, starttimes, endtimes, id and description (note that events is already loaded so no need for snapshot maybe)
-      
-    */
-
-    //INSERT THINGS of GUIDES FROM HERE:
-    // var routingParameters = {
-    //   // The routing mode:
-    //   'mode': 'fastest;car',
-    //   // The start point of the route:
-    //   'waypoint0': 'geo!50.1120423728813,8.68340740740811',
-    //   // The end point of the route:
-    //   'waypoint1': 'geo!52.5309916298853,13.3846220493377',
-    //   // To retrieve the shape of the route we choose the route
-    //   // representation mode 'display'
-    //   'representation': 'display'
-    // };
-
-    // // Define a callback function to process the routing response:
-    // var onResult = function(result) {
-    //   var route,
-    //     routeShape,
-    //     startPoint,
-    //     endPoint,
-    //     linestring;
-    //   if(result.response.route) {
-    //   // Pick the first route from the response:
-    //   route = result.response.route[0];
-    //   // Pick the route's shape:
-    //   routeShape = route.shape;
-    
-    //   // Create a linestring to use as a point source for the route line
-    //   linestring = new H.geo.LineString();
-    
-    //   // Push all the points in the shape into the linestring:
-    //   routeShape.forEach(function(point) {
-    //     var parts = point.split(',');
-    //     linestring.pushLatLngAlt(parts[0], parts[1]);
-    //   });
-    
-
-
-
-
-    //   // Retrieve the mapped positions of the requested waypoints:
-    //   startPoint = route.waypoint[0].mappedPosition;
-    //   endPoint = route.waypoint[1].mappedPosition;
-    
-    //   // Create a polyline to display the route:
-    //   var routeLine = new H.map.Polyline(linestring, {
-    //     style: { strokeColor: 'blue', lineWidth: 10 }
-    //   });
-    
-    //   // Create a marker for the start point:
-    //   var startMarker = new H.map.Marker({
-    //     lat: startPoint.latitude,
-    //     lng: startPoint.longitude
-    //   });
-    
-    //   // Create a marker for the end point:
-    //   var endMarker = new H.map.Marker({
-    //     lat: endPoint.latitude,
-    //     lng: endPoint.longitude
-    //   });
-    
-    //   // Add the route polyline and the two markers to the map:
-    //   map.addObjects([routeLine, startMarker, endMarker]);
-    
-    //   // Set the map's viewport to make the whole route visible:
-    //   map.setViewBounds(routeLine.getBounds());
-    //   }
-    // };
-
-    // // Get an instance of the routing service:
-    // var router = platform.getRoutingService();
-    
-    // // Call calculateRoute() with the routing parameters,
-    // // the callback and an error callback function (called if a
-    // // communication error occurs):
-    // router.calculateRoute(routingParameters, onResult,
-    //   function(error) {
-    //     alert(error.message);
-    //   });
+function geocodingEach(geocoder, curEvtGeoParams, userEvents, i, callback, myPosX, myPosY) {
+  geocoder.geocode(curEvtGeoParams, function (result) {
+    var curEvtCoords = result.response.view[0].result;
+    console.log(curEvtCoords, userEvents[i]);
+    var coord_ = 'geo!' + curEvtCoords[0].location.displayPosition.latitude.toString() + ',' + curEvtCoords[0].location.displayPosition.longitude.toString();
+    userEvents[i]['coordsStr'] = coord_; //appends the coordinates to the user events
+    userEvents[i]['lat'] = curEvtCoords[0].location.displayPosition.latitude;
+    userEvents[i]['long'] = curEvtCoords[0].location.displayPosition.longitude;
+    console.log(userEvents[i], coord_);
+    console.log(curEvtCoords, userEvents[i].coordsStr);
+    if (i + 1 == userEvents.length) {
+      //triggers callback fcn with new key of coordinates in each eventdata item
+      callback(userEvents, myPosX, myPosY);
+    }
+  }, onError);
+}
