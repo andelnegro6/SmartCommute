@@ -114,20 +114,7 @@ $(document).ready(function(){
       var waypoint0 = 'geo!'+myPosX.toString()+','+myPosY.toString();
       waypoints.push(waypoint0); //first element: my location
 
-      // for (var i in userEvents){
-      //   console.log(userEvents[i].location);
-      //   var curEvtGeoParams = {searchText: userEvents[i].location, jsonattributes: 1};
-      //   getEaEvtCoords(platform, waypoints, userEvents[i], curEvtGeoParams, function(platform, waypoints, curEvt){
-      //     var waypoint0 = waypoints[i];
-      //     var waypoint1 = waypoints[parseInt(i)+1];
-      //     getEaEvtRoutes(platform, waypoint0, waypoint1, curEvt, function(curEvt, route){
-      //       console.log(curEvt);
-      //       console.log(route);
-      //     });
-      //   });
-      // }
-
-      //OMIT FROM HERE 
+      //maps rendering engine starts here:
       gotAllUpcEvtCoords(geocoder, myPosX, myPosY, userEvents, function(userEvents, myPosX, myPosY){
         console.log(userEvents, myPosX, myPosY);
         var myRouter = platform.getRoutingService();
@@ -137,47 +124,16 @@ $(document).ready(function(){
           var behavior = new H.mapevents.Behavior(mapEvents);
           var ui = H.ui.UI.createDefault(map, defaultLayers);
         
-          for (var k = 0; k < userEvents.length; k++){
-            var routeShape = routes[k].shape;
-            
-            var linestring = new H.geo.LineString();
-            routeShape.forEach(function(point) {
-              var parts = point.split(',');
-              linestring.pushLatLngAlt(parts[0], parts[1]);
-            });
-            // Create a polyline to display the route:
-            var routeLine = new H.map.Polyline(linestring, {
-            style: { strokeColor: 'blue', lineWidth: 10 }
-            });
-
-            var startPoint = routes[k].waypoint[0].mappedPosition; 
-            var endPoint = routes[k].waypoint[1].mappedPosition;
-            
-            // Create a marker for start and end points k
-            var startMarker = new H.map.Marker({
-              lat: startPoint.latitude,
-              lng: startPoint.longitude
-            });
-            var endMarker = new H.map.Marker({
-              lat: endPoint.latitude,
-              lng: endPoint.longitude
-            });
-            // waypointMarkers.push(startMarker);
-            // waypointMarkers.push(endMarker);
-            
-            map.addObjects([routeLine, startMarker, endMarker]);
-            ui.addBubble(new H.ui.InfoBubble({
-              lat: endPoint.latitude,
-              lng: endPoint.longitude
-            }, {content: userEvents[k].title + '. ' + userEvents[k].location + '. Time: ' + userEvents[k].start.format('HH:mm')}));
-            map.setViewBounds(routeLine.getBounds());
+          for (var j = 0; j < userEvents.length; j++){
+            console.log(j, userEvents[j], routes[j]);
+            renderingEach(routes, j, map, ui, userEvents);
           };
         });
       });
-      //UNTIL HERE
     }); 
   }
 
+  //checks that the user is logged in to successfully get the user id which is necessary to retrieve the user's events. 
   function checkAuth() {
     var mainApp = {};
     (function () {
@@ -230,7 +186,7 @@ $(document).ready(function(){
   //   }, function (err) { alert(err.message); });
   // }
 
-  // option 2
+
   // function that retrieves from here maps all the event coordinates
   var gotAllUpcEvtCoords = function(geocoder, myPosX, myPosY, userEvents, callback){
     for (var i=0; i < userEvents.length; i++){
@@ -240,42 +196,77 @@ $(document).ready(function(){
     } 
   }
 
+  //function that obtains all the routes from the upcoming event pairs.
   var gotAllUpcEvtRoutes = function(myRouter, myPosX, myPosY, userEvents, callback){
     var waypoints = [];
     var eventRoutes = [];
     var waypoint0 = 'geo!'+myPosX.toString()+','+myPosY.toString();
     waypoints.push(waypoint0); //first waypoint will always be mylocation
-    for (var k = 0; k <= userEvents.length; k++){
-      if (userEvents[k] != undefined){ //if event is last
-        waypoints.push(userEvents[k].coordsStr); //waypoints[1]=userEvents[0].coords
-        console.log(waypoints); 
-      } else {
-        waypoints.push(userEvents[k-1].coordsStr); //pushes repeated coords to allow the route request
-      }
-      //take element 0, take element 1 and create route
-      //until element k+1 is undefined
+    for (var k = 0; k < userEvents.length; k++){
+      waypoints.push(userEvents[k].coordsStr);
+      // if (userEvents[k+1] != undefined){ //if event is last
+      //   waypoints.push(userEvents[k].coordsStr); //waypoints[1]=userEvents[0].coords
+      //   console.log(waypoints); 
+      // } else {
+      //   waypoints.push(userEvents[k-1].coordsStr); //pushes repeated coords to allow the route request
+      // }
       var routetonext = {
         'mode': 'fastest;car',
         'waypoint0': waypoints[k],
         'waypoint1': waypoints[k+1],
         'representation': 'display'
       };
-      routingEach(myRouter, routetonext, eventRoutes, waypoints, k, callback, userEvents);
+      routingEach(myRouter, routetonext, eventRoutes, k, callback, userEvents);
     }
   }
 });
  
-function routingEach(myRouter, routetonext, eventRoutes, waypoints, k, callback, userEvents) {
+//function that renders each waypoint as well as the route 
+function renderingEach(routes, j, map, ui, userEvents) {
+  var routeShape = routes[j].shape;
+  var linestring = new H.geo.LineString();
+  routeShape.forEach(function (point) {
+    var parts = point.split(',');
+    linestring.pushLatLngAlt(parts[0], parts[1]);
+  });
+  // Create a polyline to display the route:
+  var routeLine = new H.map.Polyline(linestring, {
+    style: { strokeColor: 'blue', lineWidth: 10 }
+  });
+  var startPoint = routes[j].waypoint[0].mappedPosition;
+  var endPoint = routes[j].waypoint[1].mappedPosition;
+  // Create a marker for start and end points j
+  var startMarker = new H.map.Marker({
+    lat: startPoint.latitude,
+    lng: startPoint.longitude
+  });
+  var endMarker = new H.map.Marker({
+    lat: endPoint.latitude,
+    lng: endPoint.longitude
+  });
+  // waypointMarkers.push(startMarker);
+  // waypointMarkers.push(endMarker);
+  map.addObjects([routeLine, startMarker, endMarker]);
+  ui.addBubble(new H.ui.InfoBubble({
+    lat: endPoint.latitude,
+    lng: endPoint.longitude
+  }, { content: userEvents[j].title + '. ' + userEvents[j].location + '. Time: ' + userEvents[j].start.format('HH:mm') }));
+  map.setViewBounds(routeLine.getBounds());
+}
+
+//function that routes each event coordinate pair and generates a route from each pair
+function routingEach(myRouter, routetonext, eventRoutes, k, callback, userEvents) {
   myRouter.calculateRoute(routetonext, function (result) {
     console.log(result.response.route[0]); //gives result
     eventRoutes.push(result.response.route[0]);
-    if (waypoints[k] == waypoints[k + 1]) {
-      eventRoutes.pop(); //pops out the last route in case 
+    if (k == userEvents.length -1) {
+      // eventRoutes.pop(); //pops out the last route in case 
       callback(userEvents, eventRoutes); //userEvents.length = k, eventRoutes.length = k-1
     }
   }, function (err) { alert(err.message); });
 }
 
+// function that outputs coordinates per address string of each event, one at a time, and includes it into the userEvents object
 function geocodingEach(geocoder, curEvtGeoParams, userEvents, i, callback, myPosX, myPosY) {
   geocoder.geocode(curEvtGeoParams, function (result) {
     var curEvtCoords = result.response.view[0].result;
