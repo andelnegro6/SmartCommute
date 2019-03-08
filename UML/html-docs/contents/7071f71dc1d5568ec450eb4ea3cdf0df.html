@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Event</title>
+    <title>GUI_Popup</title>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic|Source+Code+Pro:300,400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="../assets/css/bootstrap.css">
 <link rel="stylesheet" href="../assets/css/jquery.bonsai.css">
@@ -18,7 +18,7 @@
 
       <!-- Name Title -->
 
-      <h1>Event</h1>
+      <h1>GUI_Popup</h1>
 
       <!-- Type and Stereotype -->
 
@@ -43,7 +43,7 @@
           <span class="label label-info"><a href='10526e16ea4484c174562f336713c0c8.html'><span class='node-icon staruml-icon icon-UMLModel'></span>Models_tl</a></span>
         
           <span>::</span>
-          <span class="label label-info"><a href='7071f71dc1d5568ec450eb4ea3cdf0df.html'><span class='node-icon staruml-icon icon-UMLClass'></span>Event</a></span>
+          <span class="label label-info"><a href='7071f71dc1d5568ec450eb4ea3cdf0df.html'><span class='node-icon staruml-icon icon-UMLClass'></span>GUI_Popup</a></span>
         
       </section>
 
@@ -143,43 +143,29 @@
           
           <tr>
             <td>public</td>
-            <td><a href="a52555dfd174392e14cf7fb876a637cc.html">Name</a></td>
+            <td><a href="a52555dfd174392e14cf7fb876a637cc.html">Title</a></td>
             <td>String</td>
             <td></td>
           </tr>
           
           <tr>
             <td>public</td>
-            <td><a href="f8fabe1682805383b265d86157a4343f.html">Data</a></td>
-            <td>Int</td>
-            <td></td>
-          </tr>
-          
-          <tr>
-            <td>public</td>
             <td><a href="81eaa57701b489728a891047302678ac.html">StartTime</a></td>
-            <td>Time</td>
+            <td>MomentObj</td>
             <td></td>
           </tr>
           
           <tr>
             <td>public</td>
             <td><a href="f57cb6c13a05a0488b3906829f1305cf.html">EndTime</a></td>
-            <td>Time</td>
+            <td>MomentObj</td>
             <td></td>
           </tr>
           
           <tr>
             <td>public</td>
             <td><a href="2ebf4772c18fa8f7b51e5bc7090da3cb.html">Location</a></td>
-            <td>Coordinate</td>
-            <td></td>
-          </tr>
-          
-          <tr>
-            <td>public</td>
-            <td><a href="b0afcce55a53c4a85d6a747fc1ca3a44.html">Frequency</a></td>
-            <td>Frequency</td>
+            <td>String</td>
             <td></td>
           </tr>
           
@@ -187,6 +173,13 @@
             <td>public</td>
             <td><a href="bf297dd15e11db0bff0c0f935552ec98.html">Description</a></td>
             <td>String</td>
+            <td></td>
+          </tr>
+          
+          <tr>
+            <td>public</td>
+            <td><a href="b744293c7a0809de3cfa5722d523c8f8.html">EventReq</a></td>
+            <td><a href='41afd77dbecbe883cbbf52c5f04db18d.html'>Event</a></td>
             <td></td>
           </tr>
           
@@ -208,31 +201,19 @@
           
           <tr>
             <td>public</td>
-            <td><a href="6d259d670ab5c59a7bbadd3bae8f3d5b.html">Add()</a></td>
+            <td><a href="6d259d670ab5c59a7bbadd3bae8f3d5b.html">createEventRequest(EventReq)</a></td>
             <td></td>
           </tr>
           
           <tr>
             <td>public</td>
-            <td><a href="52f3580f2e89a2c97ae0c0a93069bf03.html">Edit()</a></td>
+            <td><a href="52f3580f2e89a2c97ae0c0a93069bf03.html">updateEventRequest(EventReq)</a></td>
             <td></td>
           </tr>
           
           <tr>
             <td>public</td>
-            <td><a href="45c2f3bfb7536546a015d0d8432b7704.html">Delete()</a></td>
-            <td></td>
-          </tr>
-          
-          <tr>
-            <td>public</td>
-            <td><a href="4b37884406c948e83667d540e0f64588.html">SetRepetition()</a></td>
-            <td></td>
-          </tr>
-          
-          <tr>
-            <td>private</td>
-            <td><a href="774642025f845265e3bb64a775634bb9.html">SaveDataToDB()</a></td>
+            <td><a href="45c2f3bfb7536546a015d0d8432b7704.html">deleteEvent(EventReq)</a></td>
             <td></td>
           </tr>
           
@@ -336,7 +317,7 @@
     
     <tr>
         <td>name</td>
-        <td>Event</td>
+        <td>GUI_Popup</td>
     </tr>
     
     
@@ -443,27 +424,27 @@
     <h3>Relationships</h3>
     <ul class="nav nav-list">
         
-        <li><a href='865da8188f2cab0d805af79f3e44500d.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='865da8188f2cab0d805af79f3e44500d.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='7d81da6477f2fb196edbefcc839fdd3b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—Event)</a></li>
+        <li><a href='7d81da6477f2fb196edbefcc839fdd3b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—GUI_Popup)</a></li>
         
-        <li><a href='f83774d6012f98e0d627bcd8eca1248f.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='f83774d6012f98e0d627bcd8eca1248f.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='44d198ad48e14e3a78a653312052c99e.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='44d198ad48e14e3a78a653312052c99e.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='8c6224e258b853a5fb68cea249e09a91.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='8c6224e258b853a5fb68cea249e09a91.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='945ccdec5f3d821b72677fd9ead72ce1.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—WeeklyView)</a></li>
+        <li><a href='945ccdec5f3d821b72677fd9ead72ce1.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—WeeklyView)</a></li>
         
-        <li><a href='1eaf4b6b8885a6aa75f988369edcdf14.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—DailyView)</a></li>
+        <li><a href='1eaf4b6b8885a6aa75f988369edcdf14.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—DailyView)</a></li>
         
-        <li><a href='388e2441ea69723f985a1278cf899625.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—ScheduleView)</a></li>
+        <li><a href='388e2441ea69723f985a1278cf899625.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—ScheduleView)</a></li>
         
-        <li><a href='df232e402c6ad1016523bb23124e7d66.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Event)</a></li>
+        <li><a href='df232e402c6ad1016523bb23124e7d66.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_Popup)</a></li>
         
-        <li><a href='6e5da8ee5e0c1075386792f4b9ea4adf.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Coordinate—Event)</a></li>
+        <li><a href='176ee679c6e724629b2ab40f06531454.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_Popup)</a></li>
         
-        <li><a href='176ee679c6e724629b2ab40f06531454.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Event)</a></li>
+        <li><a href='6e5da8ee5e0c1075386792f4b9ea4adf.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Waypoint—GUI_Popup)</a></li>
         
     </ul>
 </section>
@@ -478,21 +459,21 @@
     <h3>Owned Elements</h3>
     <ul class="nav nav-list">
         
-        <li><a href='865da8188f2cab0d805af79f3e44500d.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='865da8188f2cab0d805af79f3e44500d.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='7d81da6477f2fb196edbefcc839fdd3b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—Event)</a></li>
+        <li><a href='7d81da6477f2fb196edbefcc839fdd3b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—GUI_Popup)</a></li>
         
-        <li><a href='f83774d6012f98e0d627bcd8eca1248f.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='f83774d6012f98e0d627bcd8eca1248f.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='44d198ad48e14e3a78a653312052c99e.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='44d198ad48e14e3a78a653312052c99e.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='8c6224e258b853a5fb68cea249e09a91.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—MonthlyView)</a></li>
+        <li><a href='8c6224e258b853a5fb68cea249e09a91.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—MonthlyView)</a></li>
         
-        <li><a href='945ccdec5f3d821b72677fd9ead72ce1.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—WeeklyView)</a></li>
+        <li><a href='945ccdec5f3d821b72677fd9ead72ce1.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—WeeklyView)</a></li>
         
-        <li><a href='1eaf4b6b8885a6aa75f988369edcdf14.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—DailyView)</a></li>
+        <li><a href='1eaf4b6b8885a6aa75f988369edcdf14.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—DailyView)</a></li>
         
-        <li><a href='388e2441ea69723f985a1278cf899625.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Event—ScheduleView)</a></li>
+        <li><a href='388e2441ea69723f985a1278cf899625.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GUI_Popup—ScheduleView)</a></li>
         
     </ul>
 </section>

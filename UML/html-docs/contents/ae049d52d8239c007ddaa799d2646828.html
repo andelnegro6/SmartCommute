@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>GoogleMapsAPI</title>
+    <title>Maps</title>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic|Source+Code+Pro:300,400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="../assets/css/bootstrap.css">
 <link rel="stylesheet" href="../assets/css/jquery.bonsai.css">
@@ -18,7 +18,7 @@
 
       <!-- Name Title -->
 
-      <h1>GoogleMapsAPI</h1>
+      <h1>Maps</h1>
 
       <!-- Type and Stereotype -->
 
@@ -43,7 +43,7 @@
           <span class="label label-info"><a href='10526e16ea4484c174562f336713c0c8.html'><span class='node-icon staruml-icon icon-UMLModel'></span>Models_tl</a></span>
         
           <span>::</span>
-          <span class="label label-info"><a href='ae049d52d8239c007ddaa799d2646828.html'><span class='node-icon staruml-icon icon-UMLClass'></span>GoogleMapsAPI</a></span>
+          <span class="label label-info"><a href='ae049d52d8239c007ddaa799d2646828.html'><span class='node-icon staruml-icon icon-UMLClass'></span>Maps</a></span>
         
       </section>
 
@@ -142,23 +142,37 @@
           </tr>
           
           <tr>
-            <td>public</td>
-            <td><a href="ba126e22eb2b948ad1790141e555e136.html">latitude</a></td>
-            <td>int</td>
+            <td>private</td>
+            <td><a href="ba126e22eb2b948ad1790141e555e136.html">latitudes</a></td>
+            <td>Array</td>
             <td></td>
           </tr>
           
           <tr>
-            <td>public</td>
-            <td><a href="d1abd7b3f8720023ed1a00baa6c09d85.html">longitude</a></td>
-            <td>int</td>
+            <td>private</td>
+            <td><a href="d1abd7b3f8720023ed1a00baa6c09d85.html">longitudes</a></td>
+            <td>Array</td>
             <td></td>
           </tr>
           
           <tr>
-            <td>public</td>
-            <td><a href="a030bd7524b6ed16e5912023cf996bd8.html">destination</a></td>
-            <td>String</td>
+            <td>private</td>
+            <td><a href="a030bd7524b6ed16e5912023cf996bd8.html">address</a></td>
+            <td>Array</td>
+            <td></td>
+          </tr>
+          
+          <tr>
+            <td>private</td>
+            <td><a href="82413ab5572520eec8f26f3129068ba7.html">Nodes</a></td>
+            <td>JSON</td>
+            <td></td>
+          </tr>
+          
+          <tr>
+            <td>private</td>
+            <td><a href="d60e271dbf75944a3fe48a6f0c2dde29.html">Routes</a></td>
+            <td>JSON</td>
             <td></td>
           </tr>
           
@@ -179,20 +193,20 @@
           </tr>
           
           <tr>
-            <td>public</td>
-            <td><a href="1cb646bf4fd5d01c5bd4e0975471d854.html">CalculateRoute()</a></td>
+            <td>private</td>
+            <td><a href="1cb646bf4fd5d01c5bd4e0975471d854.html">obtainLatLong(address)</a></td>
             <td></td>
           </tr>
           
           <tr>
-            <td>public</td>
-            <td><a href="203e3c1efd29518fd45dc98294b10c6b.html">ShowStops()</a></td>
+            <td>private</td>
+            <td><a href="dc69eed2116c56783ba1ad8cb377bcc8.html">generateNodes(Events)</a></td>
             <td></td>
           </tr>
           
           <tr>
-            <td>public</td>
-            <td><a href="dc69eed2116c56783ba1ad8cb377bcc8.html">CalculateEstimatedTime()</a></td>
+            <td>private</td>
+            <td><a href="4e1b3c174d106e9726c44d4e570e8bd6.html">generateRoutes(Nodes.StartTimes, Nodes.EndTimes)</a></td>
             <td></td>
           </tr>
           
@@ -296,7 +310,7 @@
     
     <tr>
         <td>name</td>
-        <td>GoogleMapsAPI</td>
+        <td>Maps</td>
     </tr>
     
     
@@ -403,15 +417,15 @@
     <h3>Relationships</h3>
     <ul class="nav nav-list">
         
-        <li><a href='8fc18e0da02d61471139abae5324d74b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Trajectories)</a></li>
+        <li><a href='8fc18e0da02d61471139abae5324d74b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—Routes)</a></li>
         
-        <li><a href='df232e402c6ad1016523bb23124e7d66.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Event)</a></li>
+        <li><a href='df232e402c6ad1016523bb23124e7d66.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_Popup)</a></li>
         
-        <li><a href='c7a407a5526478c6a5f08aff33da08cb.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Coordinate)</a></li>
+        <li><a href='c7a407a5526478c6a5f08aff33da08cb.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—Waypoint)</a></li>
         
-        <li><a href='95dcf0ef988d9f553ac1f757e539801a.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—GUI_map)</a></li>
+        <li><a href='95dcf0ef988d9f553ac1f757e539801a.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_map)</a></li>
         
-        <li><a href='176ee679c6e724629b2ab40f06531454.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Event)</a></li>
+        <li><a href='176ee679c6e724629b2ab40f06531454.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_Popup)</a></li>
         
     </ul>
 </section>
@@ -426,15 +440,15 @@
     <h3>Owned Elements</h3>
     <ul class="nav nav-list">
         
-        <li><a href='8fc18e0da02d61471139abae5324d74b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Trajectories)</a></li>
+        <li><a href='8fc18e0da02d61471139abae5324d74b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—Routes)</a></li>
         
-        <li><a href='df232e402c6ad1016523bb23124e7d66.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Event)</a></li>
+        <li><a href='df232e402c6ad1016523bb23124e7d66.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_Popup)</a></li>
         
-        <li><a href='c7a407a5526478c6a5f08aff33da08cb.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Coordinate)</a></li>
+        <li><a href='c7a407a5526478c6a5f08aff33da08cb.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—Waypoint)</a></li>
         
-        <li><a href='95dcf0ef988d9f553ac1f757e539801a.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—GUI_map)</a></li>
+        <li><a href='95dcf0ef988d9f553ac1f757e539801a.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_map)</a></li>
         
-        <li><a href='176ee679c6e724629b2ab40f06531454.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Event)</a></li>
+        <li><a href='176ee679c6e724629b2ab40f06531454.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—GUI_Popup)</a></li>
         
     </ul>
 </section>

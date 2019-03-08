@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Trajectories</title>
+    <title>Routes</title>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic|Source+Code+Pro:300,400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="../assets/css/bootstrap.css">
 <link rel="stylesheet" href="../assets/css/jquery.bonsai.css">
@@ -18,7 +18,7 @@
 
       <!-- Name Title -->
 
-      <h1>Trajectories</h1>
+      <h1>Routes</h1>
 
       <!-- Type and Stereotype -->
 
@@ -43,7 +43,7 @@
           <span class="label label-info"><a href='10526e16ea4484c174562f336713c0c8.html'><span class='node-icon staruml-icon icon-UMLModel'></span>Models_tl</a></span>
         
           <span>::</span>
-          <span class="label label-info"><a href='6c6b9bd1875bc5660ebbaff4e6f0c9e7.html'><span class='node-icon staruml-icon icon-UMLClass'></span>Trajectories</a></span>
+          <span class="label label-info"><a href='6c6b9bd1875bc5660ebbaff4e6f0c9e7.html'><span class='node-icon staruml-icon icon-UMLClass'></span>Routes</a></span>
         
       </section>
 
@@ -144,14 +144,14 @@
           <tr>
             <td>public</td>
             <td><a href="db1687f9c29828f5b4fe29ed1e79dd5c.html">MeanTransport</a></td>
-            <td>Transport.Transport_name</td>
+            <td>Transport.name</td>
             <td></td>
           </tr>
           
           <tr>
             <td>public</td>
             <td><a href="0e9d26627b89a6d75c21e8094c42e28d.html">Time</a></td>
-            <td>GoogleMapsAPI.estimatedTime</td>
+            <td>hereMaps.estimatedTime</td>
             <td></td>
           </tr>
           
@@ -180,6 +180,13 @@
             <td>public</td>
             <td><a href="9fcec432343a77b413d9683fa061ba32.html">EndTime</a></td>
             <td>Nodes.EndTime</td>
+            <td></td>
+          </tr>
+          
+          <tr>
+            <td>private</td>
+            <td><a href="e25d5ffc43aec8dffabf82c85bb3fae4.html">waypoints</a></td>
+            <td>Array</td>
             <td></td>
           </tr>
           
@@ -287,7 +294,7 @@
     
     <tr>
         <td>name</td>
-        <td>Trajectories</td>
+        <td>Routes</td>
     </tr>
     
     
@@ -394,11 +401,17 @@
     <h3>Relationships</h3>
     <ul class="nav nav-list">
         
-        <li><a href='9a5b401db630c29d4ec65cc98c137952.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Trajectories—Trajectories)</a></li>
+        <li><a href='9a5b401db630c29d4ec65cc98c137952.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Routes—Routes)</a></li>
         
-        <li><a href='0940a871dd0467c417422923961945c6.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Trajectories—GUI_map)</a></li>
+        <li><a href='0940a871dd0467c417422923961945c6.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Routes—GUI_map)</a></li>
         
-        <li><a href='8fc18e0da02d61471139abae5324d74b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Trajectories)</a></li>
+        <li><a href='8fc18e0da02d61471139abae5324d74b.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—Routes)</a></li>
+        
+        <li><a href='8865d52db4068db94004d312ea905f4e.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Nodes—Routes)</a></li>
+        
+        <li><a href='2d3ecb82ef359f4ef2073cc674df1307.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Routes—Event)</a></li>
+        
+        <li><a href='055f1901d1cf71de68b5dd1b6bc24e30.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Waypoint—Routes)</a></li>
         
     </ul>
 </section>
@@ -413,9 +426,11 @@
     <h3>Owned Elements</h3>
     <ul class="nav nav-list">
         
-        <li><a href='9a5b401db630c29d4ec65cc98c137952.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Trajectories—Trajectories)</a></li>
+        <li><a href='9a5b401db630c29d4ec65cc98c137952.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Routes—Routes)</a></li>
         
-        <li><a href='0940a871dd0467c417422923961945c6.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Trajectories—GUI_map)</a></li>
+        <li><a href='0940a871dd0467c417422923961945c6.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Routes—GUI_map)</a></li>
+        
+        <li><a href='2d3ecb82ef359f4ef2073cc674df1307.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Routes—Event)</a></li>
         
     </ul>
 </section>

@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>Coordinate</title>
+    <title>Waypoint</title>
     <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700,300italic,400italic,700italic|Source+Code+Pro:300,400,700' rel='stylesheet' type='text/css'>
 <link rel="stylesheet" href="../assets/css/bootstrap.css">
 <link rel="stylesheet" href="../assets/css/jquery.bonsai.css">
@@ -18,7 +18,7 @@
 
       <!-- Name Title -->
 
-      <h1>Coordinate</h1>
+      <h1>Waypoint</h1>
 
       <!-- Type and Stereotype -->
 
@@ -43,7 +43,7 @@
           <span class="label label-info"><a href='10526e16ea4484c174562f336713c0c8.html'><span class='node-icon staruml-icon icon-UMLModel'></span>Models_tl</a></span>
         
           <span>::</span>
-          <span class="label label-info"><a href='7798fed522abfa61e71edefaeba5d6b7.html'><span class='node-icon staruml-icon icon-UMLClass'></span>Coordinate</a></span>
+          <span class="label label-info"><a href='7798fed522abfa61e71edefaeba5d6b7.html'><span class='node-icon staruml-icon icon-UMLClass'></span>Waypoint</a></span>
         
       </section>
 
@@ -144,21 +144,14 @@
           <tr>
             <td>public</td>
             <td><a href="76d7246ed2bd9ba86b3e3da373601953.html">latitude</a></td>
-            <td>GoogleMapsAPI.latitude</td>
+            <td>hereMaps.latitude</td>
             <td></td>
           </tr>
           
           <tr>
             <td>public</td>
             <td><a href="ac49e7ce22d66d8d6b8941f24ee8a70c.html">longitude</a></td>
-            <td>GoogleMapsAPI.longitude</td>
-            <td></td>
-          </tr>
-          
-          <tr>
-            <td>public</td>
-            <td><a href="8e87e1e5f94b9bc80f1d3488f40950d1.html">destination</a></td>
-            <td>GoogleMapsAPI.destination</td>
+            <td>hereMaps.longitude</td>
             <td></td>
           </tr>
           
@@ -266,7 +259,7 @@
     
     <tr>
         <td>name</td>
-        <td>Coordinate</td>
+        <td>Waypoint</td>
     </tr>
     
     
@@ -373,9 +366,11 @@
     <h3>Relationships</h3>
     <ul class="nav nav-list">
         
-        <li><a href='c7a407a5526478c6a5f08aff33da08cb.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(GoogleMapsAPI—Coordinate)</a></li>
+        <li><a href='c7a407a5526478c6a5f08aff33da08cb.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Maps—Waypoint)</a></li>
         
-        <li><a href='6e5da8ee5e0c1075386792f4b9ea4adf.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Coordinate—Event)</a></li>
+        <li><a href='6e5da8ee5e0c1075386792f4b9ea4adf.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Waypoint—GUI_Popup)</a></li>
+        
+        <li><a href='055f1901d1cf71de68b5dd1b6bc24e30.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Waypoint—Routes)</a></li>
         
     </ul>
 </section>
@@ -390,7 +385,9 @@
     <h3>Owned Elements</h3>
     <ul class="nav nav-list">
         
-        <li><a href='6e5da8ee5e0c1075386792f4b9ea4adf.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Coordinate—Event)</a></li>
+        <li><a href='6e5da8ee5e0c1075386792f4b9ea4adf.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Waypoint—GUI_Popup)</a></li>
+        
+        <li><a href='055f1901d1cf71de68b5dd1b6bc24e30.html'><span class='node-icon staruml-icon icon-UMLAssociation'></span>(Waypoint—Routes)</a></li>
         
     </ul>
 </section>
