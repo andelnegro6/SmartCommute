@@ -115,7 +115,7 @@ $(document).ready(function(){
       waypoints.push(waypoint0); //first element: my location
 
       //maps rendering engine starts here:
-      gotAllUpcEvtCoords(geocoder, myPosX, myPosY, userEvents, function(userEvents, myPosX, myPosY){
+      gotAllUpcEvtCoords(map, mapEvents, defaultLayers, geocoder, myPosX, myPosY, userEvents, function(userEvents, myPosX, myPosY){
         console.log(userEvents, myPosX, myPosY);
         var myRouter = platform.getRoutingService();
         gotAllUpcEvtRoutes(myRouter, myPosX, myPosY, userEvents, function(userEvents, routes){
@@ -123,7 +123,6 @@ $(document).ready(function(){
           console.log(userEvents, routes);
           var behavior = new H.mapevents.Behavior(mapEvents);
           var ui = H.ui.UI.createDefault(map, defaultLayers);
-        
           for (var j = 0; j < userEvents.length; j++){
             console.log(j, userEvents[j], routes[j]);
             renderingEach(routes, j, map, ui, userEvents);
@@ -188,12 +187,16 @@ $(document).ready(function(){
 
 
   // function that retrieves from here maps all the event coordinates
-  var gotAllUpcEvtCoords = function(geocoder, myPosX, myPosY, userEvents, callback){
+  var gotAllUpcEvtCoords = function(map, mapEvents, defaultLayers, geocoder, myPosX, myPosY, userEvents, callback){
     for (var i=0; i < userEvents.length; i++){
       console.log(userEvents[i].location);
       var curEvtGeoParams = {searchText: userEvents[i].location, jsonattributes: 1};
       geocodingEach(geocoder, curEvtGeoParams, userEvents, i, callback, myPosX, myPosY); 
-    } 
+    }
+    if (userEvents.length == 0){ //if no upcoming events
+      var behavior = new H.mapevents.Behavior(mapEvents);
+      var ui = H.ui.UI.createDefault(map, defaultLayers);
+    }
   }
 
   //function that obtains all the routes from the upcoming event pairs.

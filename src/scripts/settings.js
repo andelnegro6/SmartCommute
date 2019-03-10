@@ -38,6 +38,7 @@ $(document).ready(function(){
         }else if (data.toJSON() == null){
             //if no settings set, must create default ones:
             loadDatasOnFrontEnd(defaultSettings);
+            updateDefSets();
         }
     };
 
