@@ -528,6 +528,8 @@ function validateWithRoutingTime(platform, routingParams, eventData, uid, calEve
         } else {
           eventModificationProcess(uid, calEvent, eventData);
         }
+      } else {
+        alert("ERROR: you're either short on time to get there or you'd be unable to get to the following appointment!");
       }
     }
   }, function (err) {
