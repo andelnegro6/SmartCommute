@@ -1,59 +1,45 @@
 # SmartCommute
-Software Engineering course project in LM Automation &amp; Control engineering, Politecnico di Milano. Based on project proposal: TRAVLENDAR
-weiofwiefwoif
-## Requirements:
-- Authentication System
-- Calendar interface
-- Automatically compute the travel time between appointments
-(+ Warn for time overlapping)
-- Travel means by appointment and by day
-- User customizable
-- Variability time between appointments
+Smart Commute is a simple interface for commute-aware event scheduling. Considers the event travel times from your location and maps them, along with their routes, creating a roadmap with all your day events and the commuting time. In short, a lightweight assistant only focused on getting on time for your daily errands.
+
+Currently in development, constantly improving.
 
 ## Development tools:
-- jQuery (library for cross-browser compatibility, not good for building scalable web apps)
+- jQuery + fullcalendar 
 - Bootstrap
-- Package manager: npm
-- Install node.js
-- Install gulp (to run project on localhost)
-- Open a firebase project to use authentication + realtime database
-- Use Atom / Visual Studio Code
-- Version control - git with command lines / GUI software
-- Unit testing - jest (jestjs.io)
-- Docsify (documentation)
+- node.js, npm, gulp
+- Firebase Auth + Firebase Database
 
-## Pages:
-- Calendar Page (home)
-  - Daily calendar
-    - Schedules (markers)
-- Travel time between schedules (edges)
-- Transport means (color of edges)
-- Overview (map)
-  - Markers / lines / line color on the map
-  - Durations by marker / edge
-- Profile
-  - User preferences
-    - Activate/Deactivate each travel means globally
-    - Time/Distance constraints for travel means
-    - Type of user specification
-    - Personal transport means and its constraints (like shared car)
-  - Settings
-    - Notifications
-    - Overlay
-- Create Routine (Additional)
-  - User inputs:
-    - Frequency
-    - Time
-    - Duration  
-    - Recurrence (Temporary/Permanent)
-    - Type/Description
-- Create meeting
-  - User inputs:
-    - Location
-    - Time
-    - Duration
-  - User journey:
-    - Journey parameters
-    - Transportation cost
-    - Weather forecast
-    - Fill in form → Validate → Click Submit → Check travel time feasibility → Save / Warn
+## Overview:
+- Calendar
+  - Day, Week, Month calendar (shows events)
+  
+![calendar](https://user-images.githubusercontent.com/34441138/54401089-5977c080-46c6-11e9-93d6-5096e660d582.jpg)
+
+- Event creation / modification
+  - User inputs title, location, start and end times and description of the event
+
+![newevent](https://user-images.githubusercontent.com/34441138/54401608-9d6bc500-46c8-11e9-93b2-322ee01dff62.jpg)
+![editevent](https://user-images.githubusercontent.com/34441138/54401696-f3d90380-46c8-11e9-83bf-011e65499be3.jpg)
+
+- Roadmap
+  - Markers for events
+  - Travel times for polylines
+  - Popups revealing each event information
+  
+![roadmap](https://user-images.githubusercontent.com/34441138/54401059-259c9b00-46c6-11e9-8796-ab9fd6d09141.jpg)
+
+- Settings
+  - Activate/Deactivate each travel means globally
+  - Time/Distance constraints for travel means - not yet implemented
+
+![settings](https://user-images.githubusercontent.com/34441138/54401168-d440db80-46c6-11e9-8d03-01fa0860a157.jpg)
+
+- Create Routine (Additional) - not yet implemented
+  - Frequency
+  - Time
+  - Duration  
+  - Recurrence (Temporary/Permanent)
+  - Type/Description
+    
+# About
+Initially developed by Antonio Del Negro and Pavel Pascacio, for the Software Engineering course in the Automation & Control engineering Master, Politecnico di Milano, Italy. Based on project proposal: TRAVLENDAR
