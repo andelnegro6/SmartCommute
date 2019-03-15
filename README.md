@@ -8,6 +8,7 @@ Currently in development, constantly improving.
 - Bootstrap
 - node.js, npm, gulp
 - Firebase Auth + Firebase Database
+- HERE maps API (geocoder, router and autocomplete)
 
 ## Overview:
 - Calendar
