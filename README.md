@@ -22,6 +22,8 @@ Currently in development, constantly improving.
 ![newevent](https://user-images.githubusercontent.com/34441138/54401608-9d6bc500-46c8-11e9-93b2-322ee01dff62.jpg)
 ![editevent](https://user-images.githubusercontent.com/34441138/54401696-f3d90380-46c8-11e9-83bf-011e65499be3.jpg)
 
+  - Algorithm prevents event overlapping, wrong time input, empty title and evaluates the travel time between appointments to define whether the event can be added or not! 
+
 - Roadmap
   - Markers for events
   - Travel times for polylines
